@@ -1,0 +1,52 @@
+.header {
+  height: 79px;
+  background-color: var(--primary-color);
+  color: var(--white-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  .logo {
+    margin-left: 2%;
+    width: 92px;
+    height: 59px;
+    background: url("../../Assets/Logo.png"),
+      var(--primary-color) 50% / cover no-repeat;
+  }
+
+  .body {
+    margin-right: 2%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 40px;
+
+    .mini-logo {
+      display: flex;
+      padding: 5px 15px;
+      gap: 10px;
+      border-radius: 30px;
+      background: #0b2136;
+
+      .gate-logo {
+        width: 28px;
+        height: 20px;
+        background: url("../../Assets/Gate.png"),
+          var(--primary-color) 50% / cover no-repeat;
+      }
+    }
+
+    .user {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+
+      .action {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+      }
+    }
+  }
+}

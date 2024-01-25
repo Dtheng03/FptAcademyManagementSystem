@@ -167,3 +167,29 @@ export function CloseIcon(props) {
         </svg>
     );
 }
+
+export function NavDownIcon(props) {
+    return (
+        <svg fill="none" viewBox="0 0 15 15" height="24" width="24" {...props}>
+            <path
+                fill="currentColor"
+                fillRule="evenodd"
+                d="M4.182 6.182a.45.45 0 01.636 0L7.5 8.864l2.682-2.682a.45.45 0 01.636.636l-3 3a.45.45 0 01-.636 0l-3-3a.45.45 0 010-.636z"
+                clipRule="evenodd"
+            />
+        </svg>
+    );
+}
+
+export function NavLeftIcon(props) {
+    return (
+        <svg fill="none" viewBox="0 0 15 15" height="24" width="24" {...props}>
+            <path
+                fill="currentColor"
+                fillRule="evenodd"
+                d="M8.818 4.182a.45.45 0 010 .636L6.136 7.5l2.682 2.682a.45.45 0 11-.636.636l-3-3a.45.45 0 010-.636l3-3a.45.45 0 01.636 0z"
+                clipRule="evenodd"
+            />
+        </svg>
+    );
+}

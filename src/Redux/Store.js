@@ -1,14 +1,8 @@
-import Reducer from "./Reducer";
-import MiddleWare from './MiddleWare'
-import createSagaMiddleware from 'redux-saga'
-import { applyMiddleware, legacy_createStore, combineReducers } from 'redux'
+import { configureStore } from '@reduxjs/toolkit'
+import UserSlice from './Reducer/UserSlice'
 
-const sagaMiddleware = createSagaMiddleware()
-
-const allReducer = combineReducers({
-    userStore: Reducer,
+export const store = configureStore({
+    reducer: {
+        user: UserSlice
+    }
 })
-
-export default legacy_createStore(allReducer, applyMiddleware(sagaMiddleware));
-
-sagaMiddleware.run(MiddleWare)

@@ -10,7 +10,7 @@
     margin-left: 2%;
     width: 92px;
     height: 59px;
-    background: url("../../Assets/Logo.png"),
+    background: url("../../../Assets/images/Logo.png"),
       var(--primary-color) 50% / cover no-repeat;
   }
 
@@ -31,7 +31,7 @@
       .gate-logo {
         width: 28px;
         height: 20px;
-        background: url("../../Assets/Gate.png"),
+        background: url("../../../Assets/images/Gate.png"),
           var(--primary-color) 50% / cover no-repeat;
       }
     }

@@ -98,7 +98,7 @@ export function UserManagementIcon(props) {
     );
 }
 
-export function LearningMeterialsIcon(props) {
+export function LearningMaterialsIcon(props) {
     return (
         <svg
             viewBox="0 0 24 24"

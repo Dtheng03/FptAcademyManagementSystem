@@ -1,0 +1,25 @@
+.nav-item {
+  display: inline-flex;
+  align-items: center;
+  margin: 14% 5% 0;
+  width: 90%;
+  min-height: 24px;
+  gap: 8px;
+
+  .icon {
+    margin-left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .title {
+    flex: 1;
+  }
+}
+
+.sub-nav {
+  display: block;
+  width: 80%;
+  margin: 5% 10%;
+  background-color: #ecf8ff;
+  padding-left: 16%;
+}

@@ -1,7 +1,7 @@
 // ProgressBar.jsx
 import React, { useEffect, useState } from "react";
 import { Circle } from "./Circle";
-import "./ProgressBar.css";
+import "./ProgressBar.scss";
 
 const ProgressBar = ({ progressStatus }) => {
   const [circle, setCircle] = useState(4);

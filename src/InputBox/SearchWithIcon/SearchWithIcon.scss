@@ -1,0 +1,36 @@
+.search_input {
+  display: flex;
+  width: 268px;
+  height: 16px;
+  padding: 10px 16px;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+  border-radius: 8px;
+  border: 1px solid var(--Un-modified, #8b8b8b);
+  background: #fff;
+
+  .input_contain {
+    flex: 1;
+    border: none;
+    outline: none;
+
+    &:hover,
+    &:focus {
+      border: none;
+    }
+
+    q input {
+      width: 100%;
+      height: 100%;
+      font-size: 12px;
+      font-style: italic;
+      font-weight: 500;
+      line-height: 18px;
+
+      &::placeholder {
+        color: black !important;
+      }
+    }
+  }
+}

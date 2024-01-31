@@ -1,0 +1,30 @@
+.syllabus-detail-container {
+  margin-bottom: 8px;
+  padding: 0.4% 1%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 831px;
+  height: 36px;
+  background-color: #dfdede;
+  border-radius: 10px;
+
+  .info {
+    overflow: hidden;
+  }
+
+  .desc {
+    display: flex;
+    flex: 0.6;
+    align-items: center;
+    justify-content: space-evenly;
+
+    .item1 {
+      width: 50px;
+      margin-right: 30px;
+    }
+    .item {
+      margin-left: 30px;
+    }
+  }
+}

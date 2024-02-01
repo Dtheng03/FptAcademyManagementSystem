@@ -1,18 +1,21 @@
-import "./Header.scss"
+import styles from "./Header.module.scss";
+import classNames from "classnames/bind";
 import { Avatar } from "antd";
+
+const cx = classNames.bind(styles);
 
 function Header() {
     return (
-        <header className="header">
-            <div className="logo" />
-            <div className="body">
-                <div className="mini-logo">
-                    <div className="gate-logo" />
+        <header className={cx("header")}>
+            <div className={cx("logo")} />
+            <div className={cx("body")}>
+                <div className={cx("mini-logo")}>
+                    <div className={cx("gate-logo")} />
                     <span className="caption2">uniGate</span>
                 </div>
-                <div className="user">
+                <div className={cx("user")}>
                     <Avatar size={"large"} />
-                    <div className="action">
+                    <div className={cx("action")}>
                         <p className="caption1">Warrior Tran</p>
                         <p className="caption2">Log out</p>
                     </div>

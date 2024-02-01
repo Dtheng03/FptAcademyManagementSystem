@@ -1,0 +1,33 @@
+.search-input-new {
+  display: flex;
+  width: 268px;
+  height: 44px;
+  padding: 10px 20px;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+  border-radius: 10px;
+  background: var(--Box, #dfdede);
+
+  .input-contain {
+    flex: 1;
+    border: none;
+    outline: none;
+    background: var(--Box, #dfdede);
+    width: 100%;
+    height: 100%;
+    font-size: 12px;
+    font-style: italic;
+    font-weight: 500;
+    line-height: 22px;
+
+    &:hover,
+    &:focus {
+      border: none;
+    }
+
+    .input-contain ::placeholder {
+      color: #000;
+    }
+  }
+}

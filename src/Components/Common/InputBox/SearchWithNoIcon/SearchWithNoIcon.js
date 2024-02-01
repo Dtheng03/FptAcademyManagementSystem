@@ -1,5 +1,8 @@
 import { useState } from "react";
-import "./SearchWithNoIcon.scss";
+import styles from "./SearchWithNoIcon.module.scss";
+import classNames from "classnames/bind";
+
+const cx = classNames.bind(styles);
 
 function SearchWithNoIcon({ validationMessage }) {
   const [value, setValue] = useState("");
@@ -9,13 +12,13 @@ function SearchWithNoIcon({ validationMessage }) {
   };
 
   return (
-    <div className="search_input_no_icon">
+    <div className={cx("search-input-no-icon")}>
       <input
+        className={cx("input-contain")}
         type="text"
         value={value}
         onChange={handleChange}
         placeholder="Search by..."
-        className="input_contain"
       />
       {/* {validationMessage && <p>{validationMessage}</p>} */}
     </div>

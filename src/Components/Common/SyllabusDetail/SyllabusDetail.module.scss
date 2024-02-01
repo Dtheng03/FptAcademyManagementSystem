@@ -1,4 +1,4 @@
-.syllabus-detail-container {
+.container {
   margin-bottom: 8px;
   padding: 0.4% 1%;
   display: flex;
@@ -10,12 +10,17 @@
   border-radius: 10px;
 
   .info {
+    max-height: 100%;
+    max-width: 50%;
+    line-height: 1;
+    font-weight: bold;
     overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .desc {
+    width: 50%;
     display: flex;
-    flex: 0.6;
     align-items: center;
     justify-content: space-evenly;
 

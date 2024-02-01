@@ -1,9 +1,11 @@
-import "./Sidebar.scss";
+import styles from "./Sidebar.module.scss";
+import classNames from "classnames/bind";
 import NavItem from './NavItem';
 import * as Icons from "../../Common/Icons/NavMenuIcons";
 import Sider from 'antd/es/layout/Sider';
 import { useState } from 'react';
 
+const cx = classNames.bind(styles);
 
 function Sidebar() {
     const [collapsed, setCollapsed] = useState(false);
@@ -73,7 +75,7 @@ function Sidebar() {
             children: [
                 {
                     title: "User list",
-                    to: "",
+                    to: "/user-list",
                 },
                 {
                     title: "User permission",
@@ -102,7 +104,7 @@ function Sidebar() {
 
     return (
         <Sider
-            className="sidebar"
+            className={cx("sidebar")}
             collapsed={collapsed}
             theme='light'
             style={{
@@ -110,7 +112,7 @@ function Sidebar() {
                 backgroundColor: "var(--white-color)",
             }}
         >
-            <div className={collapsed ? "close" : "open"} onClick={() => { setCollapsed(!collapsed) }}>{collapsed ? <Icons.MenuIcon /> : <Icons.CloseIcon />}</div>
+            <div className={collapsed ? cx("close") : cx("open")} onClick={() => { setCollapsed(!collapsed) }}>{collapsed ? <Icons.MenuIcon /> : <Icons.CloseIcon />}</div>
             {navItems.map(item =>
                 <NavItem
                     key={item.title}

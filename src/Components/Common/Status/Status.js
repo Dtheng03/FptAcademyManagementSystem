@@ -5,7 +5,7 @@ const StatusButton = ({ online }) => {
   const buttonStyle = {
     backgroundColor: online ? 'transparent' : '#2D3748',
     color: online ? 'orange' : 'white',
-    border: ` 2px solid ${online ? 'orange' : 'white'}`,
+    border: ` 2px solid ${online ? 'orange' : 'transparent'}`,
     borderRadius: '15px',
   };
 

@@ -1,8 +1,11 @@
-import "./SyllabusDetail.scss";
+import styles from "./SyllabusDetail.module.scss";
+import classNames from "classnames/bind";
 import StatusChip from "../Status/StatusChip";
 import { OnlineStatus, OfflineStatus } from "../Status/Status";
 import * as Icons from "../Icons/DeliveryTypesIcons";
 import { LearningMaterialsIcon } from "../Icons/NavMenuIcons"
+
+const cx = classNames.bind(styles);
 
 function SyllabusDetail({ title, standard, status, time, type }) {
     let icon = "";
@@ -16,16 +19,16 @@ function SyllabusDetail({ title, standard, status, time, type }) {
     }
 
     return (
-        <div className="syllabus-detail-container">
-            <span className="info body2">
+        <div className={cx("container")}>
+            <span className={cx("info")}>
                 {title}
             </span>
-            <div className="desc">
-                <span className="item1"><StatusChip title={standard} /></span>
-                <span className="item1">{time}mins</span>
-                <span className="item1">{status ? <OnlineStatus /> : <OfflineStatus />}</span>
-                <span className="item">{icon}</span>
-                <span className="item"><LearningMaterialsIcon /></span>
+            <div className={cx("desc")}>
+                <span className={cx("item1")}><StatusChip title={standard} /></span>
+                <span className={cx("item1")}>{time}mins</span>
+                <span className={cx("item1")}>{status ? <OnlineStatus /> : <OfflineStatus />}</span>
+                <span className={cx("item")}>{icon}</span>
+                <span className={cx("item")}><LearningMaterialsIcon /></span>
             </div>
         </div>
     );

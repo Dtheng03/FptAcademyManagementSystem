@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import { SearchIcon } from "../../Icons/DocManageIcons/index";
-import './SearchWithIcon.scss';
-import StatusChip from "../../Status/StatusChip";
+import styles from './SearchWithIcon.module.scss';
+import classNames from 'classnames/bind';
+
+const cx = classNames.bind(styles);
 
 function SearchWithIcon({ secondIcon = false }) {
   const [value, setValue] = useState('');
@@ -11,15 +13,14 @@ function SearchWithIcon({ secondIcon = false }) {
   };
 
   return (
-    <div className='search_input'>
+    <div className={cx('search-input')}>
       <SearchIcon />
-      <StatusChip title={"H4SD"} closeIcon={true} />
       <input
+        className={cx('input-contain')}
         type="text"
         value={value}
         onChange={handleChange}
         placeholder="Search by..."
-        className='input_contain'
       />
       {secondIcon === true && <SearchIcon />}
     </div>

@@ -1,6 +1,9 @@
 import { useState } from 'react';
 import { VisibilityOffIcon } from "../../Icons/ActionIcons/index";
-import './SearchWithNewModel.scss';
+import styles from './SearchWithNewModel.module.scss';
+import classNames from 'classnames/bind';
+
+const cx = classNames.bind(styles);
 
 function SearchWithNewModel({ VisibilityIcon = false }) {
   const [value, setValue] = useState('');
@@ -10,13 +13,13 @@ function SearchWithNewModel({ VisibilityIcon = false }) {
   };
 
   return (
-    <div className='search_input_new'>
+    <div className={cx('search-input-new')}>
       <input
+        className={cx('input-contain')}
         type="text"
         value={value}
-        onChange={handleChange} 
+        onChange={handleChange}
         placeholder="Search by..."
-        className='input_contain'
       />
       {VisibilityIcon === true && <VisibilityOffIcon />}
     </div>

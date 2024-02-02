@@ -1,0 +1,17 @@
+.syllabus_tab {
+  height: 200px;
+  width: 861px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  border: 1.5px dashed #9747ff;
+  border-radius: 5px;
+  gap: 20px;
+
+  .syllabus_tab_button {
+    height: 30px;
+    width: auto;
+    display: flex;
+    flex-direction: row;
+  }
+}

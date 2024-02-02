@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { Button, Form, Input, message } from "antd";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
-import "./Login.css";
+import "./Login.scss";
 import { useNavigate } from "react-router-dom";
 import { loginUser } from "./api";
 
@@ -76,12 +76,19 @@ const Login = ({ onLogin }) => {
             <Form.Item>
               <Button
                 type="primary"
+                block
                 htmlType="submit"
                 className="login-form-button"
               >
                 Log in
               </Button>
-              Or <a href="">register now!</a>
+              <div className="createRegister" style={{ marginTop: "20px" }}>
+                Or{" "}
+                <a href="" style={{ paddingLeft: "5px", color: "primary" }}>
+                  {" "}
+                  Register now!
+                </a>
+              </div>
             </Form.Item>
           </Form>
         </div>

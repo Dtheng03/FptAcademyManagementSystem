@@ -20,9 +20,12 @@ function Header({ onLogout }) {
             <button
               style={{
                 display: "block",
-                margin: "0 auto",
-                padding: "10px",
+                margin: "0 0",
+                padding: "10px 0",
                 cursor: "pointer",
+                border: "none",
+                color: "#fff",
+                backgroundColor: "#2D3748",
               }}
               onClick={onLogout}
             >

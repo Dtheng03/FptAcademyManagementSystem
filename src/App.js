@@ -50,6 +50,8 @@ function App() {
           <Routes>
             {isLoggedIn ? (
               <>
+              {/* ROUTE CODE TRONG ĐÂY NHA MẤY NÍ */}
+
                 <Route path="/home" element={<HomePage />} />
                 <Route path="/user-list" element={<UserListPage />} />
                 <Route path="/materials" element={<LearningMaterials />} />

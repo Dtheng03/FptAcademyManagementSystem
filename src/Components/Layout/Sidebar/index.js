@@ -14,13 +14,13 @@ function Sidebar() {
         {
             icon: <Icons.HomeIcon />,
             title: "Home",
-            to: "",
+            to: "/home",
             children: [],
         },
         {
             icon: <Icons.SyllabusIcon />,
             title: "Syllabus",
-            to: "",
+            
             children: [
                 {
                     title: "View syllabus",
@@ -35,7 +35,7 @@ function Sidebar() {
         {
             icon: <Icons.TrainingProgramIcon />,
             title: "Traning program",
-            to: "",
+            
             children: [
                 {
                     title: "View program",
@@ -50,7 +50,7 @@ function Sidebar() {
         {
             icon: <Icons.ClassIcon />,
             title: "Class",
-            to: "",
+            
             children: [
                 {
                     title: "View class",
@@ -71,7 +71,7 @@ function Sidebar() {
         {
             icon: <Icons.UserManagementIcon />,
             title: "User management",
-            to: "",
+            
             children: [
                 {
                     title: "User list",
@@ -86,13 +86,13 @@ function Sidebar() {
         {
             icon: <Icons.LearningMaterialsIcon />,
             title: "Learning materials",
-            to: "",
+            to: "/materials",
             children: [],
         },
         {
             icon: <Icons.SettingIcon />,
             title: "Setting",
-            to: "",
+            
             children: [
                 {
                     title: "Calendar",

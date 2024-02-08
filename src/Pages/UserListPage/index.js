@@ -1,15 +1,27 @@
 import styles from "./UserListPage.module.scss";
 import classNames from "classnames/bind";
 import Button from "../../Components/Common/Button";
-import { FilterListIcon, AddIcon, SortIcon, MoreIcon } from "../../Components/Common/Icons/ActionIcons";
-import { FemaleIcon, MaleIcon } from "../../Components/Common/Icons/OtherIcons";
+import { FilterListIcon, AddIcon, SortIcon, CancleIcon } from "../../Components/Common/Icons/ActionIcons";
 import { SearchIcon } from "../../Components/Common/Icons/DocManageIcons";
-import StatusChip from "../../Components/Common/Status/StatusChip";
 import { Pagination, Tag } from "antd";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useForm } from "react-hook-form"
+import { yupResolver } from "@hookform/resolvers/yup"
+import * as yup from "yup"
+import TableRow from "./TableRow";
 
 const cx = classNames.bind(styles);
+
+const schema = yup
+    .object({
+        role: yup.number().moreThan(0, "This field is required"),
+        name: yup.string().required("This field is required").trim(),
+        email: yup.string().required("This field is required").email("This field must be a valid email").trim(),
+        phone: yup.string().required("This field is required").length(10, "Phone number must have 10 digits").trim(),
+        dob: yup.string().required("This field is required"),
+    })
+    .required()
 
 function UserListPage() {
     const [data, setData] = useState([]);
@@ -25,13 +37,17 @@ function UserListPage() {
     const [filterLs, setFilterLs] = useState([]);
     const [result, setResult] = useState([]);
 
+    const [showAddModal, setShowAddModal] = useState(false);
+    const [gender, setGender] = useState(true);
+    const [status, setStatus] = useState(true);
+
     // ham xu ly khi nhap input search
     const handleInputSearch = (e) => {
         const value = e.target.value;
         setSearchValue(value);
         const filteredSuggestions = data.filter(
-            suggestion => suggestion.name.toLowerCase().includes(value.toLowerCase())
-                || suggestion.email.toLowerCase().includes(value.toLowerCase())
+            suggestion => suggestion.name.toLowerCase().startsWith(value.toLowerCase())
+                || suggestion.email.toLowerCase().startsWith(value.toLowerCase())
                 || suggestion.id === value
         );
         setSuggestions(filteredSuggestions)
@@ -49,6 +65,32 @@ function UserListPage() {
         setResult(newData);
     };
 
+    // ham handle form add
+    const {
+        register,
+        handleSubmit,
+        reset,
+        formState: { errors },
+    } = useForm({
+        resolver: yupResolver(schema),
+    })
+
+    const onSubmit = (data, event) => {
+        event.preventDefault();
+        const finalData = { ...data, gender: gender, status: status }
+        console.log(finalData);
+        axios.post('https://65bc5f2952189914b5bdcf3a.mockapi.io/Users', finalData)
+            .then(function () {
+                alert("User added successfully!!!");
+                setShowAddModal(false);
+            })
+            .catch(function (error) {
+                console.log(error);
+                alert("User added failed! Please check all information and try again")
+            });
+        reset();
+    }
+
     useEffect(() => {
         async function getUser() {
             try {
@@ -60,7 +102,7 @@ function UserListPage() {
         }
         getUser();
         handleSearch();
-    }, [filterLs])
+    }, [filterLs, showAddModal])
 
     return (
         <div className={cx("container")}>
@@ -82,7 +124,13 @@ function UserListPage() {
                     </div>
                     <Button title={"Filter"} firstIcon={<FilterListIcon />} />
                 </div>
-                <Button title={"Add User"} firstIcon={<AddIcon />} />
+                <Button
+                    title={"Add User"}
+                    firstIcon={<AddIcon />}
+                    onClick={() => {
+                        setShowAddModal(true);
+                    }}
+                />
             </div>
 
             {/* phan hien thi suggestion khi search */}
@@ -127,7 +175,7 @@ function UserListPage() {
                         onClose={() => {
                             const newLs = filterLs.filter(x => x !== item);
                             setFilterLs(newLs);
-                            if (filterLs.length == 0) {
+                            if (filterLs.length === 0) {
                                 setResult([])
                             }
                         }}
@@ -152,48 +200,165 @@ function UserListPage() {
                 </thead>
                 {result.length > 0 ?
                     <tbody className={cx("tbody")}>
-                        {result.map(item => (
-                            <tr className={cx("tr")} key={item.id}>
-                                <td className={cx("td", "id")}>{item.id}</td>
-                                <td className={cx("td", "name")}>{item.name}</td>
-                                <td className={cx("td")}>{item.email}</td>
-                                <td className={cx("td")}>{item.dob}</td>
-                                <td className={cx("td")}>{item.gender ? <MaleIcon /> : <FemaleIcon />}</td>
-                                <td className={cx("td")}><StatusChip title={item.role ? "Admin" : "Trainer"} /></td>
-                                <td className={cx("td")}><MoreIcon /></td>
-                            </tr>
-                        ))}
+                        {result.map(item => (<TableRow item={item} key={item.id} />))}
                     </tbody>
                     :
                     <tbody className={cx("tbody")}>
-                        {currentPageData.map(item => (
-                            <tr className={cx("tr")} key={item.id}>
-                                <td className={cx("td", "id")}>{item.id}</td>
-                                <td className={cx("td", "name")}>{item.name}</td>
-                                <td className={cx("td")}>{item.email}</td>
-                                <td className={cx("td")}>{item.dob}</td>
-                                <td className={cx("td")}>{item.gender ? <MaleIcon /> : <FemaleIcon />}</td>
-                                <td className={cx("td")}><StatusChip title={item.role ? "Admin" : "Trainer"} /></td>
-                                <td className={cx("td")}><MoreIcon /></td>
-                            </tr>
-                        ))}
+                        {currentPageData.map(item => (<TableRow item={item} key={item.id} />))}
                     </tbody>}
             </table>
 
             {/* phan chuyen trang */}
-            {result.length == 0 && <div className={cx("pagination")}>
-                <Pagination
-                    onChange={(page, pageSize) => {
-                        setItemsPerPage(pageSize)
-                        setCurrentPage(page);
-                    }}
-                    showSizeChanger
-                    onShowSizeChange={(pageSize) => { setItemsPerPage(pageSize) }}
-                    defaultCurrent={1}
-                    total={data.length}
-                />
-            </div>}
-        </div>
+            {
+                result.length === 0 && <div className={cx("pagination")}>
+                    <Pagination
+                        onChange={(page, pageSize) => {
+                            setItemsPerPage(pageSize)
+                            setCurrentPage(page);
+                        }}
+                        showSizeChanger
+                        onShowSizeChange={(pageSize) => { setItemsPerPage(pageSize) }}
+                        current={currentPage}
+                        total={data.length}
+                    />
+                </div>
+            }
+
+            {/* modal add new user */}
+            {
+                showAddModal && <div className={cx("modal-add")}>
+                    <form
+                        className={cx("modal-container")}
+                        onSubmit={handleSubmit(onSubmit)}
+                    >
+                        <div className={cx("heading")}>
+                            <button className={cx("close", "disabled")} />
+                            <span>Add a new user</span>
+                            <button
+                                className={cx("close")}
+                                type="reset"
+                                onClick={() => {
+                                    reset()
+                                    setShowAddModal(false)
+                                }}
+                            >
+                                <CancleIcon />
+                            </button>
+                        </div>
+
+                        <div className={cx("body")}>
+                            {/* User type */}
+                            <div className={cx("field")}>
+                                <label className={cx("label")}>User type</label>
+                                <select
+                                    className={cx("input")}
+                                    {...register("role")}
+                                >
+                                    <option value={0}>Select one</option>
+                                    <option value={1}>Super Admin</option>
+                                    <option value={2}>Admin</option>
+                                    <option value={3}>Trainer</option>
+                                </select>
+                            </div>
+                            {errors.role && <p className={cx("error")}>{errors.role?.message}</p>}
+
+                            {/* Name */}
+                            <div className={cx("field")}>
+                                <label className={cx("label")}>Name</label>
+                                <input
+                                    {...register("name")}
+                                    className={cx("input")}
+                                    placeholder="User name"
+                                />
+                            </div>
+                            {errors.name && <p className={cx("error")}>{errors.name?.message}</p>}
+
+                            {/* Email */}
+                            <div className={cx("field")}>
+                                <label className={cx("label")}>Email Address</label>
+                                <input
+                                    {...register("email")}
+                                    className={cx("input")}
+                                    placeholder="Email address"
+                                />
+                            </div>
+                            {errors.email && <p className={cx("error")}>{errors.email?.message}</p>}
+
+                            {/* Phone */}
+                            <div className={cx("field")}>
+                                <label className={cx("label")}>Phone</label>
+                                <input
+                                    {...register("phone")}
+                                    className={cx("input")}
+                                    placeholder="Phone number"
+                                />
+                            </div>
+                            {errors.phone && <p className={cx("error")}>{errors.phone?.message}</p>}
+
+                            {/* DOB */}
+                            <div className={cx("field")}>
+                                <label className={cx("label")}>Date of birth</label>
+                                <input
+                                    {...register("dob")}
+                                    className={cx("input")}
+                                    type="date"
+                                />
+                            </div>
+                            {errors.dob && <p className={cx("error")}>{errors.dob?.message}</p>}
+
+                            {/* Gender */}
+                            <div className={cx("field")}>
+                                <label className={cx("label")}>Gender</label>
+                                <span>
+                                    <input type="radio" value={true} checked={gender === true} onChange={() => { setGender(true) }} />
+                                    Male
+                                </span>
+                                <span>
+                                    <input type="radio" value={false} checked={gender === false} onChange={() => { setGender(false) }} />
+                                    Female
+                                </span>
+                            </div>
+
+                            {/* Status */}
+                            <div className={cx("field")}>
+                                <label className={cx("label")}>Status</label>
+                                {status ?
+                                    <p
+                                        className={cx("switch", "active")}
+                                        onClick={() => { setStatus(false) }}
+                                    >
+                                        <span className={cx("status")}>Active</span>
+                                        <span className={cx("dot")}></span>
+                                    </p>
+                                    :
+                                    <p
+                                        className={cx("switch", "inactive")}
+                                        onClick={() => { setStatus(true) }}
+                                    >
+                                        <span className={cx("dot")}></span>
+                                        <span className={cx("status")}>Inactive</span>
+                                    </p>
+                                }
+                            </div>
+
+                            <div className={cx("field", "btn-group")}>
+                                <button
+                                    className={cx("cancel")}
+                                    type="reset"
+                                    onClick={() => {
+                                        reset()
+                                        setShowAddModal(false)
+                                    }}
+                                >
+                                    Cancel
+                                </button>
+                                <button className={cx("save")} type="submit">Save</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            }
+        </div >
     );
 }
 

@@ -7,6 +7,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import axios from "axios";
 import { useSelector } from "react-redux";
+import { notification } from "antd";
 
 const cx = classNames.bind(styles);
 
@@ -14,7 +15,7 @@ const schema = yup
     .object({
         role: yup.number().moreThan(0, "This field is required"),
         name: yup.string().required("This field is required").trim(),
-        phone: yup.number().required("This field is required").length(10, "Phone number must have 10 digits").trim(),
+        phone: yup.string().required("This field is required").length(10, "Phone number must have 10 digits").trim(),
         dob: yup.string().required("This field is required"),
     })
     .required()
@@ -41,12 +42,17 @@ function ModalEditUser({ closeModal }) {
         console.log(finalData);
         axios.put(`https://65bc5f2952189914b5bdcf3a.mockapi.io/Users/${updateUser.id}`, finalData)
             .then(function () {
+                notification.success({
+                    message: "Update user successfully!"
+                });
                 closeModal();
-                alert("Update user successfully!!!");
             })
             .catch(function (error) {
                 console.log(error);
-                alert("Update user failed! Please check all information and try again")
+                notification.success({
+                    message: "Update user failed!",
+                    description: "Please try again!"
+                });
             });
         reset();
     }

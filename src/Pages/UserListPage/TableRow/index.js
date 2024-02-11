@@ -4,14 +4,37 @@ import { useState } from "react";
 import { MoreIcon, VisibilityIcon, VisibilityOffIcon } from "../../../Components/Common/Icons/ActionIcons";
 import { FemaleIcon, MaleIcon, RoleIcon } from "../../../Components/Common/Icons/OtherIcons";
 import { DeleteForeverIcon, CreateIcon } from "../../../Components/Common/Icons/DocManageIcons"
-import StatusChip from "../../../Components/Common/Status/StatusChip";
 import { Popover } from 'antd';
 import { useDispatch } from "react-redux";
 import { setUpdateUser } from "../../../Redux/Reducer/UserSlice";
+import { notification, Popconfirm } from 'antd';
+import axios from "axios";
 
 const cx = classNames.bind(styles);
 
-function TableRow({ item, openEdit }) {
+function TypeChip({ role }) {
+
+    var type, className;
+
+    if (role === 1) {
+        type = "Super Admin";
+        className = "super-admin";
+    } else if (role === 2) {
+        type = "Admin";
+        className = "admin";
+    } else if (role === 3) {
+        type = "Trainer";
+        className = "trainer";
+    }
+
+    return (
+        <span className={cx("type-chip", className)}>
+            {type}
+        </span>
+    );
+}
+
+function TableRow({ item, openEdit, changeRole, changeRoleSuccess }) {
     const style = {
         backgroundColor: "transparent",
         border: "none",
@@ -25,9 +48,28 @@ function TableRow({ item, openEdit }) {
         cursor: "pointer",
     }
 
+    const dispatch = useDispatch();
+
     const [open, setOpen] = useState(false);
 
-    const dispatch = useDispatch();
+    const [newRole, setNewRole] = useState();
+
+    const handleChangeRole = () => {
+        axios.put(`https://65bc5f2952189914b5bdcf3a.mockapi.io/Users/${item.id}`, { role: newRole })
+            .then(() => {
+                notification.success({
+                    message: "Change role successfully",
+                });
+                changeRoleSuccess();
+            })
+            .catch(function (error) {
+                console.log(error);
+                notification.error({
+                    message: "Change role failed",
+                    description: "Please try again!"
+                })
+            });
+    };
 
     return (
         <tr className={cx("tr")}>
@@ -36,7 +78,7 @@ function TableRow({ item, openEdit }) {
             <td className={cx("td")}>{item.email}</td>
             <td className={cx("td")}>{item.dob}</td>
             <td className={cx("td")}>{item.gender ? <MaleIcon /> : <FemaleIcon />}</td>
-            <td className={cx("td")}><StatusChip title={item.role ? "Admin" : "Trainer"} /></td>
+            <td className={cx("td")}><TypeChip role={item.role} /></td>
             <td className={cx("td")}>
                 <Popover
                     trigger="click"
@@ -54,19 +96,61 @@ function TableRow({ item, openEdit }) {
                                 Edit user
                             </button>
                             <Popover
-                                trigger="hover"
+                                trigger="click"
                                 placement="left"
                                 content={
                                     <>
-                                        <button style={{ ...style, width: "100px" }}>
-                                            Super Admin
-                                        </button>
-                                        <button style={{ ...style, width: "100px" }}>
-                                            Class Admin
-                                        </button>
-                                        <button style={{ ...style, width: "100px" }}>
-                                            Trainer
-                                        </button>
+                                        <Popconfirm
+                                            trigger={"click"}
+                                            title="Change role"
+                                            description="Are you sure to change role of this user?"
+                                            placement="left"
+                                            onConfirm={handleChangeRole}
+                                        >
+                                            <button
+                                                style={{ ...style, width: "100px" }}
+                                                onClick={() => {
+                                                    setNewRole(1);
+                                                    changeRole();
+                                                }}
+                                            >
+                                                Super Admin
+                                            </button>
+                                        </Popconfirm>
+                                        <Popconfirm
+                                            trigger={"click"}
+                                            title="Change role"
+                                            description="Are you sure to change role of this user?"
+                                            placement="left"
+                                            onConfirm={handleChangeRole}
+                                        >
+                                            <button
+                                                style={{ ...style, width: "100px" }}
+                                                onClick={() => {
+                                                    setNewRole(2)
+                                                    changeRole();
+                                                }}
+                                            >
+                                                Class Admin
+                                            </button>
+                                        </Popconfirm>
+                                        <Popconfirm
+                                            trigger={"click"}
+                                            title="Change role"
+                                            description="Are you sure to change role of this user?"
+                                            placement="left"
+                                            onConfirm={handleChangeRole}
+                                        >
+                                            <button
+                                                style={{ ...style, width: "100px" }}
+                                                onClick={() => {
+                                                    setNewRole(3)
+                                                    changeRole();
+                                                }}
+                                            >
+                                                Trainer
+                                            </button>
+                                        </Popconfirm>
                                     </>
                                 }
                             >
@@ -92,10 +176,7 @@ function TableRow({ item, openEdit }) {
                         </>
                     }
                 >
-                    <button
-                        className={cx("more-btn")}
-                        onClick={() => { setOpen(!open) }}
-                    >
+                    <button className={cx("more-btn")} onClick={() => { setOpen(!open) }}>
                         <MoreIcon />
                     </button>
                 </Popover>

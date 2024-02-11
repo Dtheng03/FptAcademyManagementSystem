@@ -28,6 +28,7 @@ function UserListPage() {
 
     const [showAddModal, setShowAddModal] = useState(false);
     const [showEditModal, setShowEditModal] = useState(false);
+    const [changeRole, setChangeRole] = useState(false);
 
     // ham xu ly khi nhap input search
     const handleInputSearch = (e) => {
@@ -64,7 +65,7 @@ function UserListPage() {
         }
         getUser();
         handleSearch();
-    }, [filterLs, showAddModal, showEditModal])
+    }, [filterLs, showAddModal, showEditModal, changeRole])
 
     return (
         <div className={cx("container")}>
@@ -177,6 +178,8 @@ function UserListPage() {
                                 key={item.id}
                                 item={item}
                                 openEdit={() => setShowEditModal(true)}
+                                changeRole={() => setChangeRole(true)}
+                                changeRoleSuccess={() => setChangeRole(false)}
                             />
                         ))}
                     </tbody>}

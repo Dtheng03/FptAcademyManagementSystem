@@ -6,6 +6,7 @@ import axios from "axios";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import { notification } from "antd";
 
 const cx = classNames.bind(styles);
 
@@ -14,7 +15,7 @@ const schema = yup
         role: yup.number().moreThan(0, "This field is required"),
         name: yup.string().required("This field is required").trim(),
         email: yup.string().required("This field is required").email("This field must be a valid email").trim(),
-        phone: yup.number().required("This field is required").length(10, "Phone number must have 10 digits").trim(),
+        phone: yup.string().required("This field is required").length(10, "Phone number must have 10 digits").trim(),
         dob: yup.string().required("This field is required"),
     })
     .required()
@@ -39,12 +40,17 @@ function ModalAddUser({ closeModal }) {
         console.log(finalData);
         axios.post('https://65bc5f2952189914b5bdcf3a.mockapi.io/Users', finalData)
             .then(function () {
-                alert("User added successfully!!!");
+                notification.success({
+                    message: "Add new user successfully!"
+                })
                 closeModal();
             })
             .catch(function (error) {
                 console.log(error);
-                alert("User added failed! Please check all information and try again")
+                notification.error({
+                    message: "Add new user failed!",
+                    description: "Please try again!"
+                })
             });
         reset();
     }

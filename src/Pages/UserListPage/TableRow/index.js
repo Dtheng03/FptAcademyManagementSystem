@@ -6,13 +6,12 @@ import { FemaleIcon, MaleIcon, RoleIcon } from "../../../Components/Common/Icons
 import { DeleteForeverIcon, CreateIcon } from "../../../Components/Common/Icons/DocManageIcons"
 import StatusChip from "../../../Components/Common/Status/StatusChip";
 import { Popover } from 'antd';
+import { useDispatch } from "react-redux";
+import { setUpdateUser } from "../../../Redux/Reducer/UserSlice";
 
 const cx = classNames.bind(styles);
 
-function TableRow({ item }) {
-
-    const [open, setOpen] = useState(false);
-
+function TableRow({ item, openEdit }) {
     const style = {
         backgroundColor: "transparent",
         border: "none",
@@ -25,6 +24,10 @@ function TableRow({ item }) {
         color: "#4F6181",
         cursor: "pointer",
     }
+
+    const [open, setOpen] = useState(false);
+
+    const dispatch = useDispatch();
 
     return (
         <tr className={cx("tr")}>
@@ -42,7 +45,11 @@ function TableRow({ item }) {
                     onOpenChange={() => { setOpen(!open) }}
                     content={
                         <>
-                            <button style={style}>
+                            <button style={style} onClick={() => {
+                                dispatch(setUpdateUser(item))
+                                setOpen(false)
+                                openEdit()
+                            }}>
                                 <CreateIcon />
                                 Edit user
                             </button>
@@ -93,7 +100,7 @@ function TableRow({ item }) {
                     </button>
                 </Popover>
             </td>
-        </tr>
+        </tr >
     );
 }
 

@@ -20,7 +20,7 @@ function Sidebar() {
         {
             icon: <Icons.SyllabusIcon />,
             title: "Syllabus",
-            
+
             children: [
                 {
                     title: "View syllabus",
@@ -35,7 +35,7 @@ function Sidebar() {
         {
             icon: <Icons.TrainingProgramIcon />,
             title: "Traning program",
-            
+
             children: [
                 {
                     title: "View program",
@@ -50,7 +50,7 @@ function Sidebar() {
         {
             icon: <Icons.ClassIcon />,
             title: "Class",
-            
+
             children: [
                 {
                     title: "View class",
@@ -71,7 +71,7 @@ function Sidebar() {
         {
             icon: <Icons.UserManagementIcon />,
             title: "User management",
-            
+
             children: [
                 {
                     title: "User list",
@@ -79,7 +79,7 @@ function Sidebar() {
                 },
                 {
                     title: "User permission",
-                    to: "",
+                    to: "/user-permission",
                 },
             ],
         },
@@ -92,7 +92,7 @@ function Sidebar() {
         {
             icon: <Icons.SettingIcon />,
             title: "Setting",
-            
+
             children: [
                 {
                     title: "Calendar",

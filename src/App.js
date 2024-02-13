@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import HomePage from "./Pages/HomePage/HomePage";
 import Login from "./Pages/account/Login";
 import LearningMaterials from "./Pages/LearningMaterials/LearningMaterials";
+import UserPermissionPage from "./Pages/UserPermissionPage";
 
 function App() {
   const [isLoggedIn, setLoggedIn] = useState(() => {
@@ -50,10 +51,11 @@ function App() {
           <Routes>
             {isLoggedIn ? (
               <>
-              {/* ROUTE CODE TRONG ĐÂY NHA MẤY NÍ */}
+                {/* ROUTE CODE TRONG ĐÂY NHA MẤY NÍ */}
 
                 <Route path="/home" element={<HomePage />} />
                 <Route path="/user-list" element={<UserListPage />} />
+                <Route path="/user-permission" element={<UserPermissionPage />} />
                 <Route path="/materials" element={<LearningMaterials />} />
 
               </>

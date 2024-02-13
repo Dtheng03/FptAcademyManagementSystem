@@ -13,7 +13,7 @@ function NavItem(props) {
         <div>
             <Link
                 className={cx("nav-item")}
-                to={props.to}
+                to={props.to != "" && props.to}
                 onClick={() => setShowSubNav(!showSubNav)}
             >
                 <div className={props.collapsed ? cx("icon") : ""}>{props.icon}</div>
@@ -35,7 +35,7 @@ function NavItem(props) {
                             <Link
                                 className={cx("sub-nav")}
                                 key={child.title}
-                                to={child.to}
+                                to={child.to != "" && child.to}
                             >
                                 {child.title}
                             </Link>

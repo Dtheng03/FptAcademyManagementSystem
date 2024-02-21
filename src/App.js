@@ -5,6 +5,7 @@ import Sidebar from "./Components/Layout/Sidebar";
 import Footer from "./Components/Layout/Footer";
 import { Route, Routes } from 'react-router-dom';
 import UserListPage from './Pages/UserListPage';
+import TranningListPage from './Pages/TranningProgramListPage';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Layout>
           <Sidebar />
           <Routes>
+            <Route path='/tranning-program-list' element={<TranningListPage/>}/>
             <Route path='/user-list' element={<UserListPage />} />
           </Routes>
         </Layout>

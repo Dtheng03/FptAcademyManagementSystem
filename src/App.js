@@ -9,6 +9,7 @@ import HomePage from "./Pages/HomePage/HomePage";
 import Login from "./Pages/account/Login";
 import LearningMaterials from "./Pages/LearningMaterials/LearningMaterials";
 import UserPermissionPage from "./Pages/UserPermissionPage";
+import TranningListPage from './Pages/TranningProgramListPage';
 
 function App() {
   const [isLoggedIn, setLoggedIn] = useState(() => {
@@ -49,6 +50,10 @@ function App() {
         <Layout>
           {isLoggedIn && location.pathname !== "/login" && <Sidebar />}
           <Routes>
+<<<<<<< src/App.js
+            <Route path='/tranning-program-list' element={<TranningListPage/>}/>
+            <Route path='/user-list' element={<UserListPage />} />
+=======
             {isLoggedIn ? (
               <>
                 {/* ROUTE CODE TRONG ĐÂY NHA MẤY NÍ */}
@@ -62,11 +67,13 @@ function App() {
             ) : (
               <Route path="/login" element={<Login onLogin={handleLogin} />} />
             )}
-          </Routes>
-        </Layout>
-        {isLoggedIn && location.pathname !== "/login" && <Footer />}
-      </Layout>
-    </div>
+>>>>>>> src/App.js
+          </Routes >
+        </Layout >
+    { isLoggedIn && location.pathname !== "/login" && <Footer />
+}
+      </Layout >
+    </div >
   );
 }
 

@@ -1,0 +1,40 @@
+.time_line {
+  width: 287px;
+  height: 54px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 5px;
+
+  .time_line_title {
+    color: var(--Main, #2d3748);
+    font-family: Inter;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 22px;
+  }
+
+  .time_line_content {
+    display: flex;
+    align-items: center; /* Adjusted alignment */
+    gap: 15px;
+
+    p {
+      color: #000;
+      font-size: 14px;
+      font-style: normal;
+      font-weight: 500;
+      line-height: 22px;
+    }
+
+    .ant-picker {
+      margin-bottom: 0; /* Remove bottom margin of DatePicker */
+    }
+
+    .custom-date-picker .ant-picker-calendar-icon {
+      color: #000;
+    }
+  }
+}

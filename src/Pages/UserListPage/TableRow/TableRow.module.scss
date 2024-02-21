@@ -1,0 +1,55 @@
+.tr {
+  border-bottom: 0.5px solid var(--primary-color);
+  width: 100%;
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+  }
+
+  :last-child {
+    cursor: pointer;
+  }
+
+  .td {
+    padding: 0.5%;
+    height: 40px;
+
+    .more-btn {
+      background-color: transparent;
+      border: none;
+    }
+  }
+
+  .name {
+    font-weight: bold;
+  }
+
+  .id {
+    padding-left: 1%;
+  }
+}
+
+// css type-chip
+.type-chip {
+  display: inline-block;
+  min-width: 60px;
+  height: 28px;
+  line-height: 28px;
+  border-radius: 50px;
+  color: var(--white-color);
+  text-align: center;
+  font-size: small;
+}
+
+.super-admin {
+  width: 90px;
+  background-color: red;
+}
+
+.admin {
+  background-color: var(--green-color);
+}
+
+.trainer {
+  background-color: var(--primary-color);
+}

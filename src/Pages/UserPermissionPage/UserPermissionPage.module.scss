@@ -1,0 +1,92 @@
+// css roleName
+.roleName {
+  font-weight: bolder;
+}
+
+// css permission
+.permission {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+// css main content
+.container {
+  position: relative;
+  background-color: white;
+  width: 100%;
+
+  .header {
+    margin: 2%;
+  }
+
+  .action {
+    margin: 2%;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .table {
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    margin: 0 0.5%;
+    width: 99%;
+    box-shadow: 0 0 2px gray;
+    border-collapse: collapse;
+    font-weight: 500;
+    text-align: left;
+
+    .thead {
+      border-top-left-radius: 10px;
+      border-top-right-radius: 10px;
+      background-color: var(--primary-color);
+
+      .tr {
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+
+        :first-child {
+          border-top-left-radius: 10px;
+        }
+
+        :last-child {
+          border-top-right-radius: 10px;
+        }
+
+        .th {
+          width: 16%;
+          height: 40px;
+          padding: 0 2%;
+          color: var(--white-color);
+          font-weight: bold;
+        }
+      }
+    }
+
+    .tbody {
+      .tr {
+        height: 50px;
+        border-bottom: 1px solid var(--primary-color);
+
+        &:hover {
+          background-color: rgba(0, 0, 0, 0.1);
+        }
+
+        .td {
+          padding: 0 2%;
+
+          .select {
+            padding: 0 4%;
+            height: 24px;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            outline: none;
+            border-radius: 4px;
+            box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 8px;
+            font-size: small;
+            cursor: pointer;
+          }
+        }
+      }
+    }
+  }
+}

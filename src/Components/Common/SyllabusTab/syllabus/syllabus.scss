@@ -1,0 +1,25 @@
+$primary-color: #2d3748;
+
+.syllabus {
+  height: 30px;
+  width: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  button {
+    height: 100%;
+    width: 100%;
+    background-color: #6d7684;
+    border: none;
+    border-radius: 20px 20px 0px 0px;
+    font-size: 14px;
+    color: #fff;
+
+    &:hover,
+    &:focus,
+    &:active {
+      background-color: darken($primary-color, 10%);
+    }
+  }
+}

@@ -50,10 +50,8 @@ function App() {
         <Layout>
           {isLoggedIn && location.pathname !== "/login" && <Sidebar />}
           <Routes>
-<<<<<<< src/App.js
-            <Route path='/tranning-program-list' element={<TranningListPage/>}/>
+            <Route path='/tranning-program-list' element={<TranningListPage />} />
             <Route path='/user-list' element={<UserListPage />} />
-=======
             {isLoggedIn ? (
               <>
                 {/* ROUTE CODE TRONG ĐÂY NHA MẤY NÍ */}
@@ -67,11 +65,10 @@ function App() {
             ) : (
               <Route path="/login" element={<Login onLogin={handleLogin} />} />
             )}
->>>>>>> src/App.js
           </Routes >
         </Layout >
-    { isLoggedIn && location.pathname !== "/login" && <Footer />
-}
+        {isLoggedIn && location.pathname !== "/login" && <Footer />
+        }
       </Layout >
     </div >
   );

@@ -9,6 +9,7 @@ import HomePage from "./Pages/HomePage/HomePage";
 import Login from "./Pages/account/Login";
 import LearningMaterials from "./Pages/LearningMaterials/LearningMaterials";
 import UserPermissionPage from "./Pages/UserPermissionPage";
+import ClassListPage from "./Pages/ClassListPage";
 
 function App() {
   const [isLoggedIn, setLoggedIn] = useState(() => {
@@ -54,6 +55,7 @@ function App() {
                 {/* ROUTE CODE TRONG ĐÂY NHA MẤY NÍ */}
 
                 <Route path="/home" element={<HomePage />} />
+                <Route path="/class-list" element={<ClassListPage />} />
                 <Route path="/user-list" element={<UserListPage />} />
                 <Route path="/user-permission" element={<UserPermissionPage />} />
                 <Route path="/materials" element={<LearningMaterials />} />

@@ -54,7 +54,7 @@ function Sidebar() {
             children: [
                 {
                     title: "View class",
-                    to: "",
+                    to: "/class-list",
                 },
                 {
                     title: "Create class",

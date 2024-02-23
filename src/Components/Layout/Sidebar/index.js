@@ -35,7 +35,7 @@ function Sidebar() {
         {
             icon: <Icons.TrainingProgramIcon />,
             title: "Traning program",
-
+            to: "/tranning-program-list",
             children: [
                 {
                     title: "View program",

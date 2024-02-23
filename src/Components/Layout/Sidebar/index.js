@@ -28,7 +28,7 @@ function Sidebar() {
                 },
                 {
                     title: "Create syllabus",
-                    to: "",
+                    to: "/create-syllabus",
                 },
             ],
         },

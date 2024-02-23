@@ -24,7 +24,7 @@ const Login = ({ onLogin }) => {
         localStorage.setItem("isLoggedIn", JSON.stringify(true));
         navigate("/home");
       } else {
-        message.error("Incorrect userName or password. Please try again.");
+        message.error("Incorrect email or password. Please try again.");
       }
     } catch (error) {
       console.error("Error during login:", error);
@@ -33,65 +33,70 @@ const Login = ({ onLogin }) => {
   };
 
   return (
-    <div className="loginContainer">
-      <div className="loginContent">
-        <div className="loginForm">
-          <Form
-            name="normal_login"
-            className="login-form"
-            initialValues={{
-              remember: true,
-            }}
-            onFinish={onFinish}
+    <div className="login-container">
+      <div className="login-tilte">
+        <h2>
+          FPT Fresh Academy Training Management
+        </h2>
+      </div>
+      <div className="login-content">
+        <Form
+          className="login-form"
+          name="normal_login"
+          initialValues={{
+            remember: true,
+          }}
+          onFinish={onFinish}
+        >
+          <Form.Item
+            className="login-label"
+            name="userName"
+            rules={[
+              {
+                required: true,
+                message: "Please input your email!",
+              },
+            ]}
           >
-            <Form.Item
-              name="userName"
-              rules={[
-                {
-                  required: true,
-                  message: "Please input your userName!",
-                },
-              ]}
+            <Input
+              className="login-input"
+              prefix={<UserOutlined />}
+              placeholder="Email"
+              // type="email"
+              maxLength={40}
+            />
+          </Form.Item>
+          <Form.Item
+            className="login-label"
+            name="password"
+            rules={[
+              {
+                required: true,
+                message: "Please input your password!",
+              },
+            ]}
+          >
+            <Input.Password
+              className="login-input"
+              prefix={<LockOutlined />}
+              type="password"
+              placeholder="Password"
+              maxLength={12}
+            />
+          </Form.Item>
+          <Form.Item
+            className="login-label"
+          >
+            <Button
+              className="login-input"
+              type="primary"
+              block
+              htmlType="submit"
             >
-              <Input
-                prefix={<UserOutlined className="site-form-item-icon" />}
-                placeholder="Username"
-              />
-            </Form.Item>
-            <Form.Item
-              name="password"
-              rules={[
-                {
-                  required: true,
-                  message: "Please input your Password!",
-                },
-              ]}
-            >
-              <Input
-                prefix={<LockOutlined className="site-form-item-icon" />}
-                type="password"
-                placeholder="Password"
-              />
-            </Form.Item>
-            <Form.Item>
-              <Button
-                type="primary"
-                block
-                htmlType="submit"
-                className="login-form-button"
-              >
-                Log in
-              </Button>
-              <div className="createRegister" style={{ marginTop: "20px" }}>
-                Or{" "}
-                <a href="" style={{ paddingLeft: "5px", color: "primary" }}>
-                  {" "}
-                  Register now!
-                </a>
-              </div>
-            </Form.Item>
-          </Form>
-        </div>
+              Log in
+            </Button>
+          </Form.Item>
+        </Form>
       </div>
     </div>
   );

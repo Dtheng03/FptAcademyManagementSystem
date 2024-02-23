@@ -1,0 +1,55 @@
+.tr {
+    border-bottom: 0.5px solid var(--primary-color);
+    width: 100%;
+
+    &:hover {
+        background-color: rgba(0, 0, 0, 0.1);
+    }
+
+    :last-child {
+        cursor: pointer;
+    }
+
+    .td {
+        padding: 0.5%;
+        height: 40px;
+
+        .more-btn {
+            background-color: transparent;
+            border: none;
+        }
+    }
+
+    .name {
+        font-weight: bold;
+        padding-left: 3%;
+        width: 300px;
+    }
+}
+
+.attendee-style {
+    display: inline-block;
+    width: 150px;
+    height: 28px;
+    line-height: 28px;
+    border-radius: 50px;
+    color: var(--white-color);
+    text-align: center;
+    font-size: small;
+}
+
+.fresher {
+    background-color: #FF7568;
+}
+
+.intern {
+    background-color: #2D3748;
+}
+
+.online-fee-fresher {
+    background-color: #2F903F;
+}
+
+.offline-fee-fresher {
+    background-color: #D45B13;
+}

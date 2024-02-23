@@ -35,7 +35,7 @@ function Sidebar() {
         {
             icon: <Icons.TrainingProgramIcon />,
             title: "Traning program",
-
+            to: "/tranning-program-list",
             children: [
                 {
                     title: "View program",
@@ -54,7 +54,7 @@ function Sidebar() {
             children: [
                 {
                     title: "View class",
-                    to: "",
+                    to: "/class-list",
                 },
                 {
                     title: "Create class",

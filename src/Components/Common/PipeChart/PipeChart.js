@@ -13,10 +13,10 @@ const PipeChart = ({ assignment, concept, guide, test, exam }) => {
 
   const COLORS = data.map(entry => entry.color);
 
-  const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, index }) => {
-    const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
-    const x = cx + radius * Math.cos(-midAngle * (Math.PI / 180));
-    const y = cy + radius * Math.sin(-midAngle * (Math.PI / 180));
+  // const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, index }) => {
+  //   const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
+  //   const x = cx + radius * Math.cos(-midAngle * (Math.PI / 180));
+  //   const y = cy + radius * Math.sin(-midAngle * (Math.PI / 180));
 
     // return (
     //   // <>
@@ -26,7 +26,7 @@ const PipeChart = ({ assignment, concept, guide, test, exam }) => {
     //   //   </text>
     //   // </>
     // );
-  };
+  // };
 
   return (
     <div className="pipe-chart-container">

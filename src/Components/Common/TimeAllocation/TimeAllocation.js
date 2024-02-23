@@ -22,7 +22,6 @@ const TimeAllocation = () => {
             guide={guide}
             test={test}
             exam={exam}
-            labelPosition={"horizontal"}
           />
         </div>
       </div>

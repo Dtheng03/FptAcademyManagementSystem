@@ -5,17 +5,19 @@ import Footer from "./Components/Layout/Footer";
 import { Route, Routes, useNavigate, useLocation } from "react-router-dom";
 import UserListPage from "./Pages/UserListPage";
 import { useEffect, useState } from "react";
+
 import HomePage from "./Pages/HomePage/HomePage";
 import Login from "./Pages/account/Login";
 import LearningMaterials from "./Pages/LearningMaterials/LearningMaterials";
 import UserPermissionPage from "./Pages/UserPermissionPage";
 import CreateSyllabusPage from "./Pages/CreateSyllabus/CreateSyllabusPage";
 import ClassListPage from "./Pages/ClassListPage";
-import TranningListPage from './Pages/TranningProgramListPage';
+import TranningListPage from "./Pages/TranningProgramListPage";
+import { jwtDecode } from "jwt-decode";
 
 function App() {
   const [isLoggedIn, setLoggedIn] = useState(() => {
-    const storedStatus = localStorage.getItem("isLoggedIn");
+    const storedStatus = sessionStorage.getItem("isLoggedIn");
     return storedStatus ? JSON.parse(storedStatus) : false;
   });
   const navigate = useNavigate();
@@ -31,15 +33,29 @@ function App() {
     }
   }, [isLoggedIn, navigate, location.pathname]);
 
-  const handleLogin = () => {
+  const handleLogin = (user, token) => {
     setLoggedIn(true);
-    localStorage.setItem("isLoggedIn", JSON.stringify(true));
+    sessionStorage.setItem("isLoggedIn", JSON.stringify(true));
+    sessionStorage.setItem("userRole", user.userRole);
+
+    // const decodedToken = jwtDecode(token);
+
+    // // Kỉm tra coi thời hạn token còn bao nhiêu (theo giây)
+    //   const currentTime = Date.now() / 1000; 
+    //   if (decodedToken.exp < currentTime) {
+    //     // Token hết đát
+    //     handleLogout();
+    //     return;
+    //   }
+    // }
+
     navigate("/home");
   };
 
   const handleLogout = () => {
     setLoggedIn(false);
-    localStorage.removeItem("isLoggedIn");
+    sessionStorage.removeItem("isLoggedIn");
+    sessionStorage.removeItem("userRole");
     navigate("/login");
   };
 
@@ -52,8 +68,11 @@ function App() {
         <Layout>
           {isLoggedIn && location.pathname !== "/login" && <Sidebar />}
           <Routes>
-            <Route path='/tranning-program-list' element={<TranningListPage />} />
-            <Route path='/user-list' element={<UserListPage />} />
+            <Route
+              path="/tranning-program-list"
+              element={<TranningListPage />}
+            />
+            <Route path="/user-list" element={<UserListPage />} />
             {isLoggedIn ? (
               <>
                 {/* ROUTE CODE TRONG ĐÂY NHA MẤY NÍ */}
@@ -61,21 +80,28 @@ function App() {
                 <Route path="/home" element={<HomePage />} />
                 <Route path="/class-list" element={<ClassListPage />} />
                 <Route path="/user-list" element={<UserListPage />} />
-                <Route path="/user-permission" element={<UserPermissionPage />} />
-                <Route path="/user-permission" element={<UserPermissionPage />} />
-                <Route path="/create-syllabus" element={<CreateSyllabusPage />} />
+                <Route
+                  path="/user-permission"
+                  element={<UserPermissionPage />}
+                />
+                <Route
+                  path="/user-permission"
+                  element={<UserPermissionPage />}
+                />
+                <Route
+                  path="/create-syllabus"
+                  element={<CreateSyllabusPage />}
+                />
                 <Route path="/materials" element={<LearningMaterials />} />
-
               </>
             ) : (
               <Route path="/login" element={<Login onLogin={handleLogin} />} />
             )}
-          </Routes >
-        </Layout >
-        {isLoggedIn && location.pathname !== "/login" && <Footer />
-        }
-      </Layout >
-    </div >
+          </Routes>
+        </Layout>
+        {isLoggedIn && location.pathname !== "/login" && <Footer />}
+      </Layout>
+    </div>
   );
 }
 

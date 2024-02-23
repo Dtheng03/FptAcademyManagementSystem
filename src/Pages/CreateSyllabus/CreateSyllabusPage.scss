@@ -1,0 +1,50 @@
+.headerTitle {
+    margin-right: 15px;
+}
+
+.inputSyllabusName {
+    width: 300px;
+    height: 36px;
+    border: 1px solid #cccccc;
+    border-radius: 5px;
+
+}
+
+//CreateGeneral
+.baseGeneralSetup {
+    display: block;
+    width: 350px;
+    height: auto;
+
+    .selectLevel,
+    .attendeeNumbers {
+        justify-content: space-between;
+        padding-bottom: 10px;
+
+        .optionLevel {
+            width: 270px;
+            height: 30px;
+            border: 0.5px solid #d5d5d5;
+            border-radius: 5px;
+            padding: 5px;
+            box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+        }
+
+        .optionLevel option {}
+    }
+
+}
+
+.ql-container {
+    padding: 0;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+.ql-toolbar {
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+  
+ 
+  

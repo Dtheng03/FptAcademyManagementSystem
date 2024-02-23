@@ -1,0 +1,33 @@
+.timeAllocationContainer {
+    height: 443px;
+    width: 172px;
+    display: flex;
+    flex-direction: column;
+
+    .timeAllocationHeader {
+        color: #fff;
+        background-color: #3b3a4a;
+        text-align: center;
+        border-top-left-radius: 15px;
+        border-top-right-radius: 15px;
+
+
+    }
+
+    .timeAllocationContent {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+        border: 0.5px solid #cec4c4;
+        border-bottom-left-radius: 15px;
+        border-bottom-right-radius: 15px;
+
+        .timeAllocationPie {
+            width: 100%;
+            height: 100%;
+            margin: auto;
+        }
+    }
+}

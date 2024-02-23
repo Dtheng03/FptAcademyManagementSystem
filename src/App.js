@@ -9,6 +9,7 @@ import HomePage from "./Pages/HomePage/HomePage";
 import Login from "./Pages/account/Login";
 import LearningMaterials from "./Pages/LearningMaterials/LearningMaterials";
 import UserPermissionPage from "./Pages/UserPermissionPage";
+import CreateSyllabusPage from "./Pages/CreateSyllabus/CreateSyllabusPage";
 import ClassListPage from "./Pages/ClassListPage";
 import TranningListPage from './Pages/TranningProgramListPage';
 
@@ -61,6 +62,8 @@ function App() {
                 <Route path="/class-list" element={<ClassListPage />} />
                 <Route path="/user-list" element={<UserListPage />} />
                 <Route path="/user-permission" element={<UserPermissionPage />} />
+                <Route path="/user-permission" element={<UserPermissionPage />} />
+                <Route path="/create-syllabus" element={<CreateSyllabusPage />} />
                 <Route path="/materials" element={<LearningMaterials />} />
 
               </>

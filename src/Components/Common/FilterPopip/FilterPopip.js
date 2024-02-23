@@ -49,7 +49,7 @@ import FilterLocation from "./FilterLocation/FilterLocation";
 import FilterTime from "./FilterTime/FilterTime";
 import FilterForm from "./FilterForm/FilterForm";
 import DropDownBox from "./DropDownBox/DropDownBox";
-import { toast } from "react-toastify";
+// import { toast } from "react-toastify";
 
 const FilterPopip = () => {
     const [formData, setFormData] = useState({
@@ -67,7 +67,7 @@ const FilterPopip = () => {
         e.preventDefault();
         // Perform search based on formData
         // You can access form values from formData.location, formData.time, etc.
-        toast.success("Search");
+        // toast.success("Search");
     };
 
     const handleClear = (e) => {
@@ -94,7 +94,7 @@ const FilterPopip = () => {
             });
             // Reset the clearFlag to false after clearing
             setClearFlag(false);
-            toast.success("Clear");
+            // toast.success("Clear");
         }
     }, [clearFlag]);
 

@@ -13,16 +13,18 @@
 }
 
 .login-tilte {
-  width: 40%;
+  width: 36%;
 
-  h2 {
+  p {
+    font-weight: bolder;
+    font-size: xx-large;
     text-align: center;
     color: var(--white-color);
   }
 }
 
 .login-content {
-  width: 40%;
+  width: 36%;
   height: auto;
 
   .login-form {
@@ -40,7 +42,7 @@
       width: 80%;
       margin: 0 10%;
 
-      .login-input{
+      .login-input {
         height: 36px;
       }
     }

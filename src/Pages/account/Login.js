@@ -22,7 +22,7 @@ const Login = ({ onLogin }) => {
       if (user) {
         if (user.status) {
           if (user.userRole) {
-            onLogin(user); 
+            onLogin(user);
             sessionStorage.setItem("isLoggedIn", JSON.stringify(true));
             navigate("/home");
           } else {
@@ -43,7 +43,8 @@ const Login = ({ onLogin }) => {
   return (
     <div className="login-container">
       <div className="login-tilte">
-        <h2>FPT Fresh Academy Training Management</h2>
+        <p>FPT Fresh Academy</p>
+        <p>Training Management</p>
       </div>
       <div className="login-content">
         <Form
@@ -63,7 +64,7 @@ const Login = ({ onLogin }) => {
                 required: true,
                 type: "email",
                 message: "Please input your email!",
-                
+
               },
             ]}
           >

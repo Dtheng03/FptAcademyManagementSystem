@@ -13,6 +13,8 @@ import ModalEditUser from "./ModalEditUser";
 const cx = classNames.bind(styles);
 
 function UserListPage() {
+    const userRole = sessionStorage.getItem("userRole");
+
     const [data, setData] = useState([]);
 
     const [currentPage, setCurrentPage] = useState(1);
@@ -87,13 +89,13 @@ function UserListPage() {
                     </div>
                     <Button title={"Filter"} firstIcon={<FilterListIcon />} />
                 </div>
-                <Button
+                {userRole !== "trainer" && <Button
                     title={"Add User"}
                     firstIcon={<AddIcon />}
                     onClick={() => {
                         setShowAddModal(true);
                     }}
-                />
+                />}
             </div>
 
             {/* phan hien thi suggestion khi search */}
@@ -158,7 +160,8 @@ function UserListPage() {
                         <th className={cx("th")}><button className={cx("title")}>Date of birth <SortIcon /></button></th>
                         <th className={cx("th")}><button className={cx("title")}>Gender <SortIcon /></button></th>
                         <th className={cx("th")}><button className={cx("title")}>Type <SortIcon /></button></th>
-                        <th className={cx("th")}></th>
+                        <th className={cx("th")}><button className={cx("title")}>Status <SortIcon /></button></th>
+                        {userRole === "superAdmin" && <th className={cx("th")}></th>}
                     </tr>
                 </thead>
                 {result.length > 0 ?

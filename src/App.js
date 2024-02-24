@@ -3,17 +3,18 @@ import Header from "./Components/Layout/Header";
 import Sidebar from "./Components/Layout/Sidebar";
 import Footer from "./Components/Layout/Footer";
 import { Route, Routes, useNavigate, useLocation } from "react-router-dom";
-import UserListPage from "./Pages/UserListPage";
 import { useEffect, useState } from "react";
+import { jwtDecode } from "jwt-decode";
+
 
 import HomePage from "./Pages/HomePage/HomePage";
 import Login from "./Pages/account/Login";
-import LearningMaterials from "./Pages/LearningMaterials/LearningMaterials";
+import UserListPage from "./Pages/UserListPage";
 import UserPermissionPage from "./Pages/UserPermissionPage";
+import LearningMaterials from "./Pages/LearningMaterials/LearningMaterials";
 import CreateSyllabusPage from "./Pages/CreateSyllabus/CreateSyllabusPage";
 import ClassListPage from "./Pages/ClassListPage";
 import TranningListPage from "./Pages/TranningProgramListPage";
-import { jwtDecode } from "jwt-decode";
 
 function App() {
   const [isLoggedIn, setLoggedIn] = useState(() => {

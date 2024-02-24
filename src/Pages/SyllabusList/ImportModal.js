@@ -42,7 +42,7 @@ const ImportSyllabusModal = () => {
       </Button>
       <Modal
         title={<Typography style={{ color: 'white' }}>Import Syllabus</Typography>}
-        visible={isOpen}
+        open={isOpen}
         onCancel={() => {
           setIsOpen(!isOpen);
         }}
@@ -62,7 +62,7 @@ const ImportSyllabusModal = () => {
                 <Space align='start'>
                   <Form.Item
                     name='file'
-                    valuePropName='fileList'
+                    // valuePropName='fileList'
                     getValueFromEvent={handleFileChange}
                     noStyle
                   >
@@ -75,7 +75,7 @@ const ImportSyllabusModal = () => {
                       padding: '0 2rem',
                     }}
                     size='small'
-                    onClick={handleSelectButtonClick}
+                    // onClick={handleSelectButtonClick}
                   >
                     Select
                   </Button>

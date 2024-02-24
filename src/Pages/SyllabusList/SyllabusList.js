@@ -18,13 +18,14 @@ const SyllabusList = () => {
   if (apiData) {
     apiData.map((item) => {
       data.push({
+        key: item.id,
         id: item.id,
         syllabus: item.syllabus,
         code: item.code,
         createdOn: new Date(item.createdOn).toLocaleDateString('en-GB'),
         createdBy: item.createdBy,
         duration: item.duration,
-        outputStandard: item.outputStandard.map((o) => <OutputStandard data={o} />),
+        outputStandard: item.outputStandard.map((o) => <OutputStandard key={o} data={o} />),
         status: <Status data={item.status} />,
         options: '...',
       });
@@ -96,7 +97,7 @@ const SyllabusList = () => {
     >
       <Flex gap={'4rem'} style={{ width: '100%', padding: '2rem' }} vertical>
         <Flex gap={'2rem'} vertical>
-          <Typography>Syllabus</Typography>
+          <h4 style={{ margin: '0' }}>Syllabus</h4>
           <InputSection />
         </Flex>
         <Table columns={columns} dataSource={data} />

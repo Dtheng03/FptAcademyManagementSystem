@@ -35,8 +35,8 @@ const CalendarPopover = () => {
 
   return (
     <Popover
-      visible={isPopoverVisible}
-      onVisibleChange={(visible) => setPopoverVisible(visible)}
+      open={isPopoverVisible}
+      onOpenChange={(visible) => setPopoverVisible(visible)}
       content={
         <Space direction='vertical' style={{ width: '300px' }}>
           <DatePicker.RangePicker

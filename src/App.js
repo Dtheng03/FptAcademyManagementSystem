@@ -6,14 +6,15 @@ import { Route, Routes, useNavigate, useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { jwtDecode } from 'jwt-decode';
 
-import HomePage from './Pages/HomePage/HomePage';
 import Login from './Pages/account/Login';
+import HomePage from './Pages/HomePage/HomePage';
+import SyllabusList from './Pages/SyllabusList/SyllabusList';
+import CreateSyllabusPage from './Pages/CreateSyllabus/CreateSyllabusPage';
+import TranningListPage from './Pages/TranningProgramListPage';
+import ClassListPage from './Pages/ClassListPage';
 import UserListPage from './Pages/UserListPage';
 import UserPermissionPage from './Pages/UserPermissionPage';
 import LearningMaterials from './Pages/LearningMaterials/LearningMaterials';
-import CreateSyllabusPage from './Pages/CreateSyllabus/CreateSyllabusPage';
-import ClassListPage from './Pages/ClassListPage';
-import TranningListPage from './Pages/TranningProgramListPage';
 
 function App() {
   const [isLoggedIn, setLoggedIn] = useState(() => {
@@ -66,20 +67,18 @@ function App() {
         <Layout>
           {isLoggedIn && location.pathname !== '/login' && <Sidebar />}
           <Routes>
-            <Route path='/tranning-program-list' element={<TranningListPage />} />
-            <Route path='/user-list' element={<UserListPage />} />
             {isLoggedIn ? (
               <>
                 {/* ROUTE CODE TRONG ĐÂY NHA MẤY NÍ */}
-
                 <Route path='/home' element={<HomePage />} />
+                <Route path='/view-syllabus' element={<SyllabusList />} />
+                <Route path='/create-syllabus' element={<CreateSyllabusPage />} />
+                <Route path='/tranning-program-list' element={<TranningListPage />} />
                 <Route path='/class-list' element={<ClassListPage />} />
                 <Route path='/user-list' element={<UserListPage />} />
                 <Route path='/user-permission' element={<UserPermissionPage />} />
-                <Route path='/user-permission' element={<UserPermissionPage />} />
-                <Route path='/create-syllabus' element={<CreateSyllabusPage />} />
-                <Route path='/view-syllabus' element={<CreateSyllabusPage />} />
                 <Route path='/materials' element={<LearningMaterials />} />
+
               </>
             ) : (
               <Route path='/login' element={<Login onLogin={handleLogin} />} />

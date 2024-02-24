@@ -28,7 +28,7 @@ const InputSection = () => {
   return (
     <Flex justify='space-between' style={{ width: '100%' }}>
       {/* Left side */}
-      <div>
+      <div style={{ display: 'flex', width: '36rem' }}>
         <Input
           placeholder='Search...'
           value={searchInput}

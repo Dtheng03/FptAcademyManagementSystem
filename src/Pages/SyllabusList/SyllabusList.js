@@ -91,6 +91,8 @@ const SyllabusList = () => {
           Modal: {
             headerBg: '#2D3748',
             headerColor: '#fff',
+            titleColor: '#fff',
+            wireframe: true,
           },
         },
       }}

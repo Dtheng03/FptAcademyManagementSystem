@@ -41,7 +41,13 @@ const ImportSyllabusModal = () => {
         Import
       </Button>
       <Modal
-        title={<Typography style={{ color: 'white' }}>Import Syllabus</Typography>}
+        style={{
+          width: '40rem',
+        }}
+        bodyStyle={{ padding: '0' }}
+        title={
+          <Typography style={{ color: 'white', textAlign: 'center' }}>Import Syllabus</Typography>
+        }
         open={isOpen}
         onCancel={() => {
           setIsOpen(!isOpen);

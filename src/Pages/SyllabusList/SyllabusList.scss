@@ -1,0 +1,40 @@
+.ant-table-column-sorter-inner {
+  color: white;
+}
+
+.ant-table-column-sorter-inner:active {
+  color: #333;
+}
+
+.ant-row {
+  display: flex;
+  justify-content: space-between;
+}
+
+.ant-modal-close-x {
+  color: #fff;
+}
+
+.ant-modal-content {
+  padding: 0 !important;
+  width: 40rem;
+}
+
+.ant-modal-title {
+  padding: 1rem 0;
+  text-align: center;
+}
+
+.ant-btn-primary {
+  background-color: #2d3748;
+  border-radius: 12px;
+  margin: 0.2rem;
+}
+
+.ant-input-affix-wrapper {
+  width: 24rem;
+}
+
+.ant-form-item {
+  text-align: left;
+}

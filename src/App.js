@@ -78,6 +78,7 @@ function App() {
                 <Route path='/user-permission' element={<UserPermissionPage />} />
                 <Route path='/user-permission' element={<UserPermissionPage />} />
                 <Route path='/create-syllabus' element={<CreateSyllabusPage />} />
+                <Route path='/view-syllabus' element={<CreateSyllabusPage />} />
                 <Route path='/materials' element={<LearningMaterials />} />
               </>
             ) : (

@@ -14,7 +14,7 @@ export const Status = ({ data }) => {
     icon = true;
   }
   return (
-    <Button style={{ backgroundColor: `${color}` }} type='primary'>
+    <Button className='btn-cus' style={{ backgroundColor: `${color}` }} type='primary'>
       {data}
       {icon && <CloseCircleOutlined />}
     </Button>

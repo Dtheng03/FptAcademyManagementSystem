@@ -43,8 +43,8 @@ const ImportSyllabusModal = () => {
       <Modal
         style={{
           width: '40rem',
+          padding: 0,
         }}
-        bodyStyle={{ padding: '0' }}
         title={
           <Typography style={{ color: 'white', textAlign: 'center', fontSize: '16px' }}>
             Import Syllabus

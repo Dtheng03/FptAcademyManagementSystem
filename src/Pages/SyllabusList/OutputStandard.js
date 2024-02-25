@@ -4,7 +4,11 @@ import { Button } from 'antd';
 export const OutputStandard = ({ data }) => {
   return (
     <Button
-      style={{ backgroundColor: '#2d3748', borderRadius: '12px', margin: '0.2rem' }}
+      style={{
+        backgroundColor: '#2d3748',
+        borderRadius: '14px',
+        margin: '0.4rem',
+      }}
       type='primary'
     >
       {data}

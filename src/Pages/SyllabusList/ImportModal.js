@@ -46,7 +46,9 @@ const ImportSyllabusModal = () => {
         }}
         bodyStyle={{ padding: '0' }}
         title={
-          <Typography style={{ color: 'white', textAlign: 'center' }}>Import Syllabus</Typography>
+          <Typography style={{ color: 'white', textAlign: 'center', fontSize: '16px' }}>
+            Import Syllabus
+          </Typography>
         }
         open={isOpen}
         onCancel={() => {
@@ -56,44 +58,36 @@ const ImportSyllabusModal = () => {
         destroyOnClose
       >
         <Form
-          style={{ padding: '1rem' }}
+          style={{ padding: '1rem 1rem 4px 1rem' }}
           form={form}
           onFinish={handleFormSubmit}
           layout='horizontal'
         >
           <Flex gap={18} justify='space-between' style={{ width: '100%' }}>
-            <Typography>Import settings</Typography>
-            <Flex style={{ width: '20rem' }} vertical justify='space-around'>
-              <Form.Item label='File (csv)*' {...formItemLayout}>
-                <Space align='start'>
-                  <Form.Item
-                    name='file'
-                    // valuePropName='fileList'
-                    getValueFromEvent={handleFileChange}
-                    noStyle
-                  >
-                    <Input type='file' style={{ display: 'none' }} />
-                  </Form.Item>
-                  <Button
-                    style={{
-                      color: 'white',
-                      backgroundColor: '#2D3748',
-                      padding: '0 2rem',
-                    }}
-                    size='small'
-                    // onClick={handleSelectButtonClick}
-                  >
-                    Select
-                  </Button>
-                </Space>
-              </Form.Item>
-              <Form.Item label='Encoding type' {...formItemLayout}>
-                <Select placeholder='Auto detect' size='small' style={{ width: 120 }} />
-              </Form.Item>
-              <Form.Item label='Column separator' {...formItemLayout}>
-                <Select placeholder='Comma' size='small' style={{ width: 120 }} />
-              </Form.Item>
-              <Form.Item label='Import template' {...formItemLayout}>
+            <Typography style={{ fontWeight: '700' }}>Import settings</Typography>
+            <Flex style={{ width: '20rem' }} justify='space-around'>
+              <Flex gap={20} vertical {...formItemLayout}>
+                <p>
+                  File (csv)<span style={{ color: 'red' }}>*</span>
+                </p>
+                <span>Encoding type</span>
+                <span>Column separator</span>
+                <span>Import template</span>
+              </Flex>
+              <Flex gap={18} vertical {...formItemLayout}>
+                <p
+                  style={{
+                    width: '5rem',
+                    color: 'white',
+                    borderRadius: '6px',
+                    textAlign: 'center',
+                    backgroundColor: '#2D3748',
+                  }}
+                >
+                  Select
+                </p>
+                <Select placeholder='Auto detect' size='small' />
+                <Select placeholder='Comma' size='small' />
                 <Link
                   to='download'
                   style={{ textDecoration: 'underline', color: '#285D9A' }}
@@ -102,21 +96,21 @@ const ImportSyllabusModal = () => {
                 >
                   Download
                 </Link>
-              </Form.Item>
+              </Flex>
             </Flex>
           </Flex>
           <hr style={{ margin: '10px 0' }} />
-          <Space direction='vertical' style={{ width: '100%' }}>
-            <Typography>Duplicate</Typography>
-            <Flex style={{ marginLeft: '6rem' }} vertical>
-              <Form.Item label='Duplicate control' {...formItemLayout}>
-                <Space align='start'>
-                  <Form.Item name='scanning' valuePropName='checked' noStyle>
-                    <Checkbox.Group options={['Syllabus code', 'Syllabus name']} />
-                  </Form.Item>
-                </Space>
-              </Form.Item>
-              <Form.Item label='Duplicate handle' {...formItemLayout}>
+          <Flex gap={'5rem'} style={{ width: '100%' }}>
+            <Typography style={{ fontWeight: '700' }}>Duplicate control</Typography>
+            <Flex gap={8} vertical>
+              <Flex gap={6} vertical {...formItemLayout}>
+                <p>Scanning</p>
+                <Form.Item name='scanning' valuePropName='checked' noStyle>
+                  <Checkbox.Group options={['Syllabus code', 'Syllabus name']} />
+                </Form.Item>
+              </Flex>
+              <Flex gap={8} vertical>
+                <p>Duplicate handle</p>
                 <Form.Item name='duplicateHandle' initialValue='2' noStyle>
                   <Radio.Group>
                     <Radio value='1'>Allow</Radio>
@@ -124,37 +118,36 @@ const ImportSyllabusModal = () => {
                     <Radio value='3'>Skip</Radio>
                   </Radio.Group>
                 </Form.Item>
-              </Form.Item>
+              </Flex>
             </Flex>
-          </Space>
+          </Flex>
           <hr style={{ margin: '10px 0' }} />
-          <Form.Item style={{ textAlign: 'center' }}>
-            <Button
+          <Flex style={{ padding: '0.4rem 0' }} justify='flex-end' align='center'>
+            <span
               onClick={() => setIsOpen(!isOpen)}
-              type='primary'
-              htmlType='submit'
               style={{
                 borderRadius: '10px',
+                fontWeight: '600',
                 padding: '0.5rem 1.5rem',
-                color: 'white',
-                backgroundColor: '#2D3748',
+                color: '#E74A3B',
+                textDecoration: 'underline',
               }}
             >
               Cancel
-            </Button>
+            </span>
             <Button
               type='primary'
               htmlType='submit'
               style={{
                 borderRadius: '10px',
-                padding: '0.5rem 1.5rem',
                 color: 'white',
+                padding: '0 1.4rem',
                 backgroundColor: '#2D3748',
               }}
             >
               Import
             </Button>
-          </Form.Item>
+          </Flex>
         </Form>
       </Modal>
     </>

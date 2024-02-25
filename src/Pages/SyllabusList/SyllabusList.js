@@ -1,10 +1,11 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Button, ConfigProvider, Flex, Input, Space, Table, Typography } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { Button, ConfigProvider, Flex, Popconfirm, Table } from 'antd';
 import './SyllabusList.scss';
 import { OutputStandard } from './OutputStandard';
 import { Status } from './Status';
 import axios from 'axios';
 import InputSection from './InputSection';
+import MenuOption from './MenuOption';
 
 const SyllabusList = () => {
   const [apiData, setApiData] = useState();
@@ -27,7 +28,7 @@ const SyllabusList = () => {
         duration: item.duration,
         outputStandard: item.outputStandard.map((o) => <OutputStandard key={o} data={o} />),
         status: <Status data={item.status} />,
-        options: '...',
+        options: <MenuOption />,
       });
     });
   }
@@ -81,6 +82,7 @@ const SyllabusList = () => {
       theme={{
         token: {
           controlItemBgHover: 'rgba(0, 0, 0, 0.04)',
+          padding: 8,
         },
         components: {
           Table: {

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Input, Button, Calendar, Flex } from 'antd';
-import { SearchOutlined, PlusOutlined, CloudUploadOutlined } from '@ant-design/icons';
+import { Input, Button, Flex } from 'antd';
+import { SearchOutlined, PlusCircleOutlined } from '@ant-design/icons';
 import CalendarPopover from './CalendarPopover';
 import ImportSyllabusModal from './ImportModal';
 
@@ -43,7 +43,7 @@ const InputSection = () => {
       <div>
         {/* Modal */}
         <ImportSyllabusModal visible={isModalVisible} onCancel={handleCancel} />
-        <Button type='primary' icon={<PlusOutlined />}>
+        <Button style={{ backgroundColor: '#2D3748' }} type='primary' icon={<PlusCircleOutlined />}>
           Add Syllabus
         </Button>
       </div>

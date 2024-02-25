@@ -28,8 +28,8 @@ const CalendarPopover = () => {
 
   return (
     <Popover
-      visible={isVisible}
-      onVisibleChange={(visible) => setIsVisible(visible)}
+      open={isVisible}
+      onOpenChange={(visible) => setIsVisible(visible)}
       trigger='click'
       content={
         <>

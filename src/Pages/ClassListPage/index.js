@@ -13,9 +13,8 @@ const cx = classNames.bind(styles);
 
 function ClassListPage() {
 
-    //Sort Colunm
-    const [sortOrder, setSortOrder] = useState('asc'); // Thứ tự sắp xếp mặc định
-    const [sortedColumn, setSortedColumn] = useState(null); // Cột đã được sắp xếp
+    const [sortOrder, setSortOrder] = useState('asc');
+    const [sortedColumn, setSortedColumn] = useState(null);
 
     const handleSort = (column) => {
         let sortedData = [...data];
@@ -191,7 +190,7 @@ function ClassListPage() {
                     </Tag>
                 )))}
             </div>
-
+            
 
             <table className={cx("table")}>
                 <thead className={cx("thead")}>

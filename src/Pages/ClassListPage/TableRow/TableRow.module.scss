@@ -29,7 +29,7 @@
 
 .attendee-style {
     display: inline-block;
-    width: 150px;
+    min-width: 60px;
     height: 28px;
     line-height: 28px;
     border-radius: 50px;
@@ -47,9 +47,11 @@
 }
 
 .online-fee-fresher {
+    width: 130px;
     background-color: #2F903F;
 }
 
 .offline-fee-fresher {
+    width: 130px;
     background-color: #D45B13;
 }

@@ -48,7 +48,23 @@ function TableRow({ item, domChange, domChangeSuccess }) {
     const [open, setOpen] = useState(false);
 
     const handleDuplicateClass = () => {
-
+        const duplicatedClass = { ...item };
+        delete duplicatedClass.id;
+        axios
+            .post("https://653d1d13f52310ee6a99e3b7.mockapi.io/class", duplicatedClass)
+            .then(() => {
+                notification.success({
+                    message: "Duplicate class successfully",
+                });
+                domChangeSuccess();
+            })
+            .catch(function (error) {
+                console.log(error);
+                notification.error({
+                    message: "Duplicate class failed",
+                    description: "Please try again!",
+                });
+            });
     };
 
     const handleDeleteClass = () => {
@@ -105,12 +121,14 @@ function TableRow({ item, domChange, domChangeSuccess }) {
                                 onClick={() => {
                                     handleDuplicateClass();
                                     setOpen(false);
+                                    domChange();
+                                    
                                 }}
                             >
                                 <CopyIcon />
                                 Duplicate class
                             </button>
-                            
+
                             <Popconfirm
                                 trigger={"click"}
                                 title="Delete class"

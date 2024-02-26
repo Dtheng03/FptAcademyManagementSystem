@@ -1,17 +1,24 @@
 import axios from "axios";
 
-const API_BASE_URL =
-  "https://659e636d47ae28b0bd35b522.mockapi.io/cosmetic_shop";
+const API_BASE_URL = "http://fams-group1-net03.ptbiology.com/api/authorize/login";
 
 export const loginUser = async (email, password) => {
   try {
-    const response = await axios.get(API_BASE_URL);
+    const response = await axios.post(API_BASE_URL, {
+      email: email,
+      password: password,
+    });
 
-    const user = response.data.find(
-      (user) => user.email === email && user.password === password
-    );
+    const responseData = response.data;
 
-    return user;
+    if (responseData.isSuccess) {
+      const user = responseData.data.userResModel;
+      const token = responseData.data.token;
+
+      return { user, token };
+    } else {
+      throw new Error(responseData.message || "Login failed");
+    }
   } catch (error) {
     throw error;
   }

@@ -52,7 +52,7 @@ const CreateSyllabusPage = () => {
         Syllabus
       </h4>
       <div className="create-syllabus-content">
-        <Steps current={current} items={items} style={{paddingBottom: "20px", marginLeft: "20px" , borderBottom: "1px solid black"}}/>
+        <Steps size="small" current={current} items={items} style={{width: "90%", paddingBottom: "20px", marginLeft: "20px" , borderBottom: "1px solid black"}}/>
         <CreateSyllabusHeader />
         
 

@@ -1,3 +1,4 @@
+
 import Layout from "antd/es/layout/layout";
 import Header from "./Components/Layout/Header";
 import Sidebar from "./Components/Layout/Sidebar";
@@ -33,12 +34,13 @@ function App() {
     }
   }, [isLoggedIn, navigate, location.pathname]);
 
-  const handleLogin = (user, token) => {
+  const handleLogin = (user) => {
     setLoggedIn(true);
     sessionStorage.setItem("isLoggedIn", JSON.stringify(true));
-    sessionStorage.setItem("userRole", user.userRole);
+    sessionStorage.setItem("roleName", user.roleName);
 
-    // const decodedToken = jwtDecode(token);
+
+    // const decodedToken = jwtDecode(token); //token này là token nhận vào mai mốt làm thì gán dô 
 
     // // Kỉm tra coi thời hạn token còn bao nhiêu (theo giây)
     //   const currentTime = Date.now() / 1000; 
@@ -55,7 +57,8 @@ function App() {
   const handleLogout = () => {
     setLoggedIn(false);
     sessionStorage.removeItem("isLoggedIn");
-    sessionStorage.removeItem("userRole");
+    sessionStorage.removeItem("roleName");
+
     navigate("/login");
   };
 

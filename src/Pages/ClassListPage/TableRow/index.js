@@ -122,6 +122,7 @@ function TableRow({ item, domChange, domChangeSuccess }) {
                                     handleDuplicateClass();
                                     setOpen(false);
                                     domChange();
+                                    
                                 }}
                             >
                                 <CopyIcon />

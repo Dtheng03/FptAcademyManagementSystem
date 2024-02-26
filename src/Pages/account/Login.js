@@ -17,17 +17,13 @@ const Login = ({ onLogin }) => {
 
   const onFinish = async (values) => {
     try {
-      const user = await loginUser(values.email, values.password);
+      const { user } = await loginUser(values.email, values.password);
 
       if (user) {
-        if (user.status) {
-          if (user.userRole) {
-            onLogin(user);
-            sessionStorage.setItem("isLoggedIn", JSON.stringify(true));
-            navigate("/home");
-          } else {
-            message.error("User role not defined. Please contact support.");
-          }
+        if (user.status === "Active") {
+          onLogin(user);
+          sessionStorage.setItem("isLoggedIn", JSON.stringify(true));
+          navigate("/home");
         } else {
           message.error("Your account has been locked");
         }
@@ -36,15 +32,17 @@ const Login = ({ onLogin }) => {
       }
     } catch (error) {
       console.error("Error during login:", error);
-      message.error("An error occurred during login. Please try again later.");
+      message.error(
+        "An error occurred during login. Please try again later."
+      );
     }
   };
 
   return (
     <div className="login-container">
       <div className="login-tilte">
-        <p>FPT Fresh Academy</p>
-        <p>Training Management</p>
+        <img src="/fptLogo.png" style={{width: "50%", height: "auto"}}/>
+        <h2 style={{margin: "10px 0"}}>FPT Fresh Academy Training Management</h2>
       </div>
       <div className="login-content">
         <Form
@@ -64,7 +62,6 @@ const Login = ({ onLogin }) => {
                 required: true,
                 type: "email",
                 message: "Please input your email!",
-
               },
             ]}
           >
@@ -96,12 +93,11 @@ const Login = ({ onLogin }) => {
           </Form.Item>
           <Form.Item className="login-label">
             <Button
-              style={{ marginTop: "36px" }}
+              style={{ marginTop: "36px", height: "48px" }}
               className="login-input"
               type="primary"
               block
               htmlType="submit"
-              size="large"
             >
               Log in
             </Button>

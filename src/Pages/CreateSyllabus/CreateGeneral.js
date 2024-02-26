@@ -16,7 +16,7 @@ const CreateGeneral = () => {
     >
       <div
         className="generalContent"
-        style={{ width: "942px", height: "636px" }}
+        style={{ width: "78%", height: "636px" }}
       >
         <div className="baseGeneralSetup">
           <div className="selectLevel" style={{ display: "flex" }}>
@@ -41,7 +41,7 @@ const CreateGeneral = () => {
           <textarea
             style={{
               padding: "10px",
-              width: "910px",
+              width: "98%",
               height: "138px",
               border: "0.5px solid #b3a9a9",
               borderRadius: "10px",
@@ -59,7 +59,7 @@ const CreateGeneral = () => {
           <ReactQuill
             theme="snow"
             style={{
-              width: "910px",
+              width: "98%",
               height: "310px",
               borderRadius: "10px", 
             }}

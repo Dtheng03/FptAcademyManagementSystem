@@ -34,12 +34,13 @@ function App() {
     }
   }, [isLoggedIn, navigate, location.pathname]);
 
-  const handleLogin = (user, token) => {
+  const handleLogin = (user) => {
     setLoggedIn(true);
-    sessionStorage.setItem('isLoggedIn', JSON.stringify(true));
-    sessionStorage.setItem('userRole', user.userRole);
+    sessionStorage.setItem("isLoggedIn", JSON.stringify(true));
+    sessionStorage.setItem("roleName", user.roleName);
 
-    // const decodedToken = jwtDecode(token);
+
+    // const decodedToken = jwtDecode(token); //token này là token nhận vào mai mốt làm thì gán dô 
 
     // // Kỉm tra coi thời hạn token còn bao nhiêu (theo giây)
     //   const currentTime = Date.now() / 1000;
@@ -55,9 +56,10 @@ function App() {
 
   const handleLogout = () => {
     setLoggedIn(false);
-    sessionStorage.removeItem('isLoggedIn');
-    sessionStorage.removeItem('userRole');
-    navigate('/login');
+    sessionStorage.removeItem("isLoggedIn");
+    sessionStorage.removeItem("roleName");
+
+    navigate("/login");
   };
 
   return (

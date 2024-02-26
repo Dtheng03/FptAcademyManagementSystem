@@ -4,12 +4,11 @@
   display: flex;
   align-items: center;
   justify-content: space-evenly;
-  background-image: linear-gradient(
-    to bottom right,
-    var(--primary-color),
-    var(--secondary-color),
-    var(--white-color)
-  );
+  background-image: linear-gradient(to bottom right,
+      var(--primary-color) 10%,
+      var(--secondary-color) 25%,
+      var(--white-color) 70%);
+  align-items: center
 }
 
 .login-tilte {

@@ -34,6 +34,24 @@ function TypeChip({ role }) {
     );
 }
 
+function StatusChip({ status }) {
+    var type, className;
+
+    if (status === true) {
+        type = "Acitive";
+        className = "active";
+    } else if (status === false) {
+        type = "Inactive";
+        className = "inactive";
+    }
+
+    return (
+        <span className={cx("status-chip", className)}>
+            {type}
+        </span>
+    );
+}
+
 function TableRow({ item, openEdit, domChange, domChangeSuccess }) {
     const style = {
         backgroundColor: "transparent",
@@ -47,6 +65,7 @@ function TableRow({ item, openEdit, domChange, domChangeSuccess }) {
         color: "#4F6181",
         cursor: "pointer",
     }
+    const userRole = sessionStorage.getItem("userRole");
 
     const dispatch = useDispatch();
 
@@ -91,22 +110,22 @@ function TableRow({ item, openEdit, domChange, domChangeSuccess }) {
     }
 
     // hàm xử lý xóa user
-    const handleDeleteUser = () => {
-        axios.delete(`https://65bc5f2952189914b5bdcf3a.mockapi.io/Users/${item.id}`)
-            .then(() => {
-                notification.success({
-                    message: "Delete user successfully",
-                });
-                domChangeSuccess();
-            })
-            .catch(function (error) {
-                console.log(error);
-                notification.error({
-                    message: "Delete user failed",
-                    description: "Please try again!"
-                })
-            });
-    }
+    // const handleDeleteUser = () => {
+    //     axios.delete(`https://65bc5f2952189914b5bdcf3a.mockapi.io/Users/${item.id}`)
+    //         .then(() => {
+    //             notification.success({
+    //                 message: "Delete user successfully",
+    //             });
+    //             domChangeSuccess();
+    //         })
+    //         .catch(function (error) {
+    //             console.log(error);
+    //             notification.error({
+    //                 message: "Delete user failed",
+    //                 description: "Please try again!"
+    //             })
+    //         });
+    // }
 
     return (
         <tr className={cx("tr")}>
@@ -116,7 +135,8 @@ function TableRow({ item, openEdit, domChange, domChangeSuccess }) {
             <td className={cx("td")}>{item.dob}</td>
             <td className={cx("td")}>{item.gender ? <MaleIcon /> : <FemaleIcon />}</td>
             <td className={cx("td")}><TypeChip role={item.role} /></td>
-            <td className={cx("td")}>
+            <td className={cx("td")}><StatusChip status={item.status} /></td>
+            {userRole === "superAdmin" && < td className={cx("td")}>
                 <Popover
                     trigger="click"
                     placement="left"
@@ -220,7 +240,7 @@ function TableRow({ item, openEdit, domChange, domChangeSuccess }) {
                                     </button>
                                 }
                             </Popconfirm>
-                            <Popconfirm
+                            {/* <Popconfirm
                                 trigger={"click"}
                                 title="Delete user"
                                 description="Are you sure to delete this user?"
@@ -231,7 +251,7 @@ function TableRow({ item, openEdit, domChange, domChangeSuccess }) {
                                     <DeleteForeverIcon />
                                     Delete user
                                 </button>
-                            </Popconfirm>
+                            </Popconfirm> */}
                         </>
                     }
                 >
@@ -239,7 +259,7 @@ function TableRow({ item, openEdit, domChange, domChangeSuccess }) {
                         <MoreIcon />
                     </button>
                 </Popover>
-            </td>
+            </td>}
         </tr >
     );
 }

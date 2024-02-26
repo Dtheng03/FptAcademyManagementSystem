@@ -53,3 +53,24 @@
 .trainer {
   background-color: var(--primary-color);
 }
+
+// css status chip
+.status-chip {
+  display: inline-block;
+  min-width: 60px;
+  height: 28px;
+  line-height: 28px;
+  border-radius: 50px;
+  color: var(--white-color);
+  text-align: center;
+  font-size: small;
+}
+
+.active {
+  background-color: red;
+}
+
+.inactive {
+  background-color: var(--primary-color);
+  opacity: 0.5;
+}

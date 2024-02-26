@@ -1,24 +1,24 @@
+import Layout from 'antd/es/layout/layout';
+import Header from './Components/Layout/Header';
+import Sidebar from './Components/Layout/Sidebar';
+import Footer from './Components/Layout/Footer';
+import { Route, Routes, useNavigate, useLocation } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { jwtDecode } from 'jwt-decode';
 
-import Layout from "antd/es/layout/layout";
-import Header from "./Components/Layout/Header";
-import Sidebar from "./Components/Layout/Sidebar";
-import Footer from "./Components/Layout/Footer";
-import { Route, Routes, useNavigate, useLocation } from "react-router-dom";
-import UserListPage from "./Pages/UserListPage";
-import { useEffect, useState } from "react";
-
-import HomePage from "./Pages/HomePage/HomePage";
-import Login from "./Pages/account/Login";
-import LearningMaterials from "./Pages/LearningMaterials/LearningMaterials";
-import UserPermissionPage from "./Pages/UserPermissionPage";
-import CreateSyllabusPage from "./Pages/CreateSyllabus/CreateSyllabusPage";
-import ClassListPage from "./Pages/ClassListPage";
-import TranningListPage from "./Pages/TranningProgramListPage";
-import { jwtDecode } from "jwt-decode";
+import Login from './Pages/account/Login';
+import HomePage from './Pages/HomePage/HomePage';
+import SyllabusList from './Pages/SyllabusList/SyllabusList';
+import CreateSyllabusPage from './Pages/CreateSyllabus/CreateSyllabusPage';
+import TranningListPage from './Pages/TranningProgramListPage';
+import ClassListPage from './Pages/ClassListPage';
+import UserListPage from './Pages/UserListPage';
+import UserPermissionPage from './Pages/UserPermissionPage';
+import LearningMaterials from './Pages/LearningMaterials/LearningMaterials';
 
 function App() {
   const [isLoggedIn, setLoggedIn] = useState(() => {
-    const storedStatus = sessionStorage.getItem("isLoggedIn");
+    const storedStatus = sessionStorage.getItem('isLoggedIn');
     return storedStatus ? JSON.parse(storedStatus) : false;
   });
   const navigate = useNavigate();
@@ -26,11 +26,11 @@ function App() {
 
   useEffect(() => {
     if (!isLoggedIn) {
-      navigate("/login");
-    } else if (location.pathname === "/") {
-      navigate("/home");
-    } else if (location.pathname === "/login") {
-      navigate("/home");
+      navigate('/login');
+    } else if (location.pathname === '/') {
+      navigate('/home');
+    } else if (location.pathname === '/login') {
+      navigate('/home');
     }
   }, [isLoggedIn, navigate, location.pathname]);
 
@@ -43,7 +43,7 @@ function App() {
     // const decodedToken = jwtDecode(token); //token này là token nhận vào mai mốt làm thì gán dô 
 
     // // Kỉm tra coi thời hạn token còn bao nhiêu (theo giây)
-    //   const currentTime = Date.now() / 1000; 
+    //   const currentTime = Date.now() / 1000;
     //   if (decodedToken.exp < currentTime) {
     //     // Token hết đát
     //     handleLogout();
@@ -51,7 +51,7 @@ function App() {
     //   }
     // }
 
-    navigate("/home");
+    navigate('/home');
   };
 
   const handleLogout = () => {
@@ -63,46 +63,31 @@ function App() {
   };
 
   return (
-    <div className="App">
+    <div className='App'>
       <Layout>
-        {isLoggedIn && location.pathname !== "/login" && (
-          <Header onLogout={handleLogout} />
-        )}
+        {isLoggedIn && location.pathname !== '/login' && <Header onLogout={handleLogout} />}
         <Layout>
-          {isLoggedIn && location.pathname !== "/login" && <Sidebar />}
+          {isLoggedIn && location.pathname !== '/login' && <Sidebar />}
           <Routes>
-            <Route
-              path="/tranning-program-list"
-              element={<TranningListPage />}
-            />
-            <Route path="/user-list" element={<UserListPage />} />
             {isLoggedIn ? (
               <>
                 {/* ROUTE CODE TRONG ĐÂY NHA MẤY NÍ */}
+                <Route path='/home' element={<HomePage />} />
+                <Route path='/view-syllabus' element={<SyllabusList />} />
+                <Route path='/create-syllabus' element={<CreateSyllabusPage />} />
+                <Route path='/tranning-program-list' element={<TranningListPage />} />
+                <Route path='/class-list' element={<ClassListPage />} />
+                <Route path='/user-list' element={<UserListPage />} />
+                <Route path='/user-permission' element={<UserPermissionPage />} />
+                <Route path='/materials' element={<LearningMaterials />} />
 
-                <Route path="/home" element={<HomePage />} />
-                <Route path="/class-list" element={<ClassListPage />} />
-                <Route path="/user-list" element={<UserListPage />} />
-                <Route
-                  path="/user-permission"
-                  element={<UserPermissionPage />}
-                />
-                <Route
-                  path="/user-permission"
-                  element={<UserPermissionPage />}
-                />
-                <Route
-                  path="/create-syllabus"
-                  element={<CreateSyllabusPage />}
-                />
-                <Route path="/materials" element={<LearningMaterials />} />
               </>
             ) : (
-              <Route path="/login" element={<Login onLogin={handleLogin} />} />
+              <Route path='/login' element={<Login onLogin={handleLogin} />} />
             )}
           </Routes>
         </Layout>
-        {isLoggedIn && location.pathname !== "/login" && <Footer />}
+        {isLoggedIn && location.pathname !== '/login' && <Footer />}
       </Layout>
     </div>
   );

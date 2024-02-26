@@ -1,0 +1,43 @@
+.button-options {
+  font-size: 30px;
+  text-align: center;
+}
+
+.button-options:hover {
+  cursor: pointer;
+}
+
+.popup-options {
+  width: 100px;
+}
+
+.options {
+  font-size: 18px;
+}
+
+.icon-option {
+  margin-right: 0.6rem;
+  color: #2c5282;
+}
+
+.ant-table-cell::before {
+  background-color: #2d3748 !important;
+}
+
+.btn-cus {
+  border-radius: 14px;
+  width: 80px;
+}
+
+.cell-cus {
+  color: #333;
+  font-weight: 600;
+}
+
+.cell-cus:active {
+  color: #333;
+}
+
+.table-title-header:hover {
+  cursor: pointer;
+}

@@ -29,7 +29,7 @@ const Permission = ({ number }) => {
 }
 
 function UserPermissionPage() {
-
+    const userRole = sessionStorage.getItem("userRole");
     const [data, setData] = useState([]);
     const [isDomChange, setIsDomChange] = useState(false);
     const [update, setUpdate] = useState(false);
@@ -58,10 +58,11 @@ function UserPermissionPage() {
 
     const handleSaveUpdate = () => {
         async function update() {
+            var response1, response2, response3;
             try {
-                const response1 = await axios.put(`https://65bc5f2952189914b5bdcf3a.mockapi.io/permission/${1}`, newPermission1);
-                const response2 = await axios.put(`https://65bc5f2952189914b5bdcf3a.mockapi.io/permission/${2}`, newPermission2);
-                const response3 = await axios.put(`https://65bc5f2952189914b5bdcf3a.mockapi.io/permission/${3}`, newPermission3);
+                response1 = await axios.put(`https://65bc5f2952189914b5bdcf3a.mockapi.io/permission/${1}`, newPermission1);
+                response2 = await axios.put(`https://65bc5f2952189914b5bdcf3a.mockapi.io/permission/${2}`, newPermission2);
+                response3 = await axios.put(`https://65bc5f2952189914b5bdcf3a.mockapi.io/permission/${3}`, newPermission3);
                 if (response1.statusText === "OK" && response2.statusText === "OK" && response3.statusText === "OK") {
                     notification.success({
                         message: "Update permission successfully",
@@ -79,7 +80,6 @@ function UserPermissionPage() {
                 })
             }
         }
-
         update();
     }
 
@@ -96,9 +96,9 @@ function UserPermissionPage() {
             <h4 className={cx("header")}>User Permission</h4>
 
             {/* phần actions */}
-            <div className={cx("action")}>
+            {userRole !== "trainer" && < div className={cx("action")}>
                 {!update && <Button title={"Update Permission"} onClick={() => setUpdate(true)} />}
-            </div>
+            </div>}
 
             {/* phần hiển thị thông tin */}
             <table className={cx("table")}>
@@ -131,7 +131,12 @@ function UserPermissionPage() {
                             <tr key={index} className={cx("tr")}>
                                 <td className={cx("td")}><RoleName roleId={item.roleName} /></td>
                                 <td className={cx("td")}>
-                                    <select name="syllabus" className={cx("select")} onChange={(e) => handleChange(e, item.id)}>
+                                    <select
+                                        name="syllabus"
+                                        className={cx("select")}
+                                        onChange={(e) => handleChange(e, item.id)}
+                                        disabled={userRole === "admin" && (item.id === "1" || item.id === "2")}
+                                    >
                                         <option>Permission</option>0
                                         <option value={1}>Access Denied</option>
                                         <option value={2}>View</option>
@@ -141,7 +146,12 @@ function UserPermissionPage() {
                                     </select>
                                 </td>
                                 <td className={cx("td")}>
-                                    <select name="trainingProgram" className={cx("select")} onChange={(e) => handleChange(e, item.id)}>
+                                    <select
+                                        name="trainingProgram"
+                                        className={cx("select")}
+                                        onChange={(e) => handleChange(e, item.id)}
+                                        disabled={userRole === "admin" && (item.id === "1" || item.id === "2")}
+                                    >
                                         <option>Permission</option>
                                         <option value={1}>Access Denied</option>
                                         <option value={2}>View</option>
@@ -151,7 +161,12 @@ function UserPermissionPage() {
                                     </select>
                                 </td>
                                 <td className={cx("td")}>
-                                    <select name="class" className={cx("select")} onChange={(e) => handleChange(e, item.id)}>
+                                    <select
+                                        name="class"
+                                        className={cx("select")}
+                                        onChange={(e) => handleChange(e, item.id)}
+                                        disabled={userRole === "admin" && (item.id === "1" || item.id === "2")}
+                                    >
                                         <option>Permission</option>
                                         <option value={1}>Access Denied</option>
                                         <option value={2}>View</option>
@@ -161,7 +176,12 @@ function UserPermissionPage() {
                                     </select>
                                 </td>
                                 <td className={cx("td")}>
-                                    <select name="learningMaterial" className={cx("select")} onChange={(e) => handleChange(e, item.id)}>
+                                    <select
+                                        name="learningMaterial"
+                                        className={cx("select")}
+                                        onChange={(e) => handleChange(e, item.id)}
+                                        disabled={userRole === "admin" && (item.id === "1" || item.id === "2")}
+                                    >
                                         <option>Permission</option>
                                         <option value={1}>Access Denied</option>
                                         <option value={2}>View</option>

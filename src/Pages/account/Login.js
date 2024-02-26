@@ -41,8 +41,8 @@ const Login = ({ onLogin }) => {
   return (
     <div className="login-container">
       <div className="login-tilte">
-        <img src="/fptLogo.png" style={{width: "50%", height: "auto"}}/>
-        <h2 style={{margin: "10px 0"}}>FPT Fresh Academy Training Management</h2>
+        <img src="/fptLogo.png" style={{ width: "50%", height: "auto" }} />
+        <h2 style={{ margin: "10px 0" }}>FPT Fresh Academy Training Management</h2>
       </div>
       <div className="login-content">
         <Form
@@ -69,7 +69,7 @@ const Login = ({ onLogin }) => {
               className="login-input"
               prefix={<UserOutlined />}
               placeholder="Email"
-              // type="email"
+              type="email"
               maxLength={40}
             />
           </Form.Item>

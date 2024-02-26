@@ -12,8 +12,8 @@ const cx = classNames.bind(styles);
 
 const schema = yup
     .object({
-        role: yup.number().moreThan(0, "This field is required"),
-        name: yup.string().required("This field is required").trim(),
+        userType: yup.string().required("This field is required"),
+        fullName: yup.string().required("This field is required").trim(),
         email: yup.string().required("This field is required").email("This field must be a valid email").trim(),
         phone: yup.string().required("This field is required").length(10, "Phone number must have 10 digits").trim(),
         dob: yup.string().required("This field is required"),
@@ -21,8 +21,11 @@ const schema = yup
     .required()
 
 function ModalAddUser({ closeModal }) {
-    const [gender, setGender] = useState(true);
-    const [status, setStatus] = useState(true);
+    const token = sessionStorage.getItem("token");
+    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+
+    const [gender, setGender] = useState("Male");
+    const [status, setStatus] = useState("Active");
 
     // ham handle form add
     const {
@@ -37,8 +40,7 @@ function ModalAddUser({ closeModal }) {
     const onSubmit = (data, event) => {
         event.preventDefault();
         const finalData = { ...data, gender: gender, status: status }
-        console.log(finalData);
-        axios.post('https://65bc5f2952189914b5bdcf3a.mockapi.io/Users', finalData)
+        axios.post('http://fams-group1-net03.ptbiology.com/api/user/create-user', finalData)
             .then(function () {
                 notification.success({
                     message: "Add new user successfully!"
@@ -82,26 +84,26 @@ function ModalAddUser({ closeModal }) {
                         <label className={cx("label")}>User type</label>
                         <select
                             className={cx("input")}
-                            {...register("role")}
+                            {...register("userType")}
                         >
                             <option value={0}>Select one</option>
-                            <option value={1}>Super Admin</option>
-                            <option value={2}>Admin</option>
-                            <option value={3}>Trainer</option>
+                            <option value={"Super Admin"}>Super Admin</option>
+                            <option value={"Admin"}>Admin</option>
+                            <option value={"Trainer"}>Trainer</option>
                         </select>
                     </div>
-                    {errors.role && <p className={cx("error")}>{errors.role?.message}</p>}
+                    {errors.userType && <p className={cx("error")}>{errors.userType?.message}</p>}
 
                     {/* Name */}
                     <div className={cx("field")}>
                         <label className={cx("label")}>Name</label>
                         <input
-                            {...register("name")}
+                            {...register("fullName")}
                             className={cx("input")}
                             placeholder="User name"
                         />
                     </div>
-                    {errors.name && <p className={cx("error")}>{errors.name?.message}</p>}
+                    {errors.fullName && <p className={cx("error")}>{errors.fullName?.message}</p>}
 
                     {/* Email */}
                     <div className={cx("field")}>
@@ -142,11 +144,11 @@ function ModalAddUser({ closeModal }) {
                     <div className={cx("field")}>
                         <label className={cx("label")}>Gender</label>
                         <span>
-                            <input type="radio" value={true} checked={gender === true} onChange={() => { setGender(true) }} />
+                            <input type="radio" value={true} checked={gender === "Male"} onChange={() => { setGender("Male") }} />
                             Male
                         </span>
                         <span>
-                            <input type="radio" value={false} checked={gender === false} onChange={() => { setGender(false) }} />
+                            <input type="radio" value={false} checked={gender === "Female"} onChange={() => { setGender("Female") }} />
                             Female
                         </span>
                     </div>
@@ -157,7 +159,7 @@ function ModalAddUser({ closeModal }) {
                         {status ?
                             <p
                                 className={cx("switch", "active")}
-                                onClick={() => { setStatus(false) }}
+                                onClick={() => { setStatus("Inactive") }}
                             >
                                 <span className={cx("status")}>Active</span>
                                 <span className={cx("dot")}></span>
@@ -165,7 +167,7 @@ function ModalAddUser({ closeModal }) {
                             :
                             <p
                                 className={cx("switch", "inactive")}
-                                onClick={() => { setStatus(true) }}
+                                onClick={() => { setStatus("Active") }}
                             >
                                 <span className={cx("dot")}></span>
                                 <span className={cx("status")}>Inactive</span>

@@ -3,7 +3,7 @@ import classNames from "classnames/bind";
 import { useState } from "react";
 import { MoreIcon, VisibilityIcon, VisibilityOffIcon } from "../../../Components/Common/Icons/ActionIcons";
 import { FemaleIcon, MaleIcon, RoleIcon } from "../../../Components/Common/Icons/OtherIcons";
-import { DeleteForeverIcon, CreateIcon } from "../../../Components/Common/Icons/DocManageIcons"
+import { CreateIcon } from "../../../Components/Common/Icons/DocManageIcons"
 import { Popover } from 'antd';
 import { useDispatch } from "react-redux";
 import { setUpdateUser } from "../../../Redux/Reducer/UserSlice";
@@ -12,42 +12,36 @@ import axios from "axios";
 
 const cx = classNames.bind(styles);
 
-function TypeChip({ role }) {
+function TypeChip({ roleName }) {
+    var className;
 
-    var type, className;
-
-    if (role === 1) {
-        type = "Super Admin";
+    if (roleName === "Super Admin") {
         className = "super-admin";
-    } else if (role === 2) {
-        type = "Admin";
+    } else if (roleName === "Admin") {
         className = "admin";
-    } else if (role === 3) {
-        type = "Trainer";
+    } else if (roleName === "Trainer") {
         className = "trainer";
     }
 
     return (
         <span className={cx("type-chip", className)}>
-            {type}
+            {roleName}
         </span>
     );
 }
 
 function StatusChip({ status }) {
-    var type, className;
+    var className;
 
-    if (status === true) {
-        type = "Acitive";
+    if (status === "Active") {
         className = "active";
-    } else if (status === false) {
-        type = "Inactive";
+    } else if (status === "Inactive") {
         className = "inactive";
     }
 
     return (
         <span className={cx("status-chip", className)}>
-            {type}
+            {status}
         </span>
     );
 }
@@ -65,17 +59,15 @@ function TableRow({ item, openEdit, domChange, domChangeSuccess }) {
         color: "#4F6181",
         cursor: "pointer",
     }
-    const userRole = sessionStorage.getItem("userRole");
-
+    const roleName = sessionStorage.getItem("roleName");
     const dispatch = useDispatch();
 
     const [open, setOpen] = useState(false);
-    const [newRole, setNewRole] = useState();
-    const [newStatus, setNewStatus] = useState();
+    const [newRole, setNewRole] = useState(item.roleName);
 
     // hàm xử lý thay đổi role
     const handleChangeRole = () => {
-        axios.put(`https://65bc5f2952189914b5bdcf3a.mockapi.io/Users/${item.id}`, { role: newRole })
+        axios.put(`http://fams-group1-net03.ptbiology.com/api/user/grant-permission`, { id: item.id, userType: newRole })
             .then(() => {
                 notification.success({
                     message: "Change role successfully",
@@ -93,7 +85,7 @@ function TableRow({ item, openEdit, domChange, domChangeSuccess }) {
 
     // hàm xử lý thay đổi status
     const handleChangeStatus = () => {
-        axios.put(`https://65bc5f2952189914b5bdcf3a.mockapi.io/Users/${item.id}`, { status: newStatus })
+        axios.put(`http://fams-group1-net03.ptbiology.com/api/user/deactive-user?id=${item.id}`)
             .then(() => {
                 notification.success({
                     message: "Change status successfully",
@@ -109,34 +101,15 @@ function TableRow({ item, openEdit, domChange, domChangeSuccess }) {
             });
     }
 
-    // hàm xử lý xóa user
-    // const handleDeleteUser = () => {
-    //     axios.delete(`https://65bc5f2952189914b5bdcf3a.mockapi.io/Users/${item.id}`)
-    //         .then(() => {
-    //             notification.success({
-    //                 message: "Delete user successfully",
-    //             });
-    //             domChangeSuccess();
-    //         })
-    //         .catch(function (error) {
-    //             console.log(error);
-    //             notification.error({
-    //                 message: "Delete user failed",
-    //                 description: "Please try again!"
-    //             })
-    //         });
-    // }
-
     return (
         <tr className={cx("tr")}>
-            <td className={cx("td", "id")}>{item.id}</td>
-            <td className={cx("td", "name")}>{item.name}</td>
+            <td className={cx("td", "name")}>{item.fullName}</td>
             <td className={cx("td")}>{item.email}</td>
             <td className={cx("td")}>{item.dob}</td>
-            <td className={cx("td")}>{item.gender ? <MaleIcon /> : <FemaleIcon />}</td>
-            <td className={cx("td")}><TypeChip role={item.role} /></td>
+            <td className={cx("td")}>{item.gender === "Male" ? <MaleIcon /> : <FemaleIcon />}</td>
+            <td className={cx("td")}><TypeChip roleName={item.roleName} /></td>
             <td className={cx("td")}><StatusChip status={item.status} /></td>
-            {userRole === "superAdmin" && < td className={cx("td")}>
+            {roleName === "Super Admin" && < td className={cx("td")}>
                 <Popover
                     trigger="click"
                     placement="left"
@@ -167,7 +140,7 @@ function TableRow({ item, openEdit, domChange, domChangeSuccess }) {
                                             <button
                                                 style={{ ...style, width: "100px" }}
                                                 onClick={() => {
-                                                    setNewRole(1);
+                                                    setNewRole("SuperAdmin");
                                                     domChange();
                                                 }}
                                             >
@@ -184,7 +157,7 @@ function TableRow({ item, openEdit, domChange, domChangeSuccess }) {
                                             <button
                                                 style={{ ...style, width: "100px" }}
                                                 onClick={() => {
-                                                    setNewRole(2)
+                                                    setNewRole("Admin")
                                                     domChange();
                                                 }}
                                             >
@@ -201,7 +174,7 @@ function TableRow({ item, openEdit, domChange, domChangeSuccess }) {
                                             <button
                                                 style={{ ...style, width: "100px" }}
                                                 onClick={() => {
-                                                    setNewRole(3)
+                                                    setNewRole("Trainer")
                                                     domChange();
                                                 }}
                                             >
@@ -223,16 +196,14 @@ function TableRow({ item, openEdit, domChange, domChangeSuccess }) {
                                 placement="left"
                                 onConfirm={handleChangeStatus}
                             >
-                                {item.status ?
+                                {item.status === "Active" ?
                                     <button style={style} onClick={() => {
-                                        setNewStatus(false);
                                         domChange();
                                     }}>
                                         <VisibilityOffIcon />
                                         De-activate user
                                     </button> :
                                     <button style={style} onClick={() => {
-                                        setNewStatus(true);
                                         domChange();
                                     }}>
                                         <VisibilityIcon />
@@ -240,18 +211,6 @@ function TableRow({ item, openEdit, domChange, domChangeSuccess }) {
                                     </button>
                                 }
                             </Popconfirm>
-                            {/* <Popconfirm
-                                trigger={"click"}
-                                title="Delete user"
-                                description="Are you sure to delete this user?"
-                                placement="left"
-                                onConfirm={handleDeleteUser}
-                            >
-                                <button style={{ ...style, color: "red" }} onClick={() => domChange()}>
-                                    <DeleteForeverIcon />
-                                    Delete user
-                                </button>
-                            </Popconfirm> */}
                         </>
                     }
                 >

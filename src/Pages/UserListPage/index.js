@@ -1,19 +1,23 @@
 import styles from "./UserListPage.module.scss";
 import classNames from "classnames/bind";
 import Button from "../../Components/Common/Button";
-import { FilterListIcon, AddIcon, SortIcon } from "../../Components/Common/Icons/ActionIcons";
+import { AddIcon, SortIcon, CancleIcon } from "../../Components/Common/Icons/ActionIcons";
 import { SearchIcon } from "../../Components/Common/Icons/DocManageIcons";
 import { Pagination, Tag } from "antd";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import TableRow from "./TableRow";
+import Filter from "./Filter";
 import ModalAddUser from "./ModalAddUser";
 import ModalEditUser from "./ModalEditUser";
 
 const cx = classNames.bind(styles);
 
 function UserListPage() {
-    const userRole = sessionStorage.getItem("userRole");
+    const token = sessionStorage.getItem("token");
+    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+
+    const roleName = sessionStorage.getItem("roleName");
 
     const [data, setData] = useState([]);
 
@@ -24,9 +28,8 @@ function UserListPage() {
     const currentPageData = data.slice(startIndex, endIndex);
 
     const [searchValue, setSearchValue] = useState("");
-    const [suggestions, setSuggestions] = useState([]);
+    const [searchList, setSearchList] = useState([]);
     const [filterLs, setFilterLs] = useState([]);
-    const [result, setResult] = useState([]);
 
     const [showAddModal, setShowAddModal] = useState(false);
     const [showEditModal, setShowEditModal] = useState(false);
@@ -36,38 +39,37 @@ function UserListPage() {
     const handleInputSearch = (e) => {
         const value = e.target.value;
         setSearchValue(value);
-        const filteredSuggestions = data.filter(
-            suggestion => suggestion.name.toLowerCase().startsWith(value.toLowerCase())
-                || suggestion.email.toLowerCase().startsWith(value.toLowerCase())
-                || suggestion.id === value
+        const searchList = data.filter(
+            result => result.fullName.toLowerCase().includes(value.toLowerCase())
+                || result.email.toLowerCase().includes(value.toLowerCase())
         );
-        setSuggestions(filteredSuggestions)
+        setSearchList(searchList);
     };
 
-    // ham xy ly khi search
-    const handleSearch = () => {
-        const f1 = filterLs[0];
-        const f2 = filterLs[1];
-        const f3 = filterLs[2];
-        const f4 = filterLs[3];
-        const newData = data.filter(x => x.name.includes(f1) || x.name.includes(f2) || x.name.includes(f3) || x.name.includes(f4)
-            || x.email.includes(f1) || x.email.includes(f2) || x.email.includes(f3) || x.email.includes(f4)
-            || x.id.includes(f1) || x.id.includes(f2) || x.id.includes(f3) || x.name.includes(f4));
-        setResult(newData);
-    };
-
-    useEffect(() => {
+    // ham xu ly filter
+    const handleFilter = (filter, sort) => {
         async function getUser() {
             try {
-                const response = await axios.get("https://65bc5f2952189914b5bdcf3a.mockapi.io/Users");
-                setData(response.data)
+                const response = await axios.get(`http://fams-group1-net03.ptbiology.com/api/user/view-user-list?filter-by=${filter}&sort-by=${sort}`);
+                setData(response.data.data)
             } catch (error) {
                 console.error(error);
             }
         }
         getUser();
-        handleSearch();
-    }, [filterLs, showAddModal, showEditModal, isDomChange])
+    };
+
+    useEffect(() => {
+        async function getUser() {
+            try {
+                const response = await axios.get("http://fams-group1-net03.ptbiology.com/api/user/view-user-list");
+                setData(response.data.data)
+            } catch (error) {
+                console.error(error);
+            }
+        }
+        getUser();
+    }, [showAddModal, showEditModal, isDomChange])
 
     return (
         <div className={cx("container")}>
@@ -87,9 +89,9 @@ function UserListPage() {
                             placeholder="Search by..."
                         />
                     </div>
-                    <Button title={"Filter"} firstIcon={<FilterListIcon />} />
+                    <Filter handleFilter={handleFilter} setFilterLs={setFilterLs} />
                 </div>
-                {userRole !== "trainer" && <Button
+                {roleName !== "Trainer" && <Button
                     title={"Add User"}
                     firstIcon={<AddIcon />}
                     onClick={() => {
@@ -98,77 +100,47 @@ function UserListPage() {
                 />}
             </div>
 
-            {/* phan hien thi suggestion khi search */}
-            {suggestions.length > 0 && searchValue !== "" && <div className={cx("suggestion")}>
-                {suggestions.map(((item, index) => (
-                    <div key={index}>
-                        <div
-                            className={cx("item")}
-                            onClick={() => {
-                                if (filterLs.indexOf(item.name) < 0) {
-                                    setFilterLs([...filterLs, item.name]);
-                                    setSearchValue("");
-                                }
-                            }}
-                        >
-                            {item.name}
-                        </div>
-                        <div
-                            className={cx("item")}
-                            onClick={() => {
-                                if (filterLs.indexOf(item.email) < 0) {
-                                    setFilterLs([...filterLs, item.email]);
-                                    setSearchValue("");
-                                }
-                            }}
-                        >
-                            {item.email}
-                        </div>
-                    </div>
-                )))
-                }
-            </div>}
-
-            {/* phan hien thi gia tri search da chon */}
-            <div className={cx("search-result")}>
+            {/* phan hien thi gia tri filter da chon */}
+            <div className={cx("filter-result")}>
                 {filterLs.map(((item, index) => (
                     <Tag
                         key={index}
-                        className={cx("result")}
+                        className={cx("filter")}
                         color="#474747"
-                        closable
-                        onClose={() => {
-                            const newLs = filterLs.filter(x => x !== item);
-                            setFilterLs(newLs);
-                            if (filterLs.length === 0) {
-                                setResult([])
-                            }
-                        }}
                     >
                         {item}
                     </Tag>
                 )))}
+                {filterLs.length > 0 &&
+                    < button
+                        className={cx("clear")}
+                        onClick={() => {
+                            setFilterLs([]);
+                            handleFilter();
+                        }}
+                    >
+                        <CancleIcon />
+                    </button>}
             </div>
 
             {/* phan hien thi thong tin */}
             <table className={cx("table")}>
                 <thead className={cx("thead")}>
                     <tr className={cx("tr")}>
-                        <th className={cx("th")}><button className={cx("title")}>ID <SortIcon /></button></th>
                         <th className={cx("th")}><button className={cx("title")}>Full name <SortIcon /></button></th>
                         <th className={cx("th")}><button className={cx("title")}>Email <SortIcon /></button></th>
                         <th className={cx("th")}><button className={cx("title")}>Date of birth <SortIcon /></button></th>
                         <th className={cx("th")}><button className={cx("title")}>Gender <SortIcon /></button></th>
                         <th className={cx("th")}><button className={cx("title")}>Type <SortIcon /></button></th>
                         <th className={cx("th")}><button className={cx("title")}>Status <SortIcon /></button></th>
-                        {userRole === "superAdmin" && <th className={cx("th")}></th>}
+                        {roleName === "Super Admin" && <th className={cx("th")}></th>}
                     </tr>
                 </thead>
-                {result.length > 0 ?
+                {searchList.length > 0 ?
                     <tbody className={cx("tbody")}>
-                        {result.map(item => (
+                        {searchList.map((item, index) => (
                             <TableRow
-                                key={item.id}
+                                key={index}
                                 item={item}
                                 openEdit={() => setShowEditModal(true)}
                                 domChange={() => setIsDomChange(true)}
@@ -192,7 +164,7 @@ function UserListPage() {
 
             {/* phan chuyen trang */}
             {
-                result.length === 0 && <div className={cx("pagination")}>
+                (searchList.length > 0 || data.length > 0) && <div className={cx("pagination")}>
                     <Pagination
                         onChange={(page, pageSize) => {
                             setItemsPerPage(pageSize)

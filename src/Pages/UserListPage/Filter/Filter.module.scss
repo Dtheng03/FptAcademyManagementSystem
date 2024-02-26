@@ -1,0 +1,42 @@
+.filter-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 32px;
+  background-color: var(--primary-color);
+  color: var(--white-color);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+
+  .title {
+    font-weight: bold;
+    padding: 0 12px;
+  }
+}
+
+.title {
+  font-weight: bolder;
+  margin-bottom: 4%;
+}
+.select {
+  display: block;
+  margin-bottom: 4%;
+  width: 200px;
+  height: 32px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.submit-filter {
+  display: block;
+  margin-top: 8%;
+  height: 32px;
+  width: 100%;
+  background-color: var(--primary-color);
+  color: var(--white-color);
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  padding: 0 12px;
+  cursor: pointer;
+}

@@ -14,6 +14,7 @@ export const loginUser = async (email, password) => {
     if (responseData.isSuccess) {
       const user = responseData.data.userResModel;
       const token = responseData.data.token;
+      sessionStorage.setItem("token", token);
 
       return { user, token };
     } else {

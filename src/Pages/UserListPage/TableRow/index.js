@@ -85,7 +85,7 @@ function TableRow({ item, openEdit, domChange, domChangeSuccess }) {
 
     // hàm xử lý thay đổi status
     const handleChangeStatus = () => {
-        axios.put(`http://fams-group1-net03.ptbiology.com/api/user/deactive-user?id=${item.id}`)
+        axios.put(`http://fams-group1-net03.ptbiology.com/api/user/active-deactive-user?id=${item.id}`)
             .then(() => {
                 notification.success({
                     message: "Change status successfully",

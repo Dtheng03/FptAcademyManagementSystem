@@ -9,7 +9,6 @@ const cx = classNames.bind(styles);
 function Filter({ handleFilter, setFilterLs }) {
     const [open, setOpen] = useState(false);
     const [status, setStatus] = useState("");
-    const [sortType, setSortType] = useState("");
     const [sortBy, setSortBy] = useState("");
 
     return (
@@ -38,39 +37,19 @@ function Filter({ handleFilter, setFilterLs }) {
                     <p className={cx("title")}>Sort by</p>
                     <select
                         className={cx("select")}
-                        value={sortType}
+                        value={sortBy}
                         onChange={(e) => {
-                            setSortType(e.target.value);
+                            setSortBy(e.target.value);
                         }}
                     >
-                        <option value={""}>...</option>
-                        <option value={"name"}>Name</option>
-                        <option value={"createdDate"}>Created Date</option>
+                        <option>...</option>
+                        <option value={"name_asc"}>Name Ascending</option>
+                        <option value={"name_desc"}>Name Descending</option>
+                        <option value={"createdDate_asc"}>Created Date Ascending</option>
+                        <option value={"createdDate_desc"}>Created Date Descending</option>
+                        <option value={"modifiedDate_desc"}>Modified Date Descending</option>
+                        <option value={"modifiedDate_desc"}>Modified Date Descending</option>
                     </select>
-                    {sortType === "name" &&
-                        <select
-                            className={cx("select")}
-                            value={sortBy}
-                            onChange={(e) => {
-                                setSortBy(e.target.value);
-                            }}
-                        >
-                            <option>...</option>
-                            <option value={"name_asc"}>Name Ascending</option>
-                            <option value={"name_desc"}>Name Descending</option>
-                        </select>}
-                    {sortType === "createdDate" &&
-                        <select
-                            className={cx("select")}
-                            value={sortBy}
-                            onChange={(e) => {
-                                setSortBy(e.target.value);
-                            }}
-                        >
-                            <option>...</option>
-                            <option value={"createdDate_asc"}>Created Date Ascending</option>
-                            <option value={"createdDate_desc"}>Created Date Descending</option>
-                        </select>}
                     <button
                         className={cx("submit-filter")}
                         onClick={() => {
@@ -88,7 +67,6 @@ function Filter({ handleFilter, setFilterLs }) {
                                 handleFilter();
                             }
                             setStatus("");
-                            setSortType("");
                             setSortBy("");
                             setOpen(!open);
                         }}

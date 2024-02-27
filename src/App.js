@@ -38,6 +38,7 @@ function App() {
     setLoggedIn(true);
     sessionStorage.setItem("isLoggedIn", JSON.stringify(true));
     sessionStorage.setItem("roleName", user.roleName);
+    sessionStorage.setItem("fullName", user.fullName);
 
     const token = sessionStorage.getItem("token");
     const decodedToken = jwtDecode(token); //token này là token nhận vào mai mốt làm thì gán dô 

@@ -51,7 +51,7 @@ function UserListPage() {
         async function getUser() {
             try {
                 const response = await axios.get(`http://fams-group1-net03.ptbiology.com/api/user/view-user-list?filter-by=${filter}&sort-by=${sort}`);
-                setData(response.data.data)
+                setData(response.data.data);
             } catch (error) {
                 console.error(error);
             }

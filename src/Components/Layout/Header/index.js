@@ -5,6 +5,8 @@ import { Avatar } from "antd";
 const cx = classNames.bind(styles);
 
 function Header({ onLogout }) {
+  const fullName = sessionStorage.getItem("fullName");
+
   return (
     <header className={cx("header")}>
       <div className={cx("logo")} />
@@ -16,17 +18,9 @@ function Header({ onLogout }) {
         <div className={cx("user")}>
           <Avatar size={"large"} />
           <div className={cx("action")}>
-            <p className="caption1">Warrior Tran</p>
+            <p className={cx("fullName")}>{fullName}</p>
             <button
-              style={{
-                display: "block",
-                margin: "0 0",
-                padding: "10px 0",
-                cursor: "pointer",
-                border: "none",
-                color: "#fff",
-                backgroundColor: "#2D3748",
-              }}
+              className={cx("logout-btn")}
               onClick={onLogout}
             >
               Log Out

@@ -1,0 +1,56 @@
+.syllabus_card {
+  width: 845px;
+  height: 96px;
+  border-radius: 20px;
+  box-shadow: 0.1rem 0.1rem 7px;
+  margin: 30px;
+  position: relative;
+
+  .header_container {
+    height: 50%;
+    margin: 0 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    .cancleIcon {
+      cursor: pointer;
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+
+      .title {
+        margin: 0 10px 0 0;
+        color: #2d3748;
+        letter-spacing: 5px;
+      }
+
+      .status {
+        color: white;
+        padding: 3px 15px 3px 15px;
+        border: none;
+        border-radius: 10px;
+        background-color: #2d3748;
+      }
+    }
+  }
+
+  .body_container {
+    height: 50%;
+    margin: 0 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .body {
+      display: flex;
+      align-items: center;
+    }
+
+    .subtitle2 {
+      margin: 0 10px 0 0;
+      color: #2d3748;
+    }
+  }
+}

@@ -87,20 +87,20 @@ function CreateClass() {
           {isClassCreated && <ClassTab />}
         </div>
         <div className={cx("button-content")}>
-        {isClassCreated && (
-          <div className={cx("button-content")}>
-            <div className={cx("left-button-content")}>
+          {isClassCreated && (
+            <div className={cx("button-content")}>
+              <div className={cx("left-button-content")}>
                 <button className={cx("button1")}>Back</button>
               </div>
               <div className={cx("right-button-content")}>
-              <p className={cx("cancel")}>
-                Cancel
-              </p>
+                <p className={cx("cancel")}>
+                  Cancel
+                </p>
                 <button className={cx("button2")}>Save as draft</button>
                 <button className={cx("button1")}>Next</button>
               </div>
             </div>
-        )}
+          )}
         </div>
       </div>
     </div>

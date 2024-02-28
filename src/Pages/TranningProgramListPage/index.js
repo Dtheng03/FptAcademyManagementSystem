@@ -1,127 +1,153 @@
+import axios from "axios";
 import React, { useEffect, useState } from "react";
-import SearchWithIcon from "../../Components/Common/InputBox/SearchWithIcon/SearchWithIcon";
+import styles from "./TranningProgram.module.scss";
+import classNames from "classnames/bind";
+import { SearchIcon, UploadIcon } from "../../Components/Common/Icons/DocManageIcons";
 import Button from "../../Components/Common/Button";
+
 import {
   AddIcon,
   FilterListIcon,
   SortIcon,
 } from "../../Components/Common/Icons/ActionIcons";
-import classNames from "classnames/bind";
-import { UploadIcon } from "../../Components/Common/Icons/DocManageIcons";
-import { Pagination } from "antd/es";
-
-import styles from "./TranningProgram.scss";
-import axios from "axios";
+import { Pagination, Tag } from "antd";
+import Table from "./Table";
 
 const cx = classNames.bind(styles);
-
-export default function TranningListPage() {
-  const [program, setProgram] = useState([]);
+export default function TranningProgramListPage() {
+  const [data, setData] = useState([]);
 
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
-  const currentPageData = program.slice(startIndex, endIndex);
+  const currentPageData = data.slice(startIndex, endIndex);
+  console.log(currentPage);
+
+  const [result, setResult] = useState([]);
+
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [isDomChange, setIsDomChange] = useState(false);
 
   useEffect(() => {
-    axios
-      .get("https://65411666f0b8287df1fdc4fa.mockapi.io/program")
-      .then((response) => {
-        const trainningProgram = response.data;
-        setProgram(trainningProgram);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, []); // Empty dependency array to run effect only once
-  
+    async function getProgram() {
+      try {
+        const response = await axios.get(
+          "https://65411666f0b8287df1fdc4fa.mockapi.io/program"
+        );
+        setData(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    getProgram();
+  }, [isDomChange]);
 
   return (
     <div className={cx("container")}>
-      <h3>Tranning Program</h3>
+      <h3 className={cx("header")}>Tranning program</h3>
       <div className={cx("action")}>
         <div className={cx("search")}>
-          <SearchWithIcon />
-          <Button title={"Filter"} firstIcon={<FilterListIcon />} />
-        </div>
-
-        <div style={{ display: "flex" }}>
-          <div className={cx("import")}>
-            <Button title={"Import"} firstIcon={<UploadIcon />} />
+          <div className={cx("search-input")}>
+            <SearchIcon />
+            <input
+              className={cx("input-contain")}
+              type="text"
+              placeholder="search by..."
+            />
           </div>
-
-          <div className={cx("add-new")}>
-            <Button title={"Add New"} firstIcon={<AddIcon />} />
-          </div>
+          <Button title="Filter" firstIcon={<FilterListIcon />} />
         </div>
+        
+        <Button title="Add New" firstIcon={<AddIcon />} />
+        
+      </div>
+
+      <div className={cx("search-result")}>
+        <Tag className={cx("result")} color="#474747" closable>
+          cc
+        </Tag>
       </div>
 
       <table className={cx("table")}>
         <thead className={cx("thead")}>
           <tr className={cx("tr")}>
-            <th className={cx("th")}>
-              <button className="title">
-                ID
-                <SortIcon />
+            <th className={cx("th", "id")}>
+              <button className={cx("title")}>
+                ID <SortIcon />
               </button>
             </th>
-            <th className={cx("th")}>
-              <button className="title">
-                Program Name <SortIcon />
+
+            <th className={cx("th", "id")}>
+              <button className={cx("title")}>
+                Program name <SortIcon />
               </button>
             </th>
-            <th className={cx("th")}>
-              <button className="title">
+            <th className={cx("th", "id")}>
+              <button className={cx("title")}>
                 Create on <SortIcon />
               </button>
             </th>
-            <th className={cx("th")}>
-              <button className="title">
+            <th className={cx("th", "id")}>
+              <button className={cx("title")}>
                 Create by <SortIcon />
               </button>
             </th>
-            <th className={cx("th")}>
-              <button className="title">
+            <th className={cx("th", "id")}>
+              <button className={cx("title")}>
                 Duration <SortIcon />
               </button>
             </th>
-            <th className={cx("th")}>
-              <button className="title">
+            <th className={cx("th", "id")}>
+              <button className={cx("title")}>
                 Status <SortIcon />
               </button>
             </th>
             <th className={cx("th")}></th>
           </tr>
         </thead>
-        <tbody>
-          {program.map((program) => (
-            <tr key={program.id}>
-              <td>{program.id}</td>
-              <td>{program.programName}</td>
-              <td>{program.createOn}</td>
-              <td>{program.createBy}</td>
-              <td>{program.duration}</td>
-              <td>{program.status}</td>
-            </tr>
-          ))}
-        </tbody>
+        {result.length > 0 ? (
+          <tbody className={cx("tbody")}>
+            {result.map((item) => (
+              <Table
+                key={item.id}
+                item={item}
+                domChange={() => setIsDomChange(true)}
+                domChangeSuccess={() => setIsDomChange(false)}
+              />
+            ))}
+          </tbody>
+        ) : (
+          <tbody className={cx("tbody")}>
+            {currentPageData.map((item) => (
+              <Table
+                key={item.id}
+                item={item}
+                domChange={() => setIsDomChange(true)}
+                domChangeSuccess={() => setIsDomChange(false)}
+              />
+            ))}
+          </tbody>
+        )}
       </table>
 
-      <div className={cx("pagination")}>
-        <Pagination
-          onChange={(page, pageSize) => {
-            setItemsPerPage(pageSize);
-            setCurrentPage(page);
-          }}
-          showSizeChanger
-          onShowSizeChange={(pageSize) => {
-            setItemsPerPage(pageSize);
-          }}
-          current={currentPage}
-          total={program.length}
-        />
-      </div>
+      {result.length === 0 && (
+        <div className={cx("pagination")}>
+          <Pagination
+            onChange={(page, pageSize) => {
+              setItemsPerPage(pageSize);
+              setCurrentPage(page);
+            }}
+            showSizeChanger
+            onShowSizeChange={(pageSize) => {
+              setItemsPerPage(pageSize);
+            }}
+            current={currentPage}
+            total={data.length}
+          />
+        </div>
+      )}
     </div>
   );
 }

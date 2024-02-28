@@ -18,7 +18,7 @@ function Calender() {
 
   const onChangeStartDate = date => {
     setStartDate(date);
-    setEndDate(null); 
+    setEndDate(null);
     setPopupOpen(false);
   };
 
@@ -96,7 +96,7 @@ function Calender() {
                     left: '36.8%',
                     visibility: popupOpen ? 'visible' : 'hidden',
                   }}
-                  getCalendarContainer={() => dropdownButtonRef.current} 
+                  getCalendarContainer={() => dropdownButtonRef.current}
                 />
               </>
             ) : (

@@ -38,18 +38,18 @@ function Attendee() {
         </button>
         {isButtonClicked && (
           <div className={cx('dropdown-content', { 'opened': popupOpen })}>
-                <div className={cx("dropdown-option1")}>
-                    <p>Planned</p>
-                    <input type="text"/>
-                </div>
-                <div className={cx("dropdown-option2")}>
-                    <p>Accepted</p>
-                    <input type="text"/>
-                </div>
-                <div className={cx("dropdown-option3")}>
-                    <p>Actual</p>
-                    <input type="text"/>
-                </div>
+            <div className={cx("dropdown-option1")}>
+              <p>Planned</p>
+              <input type="text" />
+            </div>
+            <div className={cx("dropdown-option2")}>
+              <p>Accepted</p>
+              <input type="text" />
+            </div>
+            <div className={cx("dropdown-option3")}>
+              <p>Actual</p>
+              <input type="text" />
+            </div>
           </div>
         )}
       </div>

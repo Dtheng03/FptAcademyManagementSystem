@@ -1,11 +1,8 @@
 import React, { useState } from "react"; // Import React
 import styles from "./Attendee.module.scss";
 import classNames from "classnames/bind";
-import { toast } from "react-toastify";
 import { DropDownCircleIcon } from "../../../Components/Common/Icons/ActionIcons/index";
 import { GradeIcon } from "../../../Components/Common/Icons/IndicatorIcons/index";
-
-import "react-toastify/dist/ReactToastify.css";
 
 const cx = classNames.bind(styles);
 
@@ -41,18 +38,18 @@ function Attendee() {
         </button>
         {isButtonClicked && (
           <div className={cx('dropdown-content', { 'opened': popupOpen })}>
-                <div className={cx("dropdown-option1")}>
-                    <p>Planned</p>
-                    <input type="text"/>
-                </div>
-                <div className={cx("dropdown-option2")}>
-                    <p>Accepted</p>
-                    <input type="text"/>
-                </div>
-                <div className={cx("dropdown-option3")}>
-                    <p>Actual</p>
-                    <input type="text"/>
-                </div>
+            <div className={cx("dropdown-option1")}>
+              <p>Planned</p>
+              <input type="text" />
+            </div>
+            <div className={cx("dropdown-option2")}>
+              <p>Accepted</p>
+              <input type="text" />
+            </div>
+            <div className={cx("dropdown-option3")}>
+              <p>Actual</p>
+              <input type="text" />
+            </div>
           </div>
         )}
       </div>

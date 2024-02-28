@@ -2,8 +2,6 @@ import React, { useState, useEffect } from "react"; // Import React
 import styles from "./CreateClass.module.scss";
 import classNames from "classnames/bind";
 import Button from "../../Components/Common/Button";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import General from "./General/General";
 import Calender from "./Calender/Calender";
 import Attendee from "./Attendee/Attendee";
@@ -22,7 +20,7 @@ function CreateClass() {
 
   const handleCreateButton = () => {
     if (!className) {
-      toast.warning("Class name cannot be empty!");
+      // toast.warning("Class name cannot be empty!");
       return; // Don't proceed if class name is empty
     }
     setIsClassCreated(true);
@@ -85,20 +83,20 @@ function CreateClass() {
           {isClassCreated && <ClassTab />}
         </div>
         <div className={cx("button-content")}>
-        {isClassCreated && (
-          <div className={cx("button-content")}>
-            <div className={cx("left-button-content")}>
+          {isClassCreated && (
+            <div className={cx("button-content")}>
+              <div className={cx("left-button-content")}>
                 <button className={cx("button1")}>Back</button>
               </div>
               <div className={cx("right-button-content")}>
-              <p className={cx("cancel")}>
-                Cancel
-              </p>
+                <p className={cx("cancel")}>
+                  Cancel
+                </p>
                 <button className={cx("button2")}>Save as draft</button>
                 <button className={cx("button1")}>Next</button>
               </div>
             </div>
-        )}
+          )}
         </div>
       </div>
     </div>

@@ -12,6 +12,7 @@ import SyllabusList from './Pages/SyllabusList/SyllabusList';
 import CreateSyllabusPage from './Pages/CreateSyllabus/CreateSyllabusPage';
 import TranningListPage from './Pages/TranningProgramListPage';
 import ClassListPage from './Pages/ClassListPage';
+import CreateClass from "./Pages/CreateClass/CreateClass";
 import UserListPage from './Pages/UserListPage';
 import UserPermissionPage from './Pages/UserPermissionPage';
 import LearningMaterials from './Pages/LearningMaterials/LearningMaterials';
@@ -78,6 +79,7 @@ function App() {
                 <Route path='/create-syllabus' element={<CreateSyllabusPage />} />
                 <Route path='/tranning-program-list' element={<TranningListPage />} />
                 <Route path='/class-list' element={<ClassListPage />} />
+                <Route path='/create-class' element={<CreateClass />} />
                 <Route path='/user-list' element={<UserListPage />} />
                 <Route path='/user-permission' element={<UserPermissionPage />} />
                 <Route path='/materials' element={<LearningMaterials />} />

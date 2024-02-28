@@ -2,8 +2,6 @@ import React, { useState } from "react"; // Import React
 import styles from "./ClassTab.module.scss";
 import classNames from "classnames/bind";
 import Syllabus from "../../../Components/Common/SyllabusTab/syllabus/syllabus";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import { SearchIcon } from "../../../Components/Common/Icons/DocManageIcons/index";
 
 const cx = classNames.bind(styles);
@@ -57,32 +55,32 @@ function ClassTab() {
         <div className={cx("select-tranning-program-header")}>
           <p>Training Program name</p>
           <div className={cx("container")}>
-          <div
-            className={cx("search-input", { open: isOpen })}
-            onClick={toggleDropdown}
-          >
-            <div className={cx("input-container")}>
-            <SearchIcon className={cx("dropdown-icon")} />
-              <input
-                className={cx("input-text")}
-                type="text"
-                value={value}
-                onChange={handleChange}
-                placeholder="Select program"
-              />
+            <div
+              className={cx("search-input", { open: isOpen })}
+              onClick={toggleDropdown}
+            >
+              <div className={cx("input-container")}>
+                <SearchIcon className={cx("dropdown-icon")} />
+                <input
+                  className={cx("input-text")}
+                  type="text"
+                  value={value}
+                  onChange={handleChange}
+                  placeholder="Select program"
+                />
+              </div>
+              <div className={cx("dropdown")}>
+                {syllabusOptions
+                  .filter((name) =>
+                    name.toLowerCase().includes(value.toLowerCase())
+                  )
+                  .map((name, index) => (
+                    <div className={cx("view-select")} key={index} onClick={() => handleItemClick(name)}>
+                      {name}
+                    </div>
+                  ))}
+              </div>
             </div>
-            <div className={cx("dropdown")}>
-              {syllabusOptions
-                .filter((name) =>
-                  name.toLowerCase().includes(value.toLowerCase())
-                )
-                .map((name, index) => (
-                  <div className={cx("view-select")} key={index} onClick={() => handleItemClick(name)}>
-                    {name}
-                  </div>
-                ))}
-            </div>
-          </div>
           </div>
         </div>
         <div></div>

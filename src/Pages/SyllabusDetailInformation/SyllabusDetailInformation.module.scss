@@ -1,0 +1,38 @@
+.container {
+    width: 100%;
+    flex-direction: row !important;
+
+    .second-container{
+        border-bottom: 0.1px solid;
+    }
+
+    .content-container{
+        width: 100%;
+        display: flex;
+        padding-top: 15px;
+
+        .content-inside{
+            width: 100%;
+           
+        }
+
+    }
+
+    
+    .category {
+        display: inline-flex;
+
+
+        .button{
+            display: flex;
+            border: none;
+
+            .button-cursor{
+                cursor: pointer;
+            }
+
+           
+
+        }
+    }
+}

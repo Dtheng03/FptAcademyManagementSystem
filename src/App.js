@@ -18,7 +18,9 @@ import UserListPage from './Pages/UserListPage';
 import UserPermissionPage from './Pages/UserPermissionPage';
 import LearningMaterials from './Pages/LearningMaterials/LearningMaterials';
 import TrainingCalendarPage from './Pages/TrainingCalendarPage';
+import SyllabusDetailInformation from './Pages/SyllabusDetailInformation';
 import TranningProgramDetail from './Pages/TrainingProgramDetail';
+
 function App() {
   const [decryptedRoleName, setDecryptedRoleName] = useState("");
 
@@ -100,8 +102,9 @@ function App() {
             {isLoggedIn ? (
               <>
                 {/* ROUTE CODE TRONG ĐÂY NHA MẤY NÍ */}
-                <Route path='/home' element={<HomePage />} />
+                <Route path='/home' element={<SyllabusDetailInformation/>} />
                 <Route path='/view-syllabus' element={<SyllabusList />} />
+                <Route path='/view-syllabus-detail' element={<SyllabusDetailInformation/>}/>
                 <Route path='/create-syllabus' element={<CreateSyllabusPage />} />
                 <Route path='/tranning-program-list' element={<TranningListPage />} />
                 <Route path='/view-tranning-program-detail/:id' element={<TranningProgramDetail />} />

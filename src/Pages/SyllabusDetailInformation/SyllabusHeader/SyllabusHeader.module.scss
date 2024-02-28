@@ -1,0 +1,59 @@
+.header-container {
+    width: 100%;
+    flex-direction: row !important;
+    background-color: white;
+    margin-top: 1px;
+    margin-bottom: 15px;
+    border-bottom: 2px rgb(167, 163, 163) solid;
+
+    .title-1 {
+        display: flex;
+        align-items: center;
+        margin-left: 25px;
+
+        .syllabus-text {
+            margin: 15px 0 10px 0;
+            align-items: center;
+            color: black;
+            letter-spacing: 5px;
+        }
+    }
+
+    .header-body {
+        display: flex;
+        justify-content: space-between;
+
+        .title-2 {
+            display: flex;
+            margin-left: 25px;
+            align-items: center;
+
+            .syllabus-text {
+                margin: 15px 0 20px 0;
+                color: black;
+                letter-spacing: 5px;
+            }
+
+            .syllabus-status {
+                display: flex;
+                margin: 23px 0 20px 10px;
+            }
+        }
+
+        .syllabus-more-icon {
+            display: flex;
+            align-items: center;
+            margin-right: 6%;
+            color: black;
+            cursor: pointer;
+        }
+    }
+
+    .syllabus-version {
+        display: flex;
+
+        .version {
+            margin: 0 0 15px 23px;
+        }
+    }
+}

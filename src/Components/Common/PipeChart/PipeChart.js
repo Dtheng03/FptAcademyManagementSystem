@@ -37,7 +37,7 @@ const PipeChart = ({ assignment, concept, guide, test, exam }) => {
           cx={200}
           cy={200}
           labelLine={false}
-          label
+          
           outerRadius={80}
           fill="#8884d8"
         >

@@ -83,17 +83,90 @@
     margin: 2%;
 
     .content {
-      width: 100px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 80px;
       height: 28px;
       background-color: transparent;
       border: none;
       border-radius: 50px;
       font-weight: bold;
       cursor: pointer;
+    }
 
-      &:focus {
+    .day,
+    .week {
+      background-color: var(--primary-color);
+      color: var(--white-color);
+    }
+
+    .checkbox {
+      display: none;
+    }
+  }
+
+  .section-day {
+    .date-picker {
+      margin: 0 2%;
+      text-align: center;
+
+      .input {
+        width: 288px;
+        border: 1px solid var(--primary-color);
+        outline: 1px solid var(--primary-color);
+      }
+    }
+
+    .section {
+      margin: 1%;
+      width: 98%;
+
+      .title {
+        padding: 0.6% 0.8%;
+        border-radius: 8px;
         background-color: var(--primary-color);
         color: var(--white-color);
+        cursor: pointer;
+      }
+
+      .data {
+        .record {
+          padding: 0.6% 0.8%;
+          border-bottom: 1px solid var(--primary-color);
+
+          .time {
+            display: inline-block;
+            width: 60px;
+            border-right: 1px solid var(--primary-color);
+          }
+        }
+      }
+    }
+  }
+
+  .section-week {
+    .date-picker {
+      margin: 0 2%;
+      text-align: center;
+
+      .input {
+        width: 288px;
+        border: 1px solid var(--primary-color);
+        outline: 1px solid var(--primary-color);
+      }
+    }
+
+    .section {
+      margin: 1%;
+      width: 98%;
+
+      .title {
+        padding: 0.6% 0.8%;
+        border-radius: 8px;
+        background-color: var(--primary-color);
+        color: var(--white-color);
+        cursor: pointer;
       }
     }
   }

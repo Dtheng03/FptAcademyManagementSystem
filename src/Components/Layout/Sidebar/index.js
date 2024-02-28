@@ -58,7 +58,7 @@ function Sidebar() {
         },
         {
           title: 'Create class',
-          to: '',
+          to: '/create-class',
         },
       ],
     },

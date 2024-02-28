@@ -83,18 +83,37 @@
     margin: 2%;
 
     .content {
-      width: 100px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 80px;
       height: 28px;
       background-color: transparent;
       border: none;
       border-radius: 50px;
       font-weight: bold;
       cursor: pointer;
+    }
 
-      &:focus {
-        background-color: var(--primary-color);
-        color: var(--white-color);
-      }
+    .day,
+    .week {
+      background-color: var(--primary-color);
+      color: var(--white-color);
+    }
+
+    .checkbox {
+      display: none;
     }
   }
+
+  .section-day {
+    .date-picker {
+      margin: 2%;
+      width: 96%;
+    }
+  }
+}
+
+.popup-date-picker {
+  width: 60%;
 }

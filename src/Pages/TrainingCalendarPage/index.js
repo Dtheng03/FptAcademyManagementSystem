@@ -3,7 +3,7 @@ import classNames from "classnames/bind";
 import { SearchIcon } from "../../Components/Common/Icons/DocManageIcons";
 import { AddIcon, SortIcon, CancleIcon, FilterListIcon } from "../../Components/Common/Icons/ActionIcons";
 import Button from "../../Components/Common/Button";
-import { Tag } from "antd";
+import { Tag, DatePicker } from "antd";
 import { useState } from "react";
 
 const cx = classNames.bind(styles);
@@ -11,6 +11,7 @@ const cx = classNames.bind(styles);
 function TrainingCalendarPage() {
 
     const [filterLs, setFilterLs] = useState(["Ho Chi Minh", "BA"]);
+
     const [tab, setTab] = useState("Day");
     return (
         <div className={cx("container")}>
@@ -54,13 +55,21 @@ function TrainingCalendarPage() {
                     </button>}
             </div>
 
-            {/* phan day va week */}
+            {/* phan chon day hoac week */}
             <div className={cx("tab")}>
-                <label className="content" >Day</label>
-                <input className={cx("content")} type="checkbox" checked={tab === "Day"} />
+                <label className={cx("content", tab === "Day" ? "day" : "")} onClick={() => { setTab("Day") }}>Day</label>
+                <input className={cx("checkbox")} type="checkbox" checked={tab === "Day"} onChange={() => { setTab("Day") }} />
 
-                <label className="content" >Day</label>
-                <input className={cx("content")} type="checkbox" checked={tab === "Week"} />
+                <label className={cx("content", tab === "Week" ? "week" : "")} onClick={() => { setTab("Week") }} >Week</label>
+                <input className={cx("checkbox")} type="checkbox" checked={tab === "Week"} onChange={() => { setTab("Week") }} />
+            </div>
+
+            {/* phan day */}
+            <div className={cx("section-day")}>
+                <DatePicker
+                    className={cx("date-picker")}
+                    popupClassName={cx("popup-date-picker")}
+                />
             </div>
         </div>
     );

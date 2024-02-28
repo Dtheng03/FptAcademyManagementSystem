@@ -100,7 +100,6 @@ function App() {
             {isLoggedIn ? (
               <>
                 {/* ROUTE CODE TRONG ĐÂY NHA MẤY NÍ */}
-<<<<<<< src/App.js
                 <Route path='/home' element={<HomePage />} />
                 <Route path='/view-syllabus' element={<SyllabusList />} />
                 <Route path='/create-syllabus' element={<CreateSyllabusPage />} />
@@ -111,26 +110,14 @@ function App() {
                 <Route path='/materials' element={<LearningMaterials />} />
                 <Route path='/training-calendar' element={<TrainingCalendarPage />} />
                 <Route path='/create-class' element={<CreateClass />} />
-=======
-                <Route path="/home" element={<HomePage />} />
-                <Route path="/view-syllabus" element={<SyllabusList />} />
-                <Route path="/create-syllabus" element={<CreateSyllabusPage />} />
-                <Route path="/tranning-program-list" element={<TranningListPage />} />
-                <Route path="/class-list" element={<ClassListPage />} />
-                <Route path="/create-class" element={<CreateClass />} />
-                <Route path="/training-calendar" element={<TrainingCalendarPage />} />
-                <Route path="/user-list" element={<UserListPage />} />
-                <Route path="/user-permission" element={<UserPermissionPage />} />
-                <Route path="/materials" element={<LearningMaterials />} />
->>>>>>> src/App.js
               </>
             ) : (
-    <Route path="/login" element={<Login onLogin={handleLogin} />} />
-  )
-}
+              <Route path="/login" element={<Login onLogin={handleLogin} />} />
+            )
+            }
           </Routes >
         </Layout >
-  { isLoggedIn && location.pathname !== "/login" && <Footer />}
+        {isLoggedIn && location.pathname !== "/login" && <Footer />}
       </Layout >
     </div >
   );

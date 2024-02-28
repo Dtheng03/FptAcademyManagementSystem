@@ -10,16 +10,16 @@ import crypto from "crypto-js";
 import Login from "./Pages/account/Login";
 import HomePage from "./Pages/HomePage/HomePage";
 import SyllabusList from "./Pages/SyllabusList/SyllabusList";
+import SyllabusDetailInformation from './Pages/SyllabusDetailInformation';
 import CreateSyllabusPage from "./Pages/CreateSyllabus/CreateSyllabusPage";
 import TranningListPage from "./Pages/TranningProgramListPage";
+import TranningProgramDetail from './Pages/TrainingProgramDetail';
 import ClassListPage from "./Pages/ClassListPage";
 import CreateClass from "./Pages/CreateClass/CreateClass";
+import TrainingCalendarPage from './Pages/TrainingCalendarPage';
 import UserListPage from './Pages/UserListPage';
 import UserPermissionPage from './Pages/UserPermissionPage';
 import LearningMaterials from './Pages/LearningMaterials/LearningMaterials';
-import TrainingCalendarPage from './Pages/TrainingCalendarPage';
-import SyllabusDetailInformation from './Pages/SyllabusDetailInformation';
-import TranningProgramDetail from './Pages/TrainingProgramDetail';
 
 function App() {
   const [decryptedRoleName, setDecryptedRoleName] = useState("");
@@ -102,19 +102,19 @@ function App() {
             {isLoggedIn ? (
               <>
                 {/* ROUTE CODE TRONG ĐÂY NHA MẤY NÍ */}
-                <Route path='/home' element={<SyllabusDetailInformation/>} />
+                <Route path='/home' element={<HomePage />} />
                 <Route path='/view-syllabus' element={<SyllabusList />} />
-                <Route path='/view-syllabus-detail' element={<SyllabusDetailInformation/>}/>
+                <Route path='/view-syllabus-detail' element={<SyllabusDetailInformation />} />
                 <Route path='/create-syllabus' element={<CreateSyllabusPage />} />
                 <Route path='/tranning-program-list' element={<TranningListPage />} />
                 <Route path='/view-tranning-program-detail/:id' element={<TranningProgramDetail />} />
                 <Route path='/class-list' element={<ClassListPage />} />
-                <Route path='/user-list' element={<UserListPage />} />
-                <Route path='/user-permission' element={<UserPermissionPage />} />
-                <Route path='/materials' element={<LearningMaterials />} />
                 {/* <Route path="/view-class-detail/:id" element={<ViewClassDetail />} /> */}
                 <Route path='/training-calendar' element={<TrainingCalendarPage />} />
                 <Route path='/create-class' element={<CreateClass />} />
+                <Route path='/user-list' element={<UserListPage />} />
+                <Route path='/user-permission' element={<UserPermissionPage />} />
+                <Route path='/materials' element={<LearningMaterials />} />
               </>
             ) : (
               <Route path="/login" element={<Login onLogin={handleLogin} />} />

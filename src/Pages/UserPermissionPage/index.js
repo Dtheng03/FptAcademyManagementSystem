@@ -5,8 +5,9 @@ import { AddIcon, VisibilityIcon, VisibilityOffIcon } from "../../Components/Com
 import { CreateIcon } from "../../Components/Common/Icons/DocManageIcons";
 import { GradeIcon } from "../../Components/Common/Icons/IndicatorIcons";
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { notification } from "antd";
+import axios from "axios";
+import crypto from "crypto-js";
 
 const cx = classNames.bind(styles);
 
@@ -24,7 +25,17 @@ function UserPermissionPage() {
     const token = sessionStorage.getItem("token");
     axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
-    const roleName = sessionStorage.getItem("roleName");
+    // Decode roleName đã mã hóa
+    var decryptedRoleName;
+    const encryptedRoleName = sessionStorage.getItem("roleName");
+    if (encryptedRoleName) {
+        decryptedRoleName = crypto.AES.decrypt(
+            encryptedRoleName,
+            "react02"
+        ).toString(crypto.enc.Utf8);
+    }
+    const roleName = decryptedRoleName;
+
     const [data, setData] = useState([]);
     const [isDomChange, setIsDomChange] = useState(false);
     const [update, setUpdate] = useState(false);
@@ -94,7 +105,7 @@ function UserPermissionPage() {
             <h4 className={cx("header")}>User Permission</h4>
 
             {/* phần actions */}
-            {roleName !== "Trainer" && < div className={cx("action")}>
+            {roleName === "Super Admin" && < div className={cx("action")}>
                 {!update && <Button title={"Update Permission"} onClick={() => setUpdate(true)} />}
             </div>}
 
@@ -133,7 +144,6 @@ function UserPermissionPage() {
                                         name="syllabus"
                                         className={cx("select")}
                                         onChange={(e) => handleChange(e, item)}
-                                        disabled={roleName === "Admin" && (item.roleName === "Super Admin" || item.roleName === "Admin")}
                                     >
                                         <option>Permission</option>
                                         <option value={"Access denied"}>Access denied</option>
@@ -148,7 +158,6 @@ function UserPermissionPage() {
                                         name="trainingProgram"
                                         className={cx("select")}
                                         onChange={(e) => handleChange(e, item)}
-                                        disabled={roleName === "Admin" && (item.roleName === "Super Admin" || item.roleName === "Admin")}
                                     >
                                         <option>Permission</option>
                                         <option value={"Access denied"}>Access denied</option>
@@ -163,7 +172,6 @@ function UserPermissionPage() {
                                         name="class"
                                         className={cx("select")}
                                         onChange={(e) => handleChange(e, item)}
-                                        disabled={roleName === "Admin" && (item.roleName === "Super Admin" || item.roleName === "Admin")}
                                     >
                                         <option>Permission</option>
                                         <option value={"Access denied"}>Access denied</option>
@@ -178,7 +186,6 @@ function UserPermissionPage() {
                                         name="learningMaterial"
                                         className={cx("select")}
                                         onChange={(e) => handleChange(e, item)}
-                                        disabled={roleName === "Admin" && (item.roleName === "Super Admin" || item.roleName === "Admin")}
                                     >
                                         <option>Permission</option>
                                         <option value={"Access denied"}>Access denied</option>

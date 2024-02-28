@@ -51,7 +51,7 @@ function ModalAddUser({ closeModal }) {
                 console.log(error);
                 notification.error({
                     message: "Add new user failed!",
-                    description: "Please try again!"
+                    description: error.response.data.message || "Something wrong! Please try again later"
                 })
             });
         reset();
@@ -136,6 +136,8 @@ function ModalAddUser({ closeModal }) {
                             {...register("dob")}
                             className={cx("input")}
                             type="date"
+                            min={"1980-01-01"}
+                            max={"2003-12-31"}
                         />
                     </div>
                     {errors.dob && <p className={cx("error")}>{errors.dob?.message}</p>}
@@ -156,7 +158,7 @@ function ModalAddUser({ closeModal }) {
                     {/* Status */}
                     <div className={cx("field")}>
                         <label className={cx("label")}>Status</label>
-                        {status ?
+                        {status === "Active" ?
                             <p
                                 className={cx("switch", "active")}
                                 onClick={() => { setStatus("Inactive") }}

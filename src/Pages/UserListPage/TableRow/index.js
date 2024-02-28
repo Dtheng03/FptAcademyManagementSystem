@@ -9,6 +9,7 @@ import { useDispatch } from "react-redux";
 import { setUpdateUser } from "../../../Redux/Reducer/UserSlice";
 import { notification, Popconfirm } from 'antd';
 import axios from "axios";
+import crypto from "crypto-js";
 
 const cx = classNames.bind(styles);
 
@@ -59,7 +60,21 @@ function TableRow({ item, openEdit, domChange, domChangeSuccess }) {
         color: "#4F6181",
         cursor: "pointer",
     }
-    const roleName = sessionStorage.getItem("roleName");
+
+    const token = sessionStorage.getItem("token");
+    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+
+    // Decode roleName đã mã hóa
+    var decryptedRoleName;
+    const encryptedRoleName = sessionStorage.getItem("roleName");
+    if (encryptedRoleName) {
+        decryptedRoleName = crypto.AES.decrypt(
+            encryptedRoleName,
+            "react02"
+        ).toString(crypto.enc.Utf8);
+    }
+    const roleName = decryptedRoleName;
+
     const dispatch = useDispatch();
 
     const [open, setOpen] = useState(false);
@@ -78,7 +93,7 @@ function TableRow({ item, openEdit, domChange, domChangeSuccess }) {
                 console.log(error);
                 notification.error({
                     message: "Change role failed",
-                    description: "Please try again!"
+                    description: "Something wrong! Please try again later!"
                 })
             });
     };
@@ -96,7 +111,7 @@ function TableRow({ item, openEdit, domChange, domChangeSuccess }) {
                 console.log(error);
                 notification.error({
                     message: "Change status failed",
-                    description: "Please try again!"
+                    description: "Something wrong! Please try again later!"
                 })
             });
     }

@@ -5,11 +5,12 @@ import { AddIcon, SortIcon, CancleIcon } from "../../Components/Common/Icons/Act
 import { SearchIcon } from "../../Components/Common/Icons/DocManageIcons";
 import { Pagination, Tag } from "antd";
 import { useEffect, useState } from "react";
-import axios from "axios";
 import TableRow from "./TableRow";
 import Filter from "./Filter";
 import ModalAddUser from "./ModalAddUser";
 import ModalEditUser from "./ModalEditUser";
+import axios from "axios";
+import crypto from "crypto-js";
 
 const cx = classNames.bind(styles);
 
@@ -17,7 +18,16 @@ function UserListPage() {
     const token = sessionStorage.getItem("token");
     axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
-    const roleName = sessionStorage.getItem("roleName");
+    // Decode roleName đã mã hóa
+    var decryptedRoleName;
+    const encryptedRoleName = sessionStorage.getItem("roleName");
+    if (encryptedRoleName) {
+        decryptedRoleName = crypto.AES.decrypt(
+            encryptedRoleName,
+            "react02"
+        ).toString(crypto.enc.Utf8);
+    }
+    const roleName = decryptedRoleName;
 
     const [data, setData] = useState([]);
 
@@ -91,7 +101,7 @@ function UserListPage() {
                     </div>
                     <Filter handleFilter={handleFilter} setFilterLs={setFilterLs} />
                 </div>
-                {roleName !== "Trainer" && <Button
+                {(roleName === "Super Admin" || roleName === "Admin") && <Button
                     title={"Add User"}
                     firstIcon={<AddIcon />}
                     onClick={() => {

@@ -20,7 +20,7 @@ function Sidebar() {
     {
       icon: <Icons.SyllabusIcon />,
       title: 'Syllabus',
-
+      to: "",
       children: [
         {
           title: 'View syllabus',
@@ -35,11 +35,11 @@ function Sidebar() {
     {
       icon: <Icons.TrainingProgramIcon />,
       title: 'Traning program',
-      to: '/tranning-program-list',
+      to: "",
       children: [
         {
           title: 'View program',
-          to: '',
+          to: '/tranning-program-list',
         },
         {
           title: 'Create program',
@@ -50,7 +50,7 @@ function Sidebar() {
     {
       icon: <Icons.ClassIcon />,
       title: 'Class',
-
+      to: "",
       children: [
         {
           title: 'View class',
@@ -65,13 +65,13 @@ function Sidebar() {
     {
       icon: <Icons.TrainingCalendarIcon />,
       title: 'Training calendar',
-      to: '',
+      to: '/training-calendar',
       children: [],
     },
     {
       icon: <Icons.UserManagementIcon />,
       title: 'User management',
-
+      to: "",
       children: [
         {
           title: 'User list',

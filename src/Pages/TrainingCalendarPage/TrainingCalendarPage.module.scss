@@ -156,5 +156,18 @@
         outline: 1px solid var(--primary-color);
       }
     }
+
+    .section {
+      margin: 1%;
+      width: 98%;
+
+      .title {
+        padding: 0.6% 0.8%;
+        border-radius: 8px;
+        background-color: var(--primary-color);
+        color: var(--white-color);
+        cursor: pointer;
+      }
+    }
   }
 }

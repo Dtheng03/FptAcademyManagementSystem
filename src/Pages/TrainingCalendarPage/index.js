@@ -1,10 +1,11 @@
 import styles from "./TrainingCalendarPage.module.scss";
 import classNames from "classnames/bind";
 import { SearchIcon } from "../../Components/Common/Icons/DocManageIcons";
-import { AddIcon, SortIcon, CancleIcon, FilterListIcon } from "../../Components/Common/Icons/ActionIcons";
+import { CancleIcon, FilterListIcon } from "../../Components/Common/Icons/ActionIcons";
 import Button from "../../Components/Common/Button";
 import { Tag, DatePicker } from "antd";
 import { useState } from "react";
+import WeekDaysList from "./WeekDaysList";
 
 const cx = classNames.bind(styles);
 
@@ -182,10 +183,19 @@ function TrainingCalendarPage() {
             {tab === "Week" &&
                 <div className={cx("section-week")}>
                     <div className={cx("date-picker")}>
-                        <DatePicker
-                            className={cx("input")}
-                            picker="week"
-                        />
+                        <WeekDaysList />
+                    </div>
+
+                    <div className={cx("section")}>
+                        <p className={cx("title")} onClick={() => { setShowMoring(!showMorning) }}>Morning (8:00 - 12:00)</p>
+                    </div>
+
+                    <div className={cx("section")}>
+                        <p className={cx("title")} onClick={() => { setShowNoon(!showNoon) }}>Noon (13:00 - 17:00)</p>
+                    </div>
+
+                    <div className={cx("section")}>
+                        <p className={cx("title")} onClick={() => { setShowNight(!showNight) }}>Night (18:00 - 22:00)</p>
                     </div>
                 </div>
             }

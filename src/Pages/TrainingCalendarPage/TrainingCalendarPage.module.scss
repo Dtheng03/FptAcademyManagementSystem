@@ -110,6 +110,10 @@
     .date-picker {
       margin: 2%;
       width: 96%;
+
+      .input {
+        border: none;
+      }
     }
   }
 }

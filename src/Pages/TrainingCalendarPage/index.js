@@ -66,10 +66,12 @@ function TrainingCalendarPage() {
 
             {/* phan day */}
             <div className={cx("section-day")}>
-                <DatePicker
-                    className={cx("date-picker")}
-                    popupClassName={cx("popup-date-picker")}
-                />
+                <div className={cx("date-picker")}>
+                    <DatePicker
+                        className={cx("input")}
+                        popupClassName={cx("popup-date-picker")}
+                    />
+                </div>
             </div>
         </div>
     );

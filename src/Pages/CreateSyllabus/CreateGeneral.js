@@ -12,11 +12,11 @@ const CreateGeneral = () => {
   return (
     <div
       className="generalContainer"
-      style={{ display: "flex", padding: "20px", backgroundColor: "#F5F5F5" }}
+      style={{ display: "flex", padding: "20px", margin: "20px", backgroundColor: "#FFFFFF", justifyContent: "space-between" }}
     >
       <div
         className="generalContent"
-        style={{ width: "78%", height: "636px" }}
+        style={{ width: "81%", height: "636px" }}
       >
         <div className="baseGeneralSetup">
           <div className="selectLevel" style={{ display: "flex" }}>
@@ -102,7 +102,7 @@ const CreateGeneral = () => {
           />
         </div>
       </div>
-      <div className="timeAllocation">
+      <div className="timeAllocation" style={{width: "18%"}}>
         <TimeAllocation />
       </div>
     </div>

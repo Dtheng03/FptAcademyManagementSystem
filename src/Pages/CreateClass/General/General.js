@@ -13,6 +13,7 @@ import {
   GradeIcon,
   SupplierIcon,
 } from "../../../Components/Common/Icons/IndicatorIcons/index";
+import { notification } from 'antd';
 
 const cx = classNames.bind(styles);
 
@@ -33,7 +34,10 @@ function General() {
     if (endTime && time) {
       const endTimeString = endTime.format(format);
       if (time.format(format) === endTimeString) {
-        // toast.warning("End time cannot be the same as start time.");
+        notification.error({
+          message: "Error",
+          description: "Start time cannot be the same as end time",
+        });
         setEndTime(null);
       }
     }
@@ -45,7 +49,10 @@ function General() {
     if (startTime && time) {
       const startTimeString = startTime.format(format);
       if (time.format(format) === startTimeString) {
-        // toast.warning("End time cannot be the same as start time.");
+        notification.error({
+          message: "Error",
+          description: "End time cannot be the same as start time",
+        });
         setStartTime(null);
       }
     }

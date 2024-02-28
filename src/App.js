@@ -5,6 +5,8 @@ import Footer from './Components/Layout/Footer';
 import { Route, Routes, useNavigate, useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { jwtDecode } from 'jwt-decode';
+import { useDispatch, useSelector } from 'react-redux';
+import { setRoleName } from "./Redux/Reducer/RoleSlice"
 
 import Login from './Pages/account/Login';
 import HomePage from './Pages/HomePage/HomePage';
@@ -48,7 +50,6 @@ function App() {
     dispatch(setRoleName(user.roleName));
 
     sessionStorage.setItem("isLoggedIn", JSON.stringify(true));
-    // sessionStorage.setItem("roleName", user.roleName);
     sessionStorage.setItem("fullName", user.fullName);
 
     const token = sessionStorage.getItem("token");
@@ -69,7 +70,6 @@ function App() {
     dispatch(setRoleName(null));
     setLoggedIn(false);
     sessionStorage.removeItem("isLoggedIn");
-    sessionStorage.removeItem("roleName");
     sessionStorage.removeItem("token");
     navigate("/login");
   };

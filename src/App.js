@@ -16,6 +16,7 @@ import UserListPage from './Pages/UserListPage';
 import UserPermissionPage from './Pages/UserPermissionPage';
 import LearningMaterials from './Pages/LearningMaterials/LearningMaterials';
 import TrainingCalendarPage from './Pages/TrainingCalendarPage';
+import CreateClass from "./Pages/CreateClass/CreateClass";
 
 function App() {
   const [isLoggedIn, setLoggedIn] = useState(() => {
@@ -82,6 +83,7 @@ function App() {
                 <Route path='/user-permission' element={<UserPermissionPage />} />
                 <Route path='/materials' element={<LearningMaterials />} />
                 <Route path='/training-calendar' element={<TrainingCalendarPage />} />
+                <Route path='/create-class' element={<CreateClass />} />
               </>
             ) : (
               <Route path='/login' element={<Login onLogin={handleLogin} />} />

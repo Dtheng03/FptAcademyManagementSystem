@@ -2,12 +2,11 @@ import React, { useState, useEffect } from "react"; // Import React
 import styles from "./CreateClass.module.scss";
 import classNames from "classnames/bind";
 import Button from "../../Components/Common/Button";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import General from "./General/General";
 import Calender from "./Calender/Calender";
 import Attendee from "./Attendee/Attendee";
 import ClassTab from "./ClassTab/ClassTab";
+import { notification } from 'antd';
 
 const cx = classNames.bind(styles);
 
@@ -22,7 +21,10 @@ function CreateClass() {
 
   const handleCreateButton = () => {
     if (!className) {
-      toast.warning("Class name cannot be empty!");
+      notification.error({
+        message: "Error",
+        description: "Class name is required",
+      });
       return; // Don't proceed if class name is empty
     }
     setIsClassCreated(true);

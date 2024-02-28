@@ -2,11 +2,10 @@ import React, { useState, useRef } from "react"; // Import React
 import styles from "./Calender.module.scss";
 import classNames from "classnames/bind";
 import { DatePicker } from "antd";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import { TrainingCalendarIcon } from "../../../Components/Common/Icons/NavMenuIcons/index";
 import { DropDownCircleIcon } from "../../../Components/Common/Icons/ActionIcons/index";
 import { ReportIcon } from "../../../Components/Common/Icons/IndicatorIcons/index";
+import { notification } from 'antd';
 
 const cx = classNames.bind(styles);
 
@@ -32,7 +31,10 @@ function Calender() {
 
     // Check if the selected end date is the same as the start date
     if (startDate && date.isSame(startDate, 'day')) {
-      toast.warning('End date cannot be the same as start date.');
+      notification.error({
+        message: "Error",
+        description: "End date cannot be the same as the start date",
+      });
       setEndDate(null); // Reset end date
     } else {
       setEndDate(date);

@@ -2,8 +2,6 @@ import React, { useState } from "react"; // Import React
 import styles from "./General.module.scss";
 import classNames from "classnames/bind";
 import { TimePicker } from "antd";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import { TrainingCalendarIcon } from "../../../Components/Common/Icons/NavMenuIcons/index";
 import { DropDownCircleIcon } from "../../../Components/Common/Icons/ActionIcons/index";
 import {
@@ -15,6 +13,7 @@ import {
   GradeIcon,
   SupplierIcon,
 } from "../../../Components/Common/Icons/IndicatorIcons/index";
+import { notification } from 'antd';
 
 const cx = classNames.bind(styles);
 
@@ -35,7 +34,10 @@ function General() {
     if (endTime && time) {
       const endTimeString = endTime.format(format);
       if (time.format(format) === endTimeString) {
-        toast.warning("End time cannot be the same as start time.");
+        notification.error({
+          message: "Error",
+          description: "Start time cannot be the same as end time",
+        });
         setEndTime(null);
       }
     }
@@ -47,7 +49,10 @@ function General() {
     if (startTime && time) {
       const startTimeString = startTime.format(format);
       if (time.format(format) === startTimeString) {
-        toast.warning("End time cannot be the same as start time.");
+        notification.error({
+          message: "Error",
+          description: "End time cannot be the same as start time",
+        });
         setStartTime(null);
       }
     }

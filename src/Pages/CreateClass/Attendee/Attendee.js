@@ -1,11 +1,8 @@
 import React, { useState } from "react"; // Import React
 import styles from "./Attendee.module.scss";
 import classNames from "classnames/bind";
-import { toast } from "react-toastify";
 import { DropDownCircleIcon } from "../../../Components/Common/Icons/ActionIcons/index";
 import { GradeIcon } from "../../../Components/Common/Icons/IndicatorIcons/index";
-
-import "react-toastify/dist/ReactToastify.css";
 
 const cx = classNames.bind(styles);
 

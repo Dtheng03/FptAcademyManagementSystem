@@ -2,8 +2,6 @@ import React, { useState } from "react"; // Import React
 import styles from "./ClassTab.module.scss";
 import classNames from "classnames/bind";
 import Syllabus from "../../../Components/Common/SyllabusTab/syllabus/syllabus";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import { SearchIcon } from "../../../Components/Common/Icons/DocManageIcons/index";
 
 const cx = classNames.bind(styles);

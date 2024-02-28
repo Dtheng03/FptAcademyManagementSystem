@@ -3,42 +3,16 @@ import classNames from "classnames/bind";
 import Button from "../../Components/Common/Button";
 import { FilterListIcon, AddIcon, SortIcon } from "../../Components/Common/Icons/ActionIcons";
 import { SearchIcon } from "../../Components/Common/Icons/DocManageIcons";
-import { Pagination, Popover, Tag } from "antd";
+import { Pagination, Popover } from "antd";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import TableRow from "./TableRow";
 import FilterPopip from "../../Components/Common/FilterPopip/FilterPopip"
+import { Link } from "react-router-dom";
 
 const cx = classNames.bind(styles);
 
 function ClassListPage() {
-
-    const [sortOrder, setSortOrder] = useState('asc');
-    const [sortedColumn, setSortedColumn] = useState(null);
-
-    const handleSort = (column) => {
-        let sortedData = [...data];
-
-        if (column === sortedColumn) {
-            // Đảo ngược thứ tự sắp xếp nếu cùng cột đã được chọn trước đó
-            sortedData.reverse();
-            setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
-        } else {
-            // Sắp xếp theo cột mới
-            sortedData.sort((a, b) => {
-                if (a[column] < b[column]) return sortOrder === 'asc' ? -1 : 1;
-                if (a[column] > b[column]) return sortOrder === 'asc' ? 1 : -1;
-                return 0;
-            });
-
-            setSortOrder('asc');
-            setSortedColumn(column);
-        }
-
-        setData(sortedData);
-    };
-
-
     const [data, setData] = useState([]);
 
     const [currentPage, setCurrentPage] = useState(1);
@@ -48,38 +22,66 @@ function ClassListPage() {
     const currentPageData = data.slice(startIndex, endIndex);
 
     const [searchValue, setSearchValue] = useState("");
-    const [suggestions, setSuggestions] = useState([]);
     const [filterLs, setFilterLs] = useState([]);
-    const [result, setResult] = useState([]);
+    const [search, setSearch] = useState([]);
 
-    const [showAddModal, setShowAddModal] = useState(false);
-    const [showEditModal, setShowEditModal] = useState(false);
     const [isDomChange, setIsDomChange] = useState(false);
+
+    const [sortedInfo, setSortedInfo] = useState([]);
+
+    //sắp xếp tăng giảm theo từng cột
+    const handleSort = (columnKey) => {
+        let sortOrder =
+            sortedInfo.columnKey === columnKey && sortedInfo.order === 'ascend' ? 'descend' : 'ascend';
+        setSortedInfo({ columnKey, order: sortOrder });
+    };
+
+    const sortedData = data.sort((a, b) => {
+        const columnKey = sortedInfo.columnKey;
+        const order = sortedInfo.order === 'ascend' ? 1 : -1;
+
+        if (columnKey === 'classNames') {
+            return a.classNames.localeCompare(b.classNames) * order;
+        }
+        else if (columnKey === 'classCode') {
+            return a.classCode.localeCompare(b.classCode) * order;
+        }
+        else if (columnKey === 'createdOn') {
+            return a.createdOn.localeCompare(b.createdOn) * order;
+        }
+        else if (columnKey === 'createdBy') {
+            return a.createdBy.localeCompare(b.createdBy) * order;
+        }
+        else if (columnKey === 'duration') {
+            return (a.duration - b.duration) * order;;
+        }
+        else if (columnKey === 'attendee') {
+            return a.attendee.localeCompare(b.attendee) * order;
+        }
+        else if (columnKey === 'location') {
+            return a.location.localeCompare(b.location) * order;
+        }
+
+        return 0;
+    });
 
     //Xử lý input search
     const handleInputSearch = (e) => {
         const value = e.target.value;
         setSearchValue(value);
-        const filteredSuggestions = data.filter(
-            suggestion => suggestion.classNames.toLowerCase().startsWith(value.toLowerCase())
-                || suggestion.classCode.toLowerCase().startsWith(value.toLowerCase())
-                || suggestion.id === value
-        );
-        setSuggestions(filteredSuggestions)
+
+        if (value.trim() === "") {
+            setSearch([]);
+        } else {
+            const searchResults = data.filter(
+                result => result.classNames.toLowerCase().includes(value.toLowerCase())
+                    || result.classCode.toLowerCase().includes(value.toLowerCase())
+            );
+            setSearch(searchResults);
+        }
     };
 
-    //Xử lý sau khi search
-    const handleSearch = () => {
-        const f1 = filterLs[0];
-        const f2 = filterLs[1];
-        const f3 = filterLs[2];
-        const f4 = filterLs[3];
-        const newData = data.filter(x => x.classNames.includes(f1) || x.classNames.includes(f2) || x.classNames.includes(f3) || x.classNames.includes(f4)
-            || x.classCode.includes(f1) || x.classCode.includes(f2) || x.classCode.includes(f3) || x.classCode.includes(f4)
-            || x.createdBy.includes(f1) || x.createdBy.includes(f2) || x.createdBy.includes(f3) || x.createdBy.includes(f4));
-        setResult(newData);
-    };
-
+    //Gọi API
     useEffect(() => {
         async function getClass() {
             try {
@@ -90,8 +92,7 @@ function ClassListPage() {
             }
         }
         getClass();
-        handleSearch();
-    }, [filterLs, showAddModal, showEditModal, isDomChange])
+    }, [isDomChange])
 
     return (
         <div className={cx("container")}>
@@ -122,75 +123,18 @@ function ClassListPage() {
                         </>
                     </Popover>
                 </div>
-                <Button
-                    title={"Add Class"}
-                    firstIcon={<AddIcon />}
-                />
+                <Link to="create-class">
+                    <Button
+                        title={"Add Class"}
+                        firstIcon={<AddIcon />}
+                    />
+                </Link>
+
             </div>
 
+            <div className={cx("filter-result")}>
 
-            {suggestions.length > 0 && searchValue !== "" && <div className={cx("suggestion")}>
-                {suggestions.map(((item, index) => (
-                    <div key={index}>
-                        <div
-                            className={cx("item")}
-                            onClick={() => {
-                                if (filterLs.indexOf(item.classNames) < 0) {
-                                    setFilterLs([...filterLs, item.classNames]);
-                                    setSearchValue("");
-                                }
-                            }}
-                        >
-                            {item.classNames}
-                        </div>
-                        <div
-                            className={cx("item")}
-                            onClick={() => {
-                                if (filterLs.indexOf(item.classCode) < 0) {
-                                    setFilterLs([...filterLs, item.classCode]);
-                                    setSearchValue("");
-                                }
-                            }}
-                        >
-                            {item.classCode}
-                        </div>
-                        <div
-                            className={cx("item")}
-                            onClick={() => {
-                                if (filterLs.indexOf(item.createdBy) < 0) {
-                                    setFilterLs([...filterLs, item.createdBy]);
-                                    setSearchValue("");
-                                }
-                            }}
-                        >
-                            {item.createdBy}
-                        </div>
-                    </div>
-                )))
-                }
-            </div>}
-
-
-            <div className={cx("search-result")}>
-                {filterLs.map(((item, index) => (
-                    <Tag
-                        key={index}
-                        className={cx("result")}
-                        color="#474747"
-                        closable
-                        onClose={() => {
-                            const newLs = filterLs.filter(x => x !== item);
-                            setFilterLs(newLs);
-                            if (filterLs.length === 0) {
-                                setResult([])
-                            }
-                        }}
-                    >
-                        {item}
-                    </Tag>
-                )))}
             </div>
-            
 
             <table className={cx("table")}>
                 <thead className={cx("thead")}>
@@ -239,13 +183,12 @@ function ClassListPage() {
                         <th className={cx('th')}></th>
                     </tr>
                 </thead>
-                {result.length > 0 ?
+                {search.length > 0 ?
                     <tbody className={cx("tbody")}>
-                        {result.map(item => (
+                        {search.map((item, index) => (
                             <TableRow
-                                key={item.id}
+                                key={index}
                                 item={item}
-                                openEdit={() => setShowEditModal(true)}
                                 domChange={() => setIsDomChange(true)}
                                 domChangeSuccess={() => setIsDomChange(false)}
                             />
@@ -257,7 +200,6 @@ function ClassListPage() {
                             <TableRow
                                 key={item.id}
                                 item={item}
-                                openEdit={() => setShowEditModal(true)}
                                 domChange={() => setIsDomChange(true)}
                                 domChangeSuccess={() => setIsDomChange(false)}
                             />
@@ -266,7 +208,7 @@ function ClassListPage() {
             </table>
 
             {
-                result.length === 0 && <div className={cx("pagination")}>
+                (search.length > 0 || data.length > 0) && <div className={cx("pagination")}>
                     <Pagination
                         onChange={(page, pageSize) => {
                             setItemsPerPage(pageSize)

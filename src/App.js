@@ -80,6 +80,7 @@ function App() {
                 <Route path='/user-list' element={<UserListPage />} />
                 <Route path='/user-permission' element={<UserPermissionPage />} />
                 <Route path='/materials' element={<LearningMaterials />} />
+                {/* <Route path="/view-class-detail/:id" element={<ViewClassDetail />} /> */}
 
               </>
             ) : (

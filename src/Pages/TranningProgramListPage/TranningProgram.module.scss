@@ -61,6 +61,25 @@
               }
           }
       }
+      .btn-grp{
+        display: flex;
+        justify-content: space-around;
+        
+      }
+      .import-btn{
+        display: flex;
+        align-items: center;
+        justify-content: space-evenly;
+        height: 32px;
+        background-color: #D45B13;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: bold;
+        padding: 0 12px;
+        margin-right: 10px;
+      }
   }
 
   .suggestion {

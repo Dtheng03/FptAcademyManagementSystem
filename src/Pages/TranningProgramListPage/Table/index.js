@@ -14,6 +14,7 @@ import {
   VisibilityOffIcon,
 } from "../../../Components/Common/Icons/ActionIcons";
 import axios from "axios";
+import { useNavigate } from "react-router";
 
 const cx = classNames.bind(styles);
 
@@ -34,11 +35,23 @@ function StatusStyle({ status }) {
 }
 
 export default function Table({ item, domChange, domChangeSuccess }) {
+  const link = useNavigate();
+
+  const handleViewDetail = (selectedItem) => {
+    link(`/view-tranning-program-detail/${selectedItem.id}`);
+  };
+
   const style = {
     backgroundColor: "transparent",
     border: "none",
     display: "flex",
     alignItems: "center",
+    gap: "12%",
+    width: "180px",
+    height: "40px",
+    fontWeight: "bold",
+    color: "#4F6181",
+    cursor: "pointer",
   };
   const [open, setOpen] = useState(false);
   const [newStatus, setNewStatus] = useState(item.status);
@@ -106,7 +119,7 @@ export default function Table({ item, domChange, domChangeSuccess }) {
   };
 
   return (
-    <tr className={cx("tr")}>
+    <tr className={cx("tr")} onDoubleClick={() => handleViewDetail(item)}>
       <td className={cx("td")}>{item.id}</td>
       <td className={cx("td")}>{item.name}</td>
       <td className={cx("td")}>{item.createOn}</td>
@@ -128,7 +141,7 @@ export default function Table({ item, domChange, domChangeSuccess }) {
               <button
                 style={style}
                 onClick={() => {
-                  setOpen = false;
+                  setOpen(false);
                 }}
               >
                 <LearningMaterialsIcon />
@@ -138,7 +151,7 @@ export default function Table({ item, domChange, domChangeSuccess }) {
               <button
                 style={style}
                 onClick={() => {
-                  setOpen = false;
+                  setOpen(false);
                 }}
               >
                 <CreateIcon />
@@ -146,6 +159,7 @@ export default function Table({ item, domChange, domChangeSuccess }) {
               </button>
 
               <button
+                
                 style={style}
                 onClick={() => {
                   handleDuplicate();
@@ -178,6 +192,7 @@ export default function Table({ item, domChange, domChangeSuccess }) {
                 }}
               >
                 <button
+                  
                   style={{ ...style, color: "red" }}
                   onClick={() => domChange()}
                 >
@@ -198,15 +213,15 @@ export default function Table({ item, domChange, domChangeSuccess }) {
                 cancelText="No"
               >
                 {newStatus === "Active" ? (
-                  <Button style={style} onClick={() => domChange()}>
+                  <button style={style} onClick={() => domChange()}>
                     <VisibilityOffIcon />
                     Deactivate
-                  </Button>
+                  </button>
                 ) : (
-                  <Button style={style} onClick={() => domChange()}>
+                  <button style={style} onClick={() => domChange()} >
                     <VisibilityIcon />
                     Activate
-                  </Button>
+                  </button>
                 )}
               </Popconfirm>
             </>

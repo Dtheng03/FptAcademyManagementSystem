@@ -4,6 +4,7 @@ import { useState } from "react";
 import { MoreIcon } from "../../../Components/Common/Icons/ActionIcons";
 import { DeleteForeverIcon, CreateIcon, CopyIcon } from "../../../Components/Common/Icons/DocManageIcons";
 import { Popover, notification, Popconfirm } from 'antd';
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const cx = classNames.bind(styles);
@@ -47,6 +48,12 @@ function TableRow({ item, domChange, domChangeSuccess }) {
 
     const [open, setOpen] = useState(false);
 
+    const navigate = useNavigate();
+
+    const handleDoubleClick = (selectedItem) => {
+        navigate(`/view-class-detail/${selectedItem.id}`);
+    };
+
     const handleDuplicateClass = () => {
         const duplicatedClass = { ...item };
         delete duplicatedClass.id;
@@ -86,7 +93,7 @@ function TableRow({ item, domChange, domChangeSuccess }) {
     };
 
     return (
-        <tr className={cx("tr")}>
+        <tr className={cx("tr")} onDoubleClick={() => handleDoubleClick(item)}>
             {/* <td className={cx("td", "id")}>{item.id}</td> */}
             <td className={cx("td", "name")}>{item.classNames}</td>
             <td className={cx("td")}>{item.classCode}</td>
@@ -122,7 +129,7 @@ function TableRow({ item, domChange, domChangeSuccess }) {
                                     handleDuplicateClass();
                                     setOpen(false);
                                     domChange();
-                                    
+
                                 }}
                             >
                                 <CopyIcon />
@@ -161,7 +168,7 @@ function TableRow({ item, domChange, domChangeSuccess }) {
                     </button>
                 </Popover>
             </td>
-        </tr>
+        </tr >
     );
 }
 

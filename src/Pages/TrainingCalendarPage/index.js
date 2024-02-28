@@ -13,6 +13,10 @@ function TrainingCalendarPage() {
     const [filterLs, setFilterLs] = useState(["Ho Chi Minh", "BA"]);
 
     const [tab, setTab] = useState("Day");
+    const [showMorning, setShowMoring] = useState(true);
+    const [showNoon, setShowNoon] = useState(true);
+    const [showNight, setShowNight] = useState(true);
+
     return (
         <div className={cx("container")}>
             <h4 className={cx("header")}>Training Calendar</h4>
@@ -64,15 +68,127 @@ function TrainingCalendarPage() {
                 <input className={cx("checkbox")} type="checkbox" checked={tab === "Week"} onChange={() => { setTab("Week") }} />
             </div>
 
-            {/* phan day */}
-            <div className={cx("section-day")}>
-                <div className={cx("date-picker")}>
-                    <DatePicker
-                        className={cx("input")}
-                        popupClassName={cx("popup-date-picker")}
-                    />
+            {/* tab day */}
+            {tab === "Day" &&
+                <div className={cx("section-day")}>
+                    <div className={cx("date-picker")}>
+                        <DatePicker
+                            className={cx("input")}
+                        />
+                    </div>
+
+                    <div className={cx("section")}>
+                        <p className={cx("title")} onClick={() => { setShowMoring(!showMorning) }}>Morning (8:00 - 12:00)</p>
+                        {showMorning && <div className={cx("data")}>
+                            <div className={cx("record")}>
+                                <span className={cx("time")}>8:00</span>
+                            </div>
+                            <div className={cx("record")}>
+                                <span className={cx("time")}>8:30</span>
+                            </div>
+                            <div className={cx("record")}>
+                                <span className={cx("time")}>9:00</span>
+                            </div>
+                            <div className={cx("record")}>
+                                <span className={cx("time")}>9:30</span>
+                            </div>
+                            <div className={cx("record")}>
+                                <span className={cx("time")}>10:00</span>
+                            </div>
+                            <div className={cx("record")}>
+                                <span className={cx("time")}>10:30</span>
+                            </div>
+                            <div className={cx("record")}>
+                                <span className={cx("time")}>11:00</span>
+                            </div>
+                            <div className={cx("record")}>
+                                <span className={cx("time")}>11:30</span>
+                            </div>
+                            <div className={cx("record")}>
+                                <span className={cx("time")}>12:00</span>
+                            </div>
+                        </div>}
+                    </div>
+
+                    <div className={cx("section")}>
+                        <p className={cx("title")} onClick={() => { setShowNoon(!showNoon) }}>Noon (13:00 - 17:00)</p>
+                        {showNoon && <div className={cx("data")}>
+                            <div className={cx("record")}>
+                                <span className={cx("time")}>13:00</span>
+                            </div>
+                            <div className={cx("record")}>
+                                <span className={cx("time")}>13:30</span>
+                            </div>
+                            <div className={cx("record")}>
+                                <span className={cx("time")}>14:00</span>
+                            </div>
+                            <div className={cx("record")}>
+                                <span className={cx("time")}>14:30</span>
+                            </div>
+                            <div className={cx("record")}>
+                                <span className={cx("time")}>15:00</span>
+                            </div>
+                            <div className={cx("record")}>
+                                <span className={cx("time")}>15:30</span>
+                            </div>
+                            <div className={cx("record")}>
+                                <span className={cx("time")}>16:00</span>
+                            </div>
+                            <div className={cx("record")}>
+                                <span className={cx("time")}>16:30</span>
+                            </div>
+                            <div className={cx("record")}>
+                                <span className={cx("time")}>17:00</span>
+                            </div>
+                        </div>}
+                    </div>
+
+                    <div className={cx("section")}>
+                        <p className={cx("title")} onClick={() => { setShowNight(!showNight) }}>Night (18:00 - 22:00)</p>
+                        {showNight && <div className={cx("data")}>
+                            <div className={cx("record")}>
+                                <span className={cx("time")}>18:00</span>
+                            </div>
+                            <div className={cx("record")}>
+                                <span className={cx("time")}>18:30</span>
+                            </div>
+                            <div className={cx("record")}>
+                                <span className={cx("time")}>19:00</span>
+                            </div>
+                            <div className={cx("record")}>
+                                <span className={cx("time")}>19:30</span>
+                            </div>
+                            <div className={cx("record")}>
+                                <span className={cx("time")}>20:00</span>
+                            </div>
+                            <div className={cx("record")}>
+                                <span className={cx("time")}>20:30</span>
+                            </div>
+                            <div className={cx("record")}>
+                                <span className={cx("time")}>21:00</span>
+                            </div>
+                            <div className={cx("record")}>
+                                <span className={cx("time")}>21:30</span>
+                            </div>
+                            <div className={cx("record")}>
+                                <span className={cx("time")}>22:00</span>
+                            </div>
+                        </div>}
+                    </div>
                 </div>
-            </div>
+            }
+
+            {/* tab week */}
+            {tab === "Week" &&
+                <div className={cx("section-week")}>
+                    <div className={cx("date-picker")}>
+                        <DatePicker
+                            className={cx("input")}
+                            picker="week"
+                        />
+                    </div>
+                </div>
+            }
         </div>
     );
 }

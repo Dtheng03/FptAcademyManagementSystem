@@ -13,6 +13,8 @@ import SyllabusList from "./Pages/SyllabusList/SyllabusList";
 import CreateSyllabusPage from "./Pages/CreateSyllabus/CreateSyllabusPage";
 import TranningListPage from "./Pages/TranningProgramListPage";
 import ClassListPage from "./Pages/ClassListPage";
+import CreateClass from "./Pages/CreateClass/CreateClass";
+import TrainingCalendarPage from "./Pages/TrainingCalendarPage";
 import UserListPage from "./Pages/UserListPage";
 import UserPermissionPage from "./Pages/UserPermissionPage";
 import LearningMaterials from "./Pages/LearningMaterials/LearningMaterials";
@@ -100,20 +102,13 @@ function App() {
                 {/* ROUTE CODE TRONG ĐÂY NHA MẤY NÍ */}
                 <Route path="/home" element={<HomePage />} />
                 <Route path="/view-syllabus" element={<SyllabusList />} />
-                <Route
-                  path="/create-syllabus"
-                  element={<CreateSyllabusPage />}
-                />
-                <Route
-                  path="/tranning-program-list"
-                  element={<TranningListPage />}
-                />
+                <Route path="/create-syllabus" element={<CreateSyllabusPage />} />
+                <Route path="/tranning-program-list" element={<TranningListPage />} />
                 <Route path="/class-list" element={<ClassListPage />} />
+                <Route path="/create-class" element={<CreateClass />} />
+                <Route path="/training-calendar" element={<TrainingCalendarPage />} />
                 <Route path="/user-list" element={<UserListPage />} />
-                <Route
-                  path="/user-permission"
-                  element={<UserPermissionPage />}
-                />
+                <Route path="/user-permission" element={<UserPermissionPage />} />
                 <Route path="/materials" element={<LearningMaterials />} />
               </>
             ) : (

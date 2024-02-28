@@ -1,0 +1,52 @@
+.title-container {
+  width: 100%;
+  position: sticky;
+  top: 0;
+  z-index: 999;
+  flex-direction: row !important;
+  background-color: #2d3748;
+  margin-top: 1px;
+
+  .title-1 {
+    display: flex;
+    align-items: center;
+    margin-left: 25px;
+
+    .program-text {
+      margin: 15px 0 10px 0;
+      align-items: center;
+      color: white;
+      letter-spacing: 5px;
+    }
+  }
+
+  .title-body {
+    display: flex;
+    justify-content: space-between;
+
+    .title-2 {
+      position: relative;
+      display: flex;
+      margin-left: 25px;
+      align-items: center;
+
+      .program-text {
+        margin: 15px 0 20px 0;
+        color: white;
+        letter-spacing: 5px;
+      }
+
+      .program-status {
+        display: flex;
+        margin: 23px 0 20px 10px;
+      }
+    }
+    .program-more-icon {
+      display: flex;
+      align-items: center;
+      margin-right: 6%;
+      color: white;
+      cursor: pointer;
+    }
+  }
+}

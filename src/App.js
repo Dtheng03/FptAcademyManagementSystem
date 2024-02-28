@@ -17,7 +17,7 @@ import UserListPage from './Pages/UserListPage';
 import UserPermissionPage from './Pages/UserPermissionPage';
 import LearningMaterials from './Pages/LearningMaterials/LearningMaterials';
 import TrainingCalendarPage from './Pages/TrainingCalendarPage';
-
+import TranningProgramDetail from './Pages/TrainingProgramDetail';
 function App() {
   const [isLoggedIn, setLoggedIn] = useState(() => {
     const storedStatus = sessionStorage.getItem('isLoggedIn');
@@ -78,6 +78,7 @@ function App() {
                 <Route path='/view-syllabus' element={<SyllabusList />} />
                 <Route path='/create-syllabus' element={<CreateSyllabusPage />} />
                 <Route path='/tranning-program-list' element={<TranningListPage />} />
+                <Route path='/view-tranning-program-detail/:id' element={<TranningProgramDetail/>}/>
                 <Route path='/class-list' element={<ClassListPage />} />
                 <Route path='/create-class' element={<CreateClass />} />
                 <Route path='/user-list' element={<UserListPage />} />

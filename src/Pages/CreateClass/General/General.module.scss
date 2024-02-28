@@ -1,0 +1,139 @@
+.general {
+  width: 40%;
+  padding: 0 0 20px 20px;
+
+  .dropdown {
+
+    button {
+      height: 40px;
+      width: 100%;
+      background-color: #2d3748;
+      color: white;
+      border-radius: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px;
+
+      &.clicked {
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+      }
+      .conner-left {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .conner-right {
+        display: flex;
+        align-items: center;
+      }
+    }
+  }
+  .dropdown-content {
+    height: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border: 1px solid #8b8b8b;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    padding: 10px;
+    transition: height 0.3s ease;
+    
+    &.opened {
+      height: 465px; 
+    }
+
+    .select {
+      height: 24px;
+      width: 188px;
+      border-radius: 5px;
+      margin-left: auto;
+    }
+
+    .dropdown-option1 {
+      display: flex;
+      gap: 10px;
+
+      p {
+        font-size: 16px;
+        font-weight: normal; 
+      }
+
+      .class-time {
+        font-size: 16px;
+        font-weight: bold; 
+      }
+    }
+
+    .dropdown-option2 {
+      display: flex;
+      padding: 5px;
+      gap: 10px;
+      color: #8b8b8b;
+
+      p {
+        font-size: 16px;
+        font-weight: 600px;
+      }
+    }
+
+    .dropdown-option3 {
+      display: flex;
+      padding: 5px;
+      gap: 10px;
+      color: #8b8b8b;
+
+      p {
+        font-size: 16px;
+        font-weight: 600px;
+      }
+    }
+
+    .dropdown-option4 {
+      display: flex;
+      padding: 5px;
+      gap: 10px;
+
+      p {
+        font-size: 16px;
+        font-weight: bold;
+      }
+    }
+
+    .dropdown-option5 {
+      display: flex;
+      padding: 5px;
+      gap: 10px;
+
+      p {
+        font-size: 16px;
+        font-weight: bold;
+      }
+    }
+
+    .dropdown-option6 {
+      padding: 5px;
+      margin-left: auto;
+    }
+  }
+  .Strange-line {
+    width: 100%;
+    height: 0.2px;
+    background-color: #000;
+    margin: 10px 0;
+  }
+  .choose-action {
+    display: flex;
+    flex-direction: column;
+
+    a {
+      color: #8b8b8b;
+      padding: 10px 0;
+      font-size: 14px;
+    }
+  }
+}

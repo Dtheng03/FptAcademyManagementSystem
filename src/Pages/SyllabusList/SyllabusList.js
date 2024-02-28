@@ -11,6 +11,8 @@ import MenuOption from './MenuOption';
 const SyllabusList = () => {
   const [apiData, setApiData] = useState();
   const [sortedInfo, setSortedInfo] = useState({});
+  const [searchInput, setSearchInput] = useState('');
+  const [searchBy, setSearchBy] = useState('');
 
   const handleSort = (columnKey) => {
     let sortOrder =
@@ -25,6 +27,51 @@ const SyllabusList = () => {
     });
   }, []);
 
+  let params;
+  // handle Search Input
+  useEffect(() => {
+    params = {};
+
+    // Check if searchInput is not empty before adding it to params
+    // if (searchInput.trim() !== '') {
+    //   params = {
+    //     syllabus: searchInput,
+    //   };
+    //   console.log('searchby ' + searchBy.includes('code_'));
+    // }
+    if (searchBy.trim() !== '') {
+      if (searchBy.includes('syllabus_')) {
+        params = {
+          syllabus: searchInput,
+        };
+      }
+      if (searchBy.includes('code_')) {
+        params = {
+          code: searchInput,
+        };
+      }
+      if (searchBy.includes('createdby_')) {
+        params = {
+          createdBy: searchInput,
+        };
+      }
+    } else {
+      params = {
+        syllabus: '',
+        code: '',
+        createdBy: '',
+      };
+    }
+
+    axios
+      .get('https://6541299af0b8287df1fdf263.mockapi.io/Syllabus-API', {
+        params,
+      })
+      .then((response) => {
+        setApiData(response.data);
+      });
+  }, [searchBy]);
+
   if (apiData) {
     apiData.map((item) => {
       data.push({
@@ -37,7 +84,7 @@ const SyllabusList = () => {
         duration: item.duration,
         outputStandard: item.outputStandard.map((o) => <OutputStandard key={o} data={o} />),
         status: <Status data={item.status} />,
-        options: <MenuOption />,
+        options: <MenuOption apiData={apiData} item={item} setApiData={setApiData} />,
       });
     });
   }
@@ -169,7 +216,12 @@ const SyllabusList = () => {
       <Flex gap={'4rem'} style={{ width: '100%', padding: '2rem' }} vertical>
         <Flex gap={'2rem'} vertical>
           <h4 style={{ margin: '0' }}>Syllabus</h4>
-          <InputSection />
+          <InputSection
+            apiData={apiData}
+            searchInput={searchInput}
+            setSearchBy={setSearchBy}
+            onSearchInputChange={setSearchInput}
+          />
         </Flex>
         <Table
           pagination={{

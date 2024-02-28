@@ -1,0 +1,26 @@
+.week-picker {
+  .input {
+    width: 220px;
+    height: 32px;
+    border-radius: 8px;
+    border: 1px solid var(--primary-color);
+    outline: 1px solid var(--primary-color);
+    cursor: pointer;
+  }
+
+  .week {
+    margin: 2% 0 1%;
+    padding: 0 2%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 40px;
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+
+    .day {
+      display: inline-flex;
+      align-items: center;
+    }
+  }
+}

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ConfigProvider, Flex, Table } from 'antd';
+import { ConfigProvider, Flex, Modal, Table } from 'antd';
 import './SyllabusList.scss';
 import { OutputStandard } from './OutputStandard';
 import { Status } from './Status';

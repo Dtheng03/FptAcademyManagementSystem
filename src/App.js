@@ -15,6 +15,7 @@ import CreateSyllabusPage from "./Pages/CreateSyllabus/CreateSyllabusPage";
 import TranningListPage from "./Pages/TranningProgramListPage";
 import TranningProgramDetail from "./Pages/TrainingProgramDetail";
 import ClassListPage from "./Pages/ClassListPage";
+import ViewClass from "./Pages/ViewClass";
 import CreateClass from "./Pages/CreateClass/CreateClass";
 import TrainingCalendarPage from "./Pages/TrainingCalendarPage";
 import UserListPage from "./Pages/UserListPage";
@@ -48,7 +49,7 @@ function App() {
       setLoggedIn(true);
       sessionStorage.setItem("isLoggedIn", JSON.stringify(true));
 
-          // Mã hóa roleName trc khi set vào session
+      // Mã hóa roleName trc khi set vào session
 
       const encryptedRoleName = crypto.AES.encrypt(
         user.roleName,
@@ -60,11 +61,11 @@ function App() {
       const token = sessionStorage.getItem("token");
       const decodedToken = jwtDecode(token);
 
-    // Kỉm tra coi thời hạn token còn bao nhiêu (theo giây)
-    const isTokenValid = decodedToken.exp > Date.now() / 1000;
+      // Kỉm tra coi thời hạn token còn bao nhiêu (theo giây)
+      const isTokenValid = decodedToken.exp > Date.now() / 1000;
       if (!isTokenValid) {
-      // Token hết đát
-      handleLogout();
+        // Token hết đát
+        handleLogout();
         return;
       }
 
@@ -121,30 +122,17 @@ function App() {
                 {/* ROUTE CODE TRONG ĐÂY NHA MẤY NÍ */}
                 <Route path="/home" element={<HomePage />} />
                 <Route path="/view-syllabus" element={<SyllabusList />} />
-                <Route
-                  path="/view-syllabus-detail"
-                  element={<SyllabusDetailInformation />}
-                />
-                <Route
-                  path="/create-syllabus"
-                  element={<CreateSyllabusPage />}
-                />
-                <Route
-                  path="/tranning-program-list"
-                  element={<TranningListPage />}
-                />
-                <Route
-                  path="/view-tranning-program-detail/:id"
-                  element={<TranningProgramDetail />}
-                />
+                <Route path="/view-syllabus-detail" element={<SyllabusDetailInformation />} />
+                <Route path="/create-syllabus" element={<CreateSyllabusPage />} />
+                <Route path="/tranning-program-list" element={<TranningListPage />} />
+                <Route path="/view-tranning-program-detail/:id" element={<TranningProgramDetail />} />
                 <Route path="/class-list" element={<ClassListPage />} />
-                {/* <Route path="/view-class-detail/:id" element={<ViewClassDetail />} /> */}
-                <Route path='/training-calendar' element={<TrainingCalendarPage />} />
+                <Route path="/view-class-detail/:id" element={<ViewClass />} />
                 <Route path='/create-class' element={<CreateClass />} />
+                <Route path='/training-calendar' element={<TrainingCalendarPage />} />
                 <Route path='/user-list' element={<UserListPage />} />
                 <Route path='/user-permission' element={<UserPermissionPage />} />
                 <Route path='/materials' element={<LearningMaterials />} />
-                <Route path='/view-class-detail' element={<ViewClass />} />
               </>
             ) : (
               <Route path="/login" element={<Login onLogin={handleLogin} />} />

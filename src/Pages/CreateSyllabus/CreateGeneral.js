@@ -1,5 +1,3 @@
-//
-
 import { InputNumber } from "antd";
 import React, { useState } from "react";
 import ReactQuill from "react-quill";
@@ -11,12 +9,11 @@ const CreateGeneral = () => {
 
   return (
     <div
-      className="generalContainer"
-      style={{ display: "flex", padding: "20px", margin: "20px", backgroundColor: "#FFFFFF", justifyContent: "space-between" }}
+      className="syllabusTabContainer"
+      
     >
       <div
-        className="generalContent"
-        style={{ width: "81%", height: "636px" }}
+        className="syllabusTabContent"
       >
         <div className="baseGeneralSetup">
           <div className="selectLevel" style={{ display: "flex" }}>

@@ -30,12 +30,12 @@ const PipeChart = ({ assignment, concept, guide, test, exam }) => {
 
   return (
     <div className="pipe-chart-container">
-      <PieChart width={400} height={400}>
+      <PieChart width={220} height={409}>
         <Pie
           data={data}
           dataKey="value"
-          cx={200}
-          cy={200}
+          cx={104}
+          cy={90}
           labelLine={false}
           
           outerRadius={80}

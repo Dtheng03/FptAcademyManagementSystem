@@ -58,8 +58,14 @@ function ClassListPage() {
         else if (columnKey === 'attendee') {
             return a.attendee.localeCompare(b.attendee) * order;
         }
+        // else if (columnKey === 'status') {
+        //     return a.status.localeCompare(b.status) * order;
+        // }
         else if (columnKey === 'location') {
             return a.location.localeCompare(b.location) * order;
+        }
+        else if (columnKey === 'fsu') {
+            return a.fsu.localeCompare(b.fsu) * order;
         }
 
         return 0;
@@ -123,7 +129,7 @@ function ClassListPage() {
                         </>
                     </Popover>
                 </div>
-                <Link to="create-class">
+                <Link to="/create-class">
                     <Button
                         title={"Add Class"}
                         firstIcon={<AddIcon />}
@@ -170,6 +176,11 @@ function ClassListPage() {
                                 Attendee <SortIcon />
                             </button>
                         </th>
+                        {/* <th className={cx('th')}>
+                            <button className={cx('title')} onClick={() => handleSort('status')}>
+                                Status <SortIcon />
+                            </button>
+                        </th> */}
                         <th className={cx('th')}>
                             <button className={cx('title')} onClick={() => handleSort('location')}>
                                 Location <SortIcon />

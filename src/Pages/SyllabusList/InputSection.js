@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Input, Button, Flex, AutoComplete, Tag } from 'antd';
 import { SearchOutlined, PlusCircleOutlined } from '@ant-design/icons';
+import { useNavigate } from 'react-router-dom';
 import CalendarPopover from './CalendarPopover';
 import ImportSyllabusModal from './ImportModal';
 
 const InputSection = ({ apiData, searchInput, setSearchBy, onSearchInputChange }) => {
+  const navigate = useNavigate();
   const [isModalVisible, setModalVisible] = useState(false);
   const [suggestions, setSuggestions] = useState([]);
   const [selectedTags, setSelectedTags] = useState([]);
@@ -49,7 +51,7 @@ const InputSection = ({ apiData, searchInput, setSearchBy, onSearchInputChange }
   };
 
   const handleImportClick = () => {
-    showModal();
+    navigate('/create-syllabus');
   };
 
   const onSelect = (value) => {

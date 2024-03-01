@@ -2,6 +2,9 @@ import styles from "./TrainingCalendarPage.module.scss";
 import classNames from "classnames/bind";
 import { SearchIcon } from "../../Components/Common/Icons/DocManageIcons";
 import { CancleIcon, FilterListIcon } from "../../Components/Common/Icons/ActionIcons";
+import { HomeworkIcon } from "../../Components/Common/Icons/OtherIcons";
+import { LectureIcon } from "../../Components/Common/Icons/DeliveryTypesIcons";
+import { GradeIcon } from "../../Components/Common/Icons/IndicatorIcons";
 import Button from "../../Components/Common/Button";
 import { Tag, DatePicker } from "antd";
 import { useState } from "react";
@@ -9,14 +12,127 @@ import WeekDaysList from "./WeekDaysList";
 
 const cx = classNames.bind(styles);
 
-function TrainingCalendarPage() {
+function ItemOfDay({ item, type }) {
+    var className;
 
+    if (type === "Intern") {
+        className = "intern"
+    } else if (type === "Fresher") {
+        className = "fresher"
+    } else if (type === "Online fee-fresher") {
+        className = "online-fee-fresher"
+    } else if (type === "Offline fee-fresher") {
+        className = "offline-fee-fresher"
+    }
+
+    return (
+        <div className={cx("item-day-wrapper")} >
+            <span className={cx("item", className)}>
+                {/* {item.classCode} | {item.class} */}
+                {"HCM24_CPL_REACT_02"} | {"React JS"}
+            </span>
+            <div className={cx("item-detail")}>
+                <p className={cx("day")}>Day 10 of 20</p>
+                <div className={cx("info")}>
+                    <span className={cx("label")}>
+                        <HomeworkIcon />
+                        Location
+                    </span>
+                    <span className={cx("data")}>
+                        HN.Fville
+                    </span>
+                </div>
+                <div className={cx("info")}>
+                    <span className={cx("label")}>
+                        <LectureIcon />
+                        Trainer
+                    </span>
+                    <span className={cx("data")}>
+                        Dinh Vu Quoc Trung
+                    </span>
+                </div>
+                <div className={cx("info")}>
+                    <span className={cx("label")}>
+                        <GradeIcon />
+                        Admin
+                    </span>
+                    <span className={cx("data")}>
+                        Ly Lien Lien Dung
+                    </span>
+                </div>
+            </div>
+        </div>
+    );
+}
+
+function ItemOfWeek({ item, type }) {
+    var className;
+
+    if (type === "Intern") {
+        className = "intern"
+    } else if (type === "Fresher") {
+        className = "fresher"
+    } else if (type === "Online fee-fresher") {
+        className = "online-fee-fresher"
+    } else if (type === "Offline fee-fresher") {
+        className = "offline-fee-fresher"
+    }
+
+    return (
+        <div className={cx("item-week-wrapper")} >
+            <span className={cx("item", className)}>
+                {/* {item.classCode}*/}
+                {"HCM24_CPL_REACT_02"}
+            </span>
+            <div className={cx("item-detail")}>
+                <p className={cx("class")}>{"React Js"}</p>
+                <p className={cx("day")}>Day 10 of 20</p>
+                <div className={cx("info")}>
+                    <span className={cx("label")}>
+                        Unit {"6"}
+                    </span>
+                    <span className={cx("data")}>
+                        {"Class and Function Component "}
+                    </span>
+                </div>
+                <div className={cx("info")}>
+                    <span className={cx("label")}>
+                        Location
+                    </span>
+                    <span className={cx("data")}>
+                        HN.Fville
+                    </span>
+                </div>
+                <div className={cx("info")}>
+                    <span className={cx("label")}>
+                        Trainer
+                    </span>
+                    <span className={cx("data")}>
+                        Dinh Vu Quoc Trung
+                    </span>
+                </div>
+                <div className={cx("info")}>
+                    <span className={cx("label")}>
+                        Admin
+                    </span>
+                    <span className={cx("data")}>
+                        Ly Lien Lien Dung
+                    </span>
+                </div>
+            </div>
+        </div>
+    );
+}
+
+function TrainingCalendarPage() {
     const [filterLs, setFilterLs] = useState(["Ho Chi Minh", "BA"]);
 
     const [tab, setTab] = useState("Day");
     const [showMorning, setShowMoring] = useState(true);
     const [showNoon, setShowNoon] = useState(true);
     const [showNight, setShowNight] = useState(true);
+
+    const [showDataWeek, setShowDataWeek] = useState(false);
 
     return (
         <div className={cx("container")}>
@@ -62,11 +178,8 @@ function TrainingCalendarPage() {
 
             {/* phan chon day hoac week */}
             <div className={cx("tab")}>
-                <label className={cx("content", tab === "Day" ? "day" : "")} onClick={() => { setTab("Day") }}>Day</label>
-                <input className={cx("checkbox")} type="checkbox" checked={tab === "Day"} onChange={() => { setTab("Day") }} />
-
-                <label className={cx("content", tab === "Week" ? "week" : "")} onClick={() => { setTab("Week") }} >Week</label>
-                <input className={cx("checkbox")} type="checkbox" checked={tab === "Week"} onChange={() => { setTab("Week") }} />
+                <span className={cx("content", tab === "Day" ? "day" : "")} onClick={() => { setTab("Day") }}>Day</span>
+                <span className={cx("content", tab === "Week" ? "week" : "")} onClick={() => { setTab("Week") }} >Week</span>
             </div>
 
             {/* tab day */}
@@ -83,6 +196,16 @@ function TrainingCalendarPage() {
                         {showMorning && <div className={cx("data")}>
                             <div className={cx("record")}>
                                 <span className={cx("time")}>8:00</span>
+                                <div className={cx("items")}>
+                                    <ItemOfDay type={"Intern"} />
+                                    <ItemOfDay type={"Fresher"} />
+                                    <ItemOfDay type={"Online fee-fresher"} />
+                                    <ItemOfDay type={"Offline fee-fresher"} />
+                                    <ItemOfDay type={"Intern"} />
+                                    <ItemOfDay type={"Fresher"} />
+                                    <ItemOfDay type={"Online fee-fresher"} />
+                                    <ItemOfDay type={"Offline fee-fresher"} />
+                                </div>
                             </div>
                             <div className={cx("record")}>
                                 <span className={cx("time")}>8:30</span>
@@ -183,11 +306,55 @@ function TrainingCalendarPage() {
             {tab === "Week" &&
                 <div className={cx("section-week")}>
                     <div className={cx("date-picker")}>
-                        <WeekDaysList />
+                        <WeekDaysList showData={() => setShowDataWeek(true)} />
                     </div>
 
                     <div className={cx("section")}>
                         <p className={cx("title")} onClick={() => { setShowMoring(!showMorning) }}>Morning (8:00 - 12:00)</p>
+                        {showDataWeek && showMorning && <div className={cx("record")}>
+                            <div className={cx("col")}>
+                                <ItemOfWeek type={"Intern"} />
+                                <ItemOfWeek type={"Fresher"} />
+                                <ItemOfWeek type={"Online fee-fresher"} />
+                                <ItemOfWeek type={"Offline fee-fresher"} />
+                            </div>
+                            <div className={cx("col")}>
+                                <ItemOfWeek type={"Intern"} />
+                                <ItemOfWeek type={"Fresher"} />
+                                <ItemOfWeek type={"Online fee-fresher"} />
+                                <ItemOfWeek type={"Offline fee-fresher"} />
+                            </div>
+                            <div className={cx("col")}>
+                                <ItemOfWeek type={"Intern"} />
+                                <ItemOfWeek type={"Fresher"} />
+                                <ItemOfWeek type={"Online fee-fresher"} />
+                                <ItemOfWeek type={"Offline fee-fresher"} />
+                            </div>
+                            <div className={cx("col")}>
+                                <ItemOfWeek type={"Intern"} />
+                                <ItemOfWeek type={"Fresher"} />
+                                <ItemOfWeek type={"Online fee-fresher"} />
+                                <ItemOfWeek type={"Offline fee-fresher"} />
+                            </div>
+                            <div className={cx("col")}>
+                                <ItemOfWeek type={"Intern"} />
+                                <ItemOfWeek type={"Fresher"} />
+                                <ItemOfWeek type={"Online fee-fresher"} />
+                                <ItemOfWeek type={"Offline fee-fresher"} />
+                            </div>
+                            <div className={cx("col")}>
+                                <ItemOfWeek type={"Intern"} />
+                                <ItemOfWeek type={"Fresher"} />
+                                <ItemOfWeek type={"Online fee-fresher"} />
+                                <ItemOfWeek type={"Offline fee-fresher"} />
+                            </div>
+                            <div className={cx("col")}>
+                                <ItemOfWeek type={"Intern"} />
+                                <ItemOfWeek type={"Fresher"} />
+                                <ItemOfWeek type={"Online fee-fresher"} />
+                                <ItemOfWeek type={"Offline fee-fresher"} />
+                            </div>
+                        </div>}
                     </div>
 
                     <div className={cx("section")}>

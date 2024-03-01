@@ -133,12 +133,23 @@
       .data {
         .record {
           padding: 0.6% 0.8%;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
           border-bottom: 1px solid var(--primary-color);
 
           .time {
             display: inline-block;
             width: 60px;
             border-right: 1px solid var(--primary-color);
+          }
+
+          .items {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            width: 90%;
+            gap: 8px;
           }
         }
       }
@@ -168,6 +179,161 @@
         color: var(--white-color);
         cursor: pointer;
       }
+
+      .record {
+        display: flex;
+        justify-content: space-between;
+
+        .col {
+          width: 14.2%;
+          display: flex;
+          align-items: center;
+          flex-direction: column;
+          border-left: 1px solid var(--primary-color);
+        }
+      }
     }
+  }
+}
+
+// css item of day
+.item-day-wrapper {
+  position: relative;
+  font-size: small;
+  cursor: default;
+
+  .item {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 8px;
+    color: var(--white-color);
+  }
+
+  .intern {
+    background-color: #2d3748;
+  }
+  .fresher {
+    background-color: #ff7568;
+  }
+
+  .online-fee-fresher {
+    background-color: #2f903f;
+  }
+
+  .offline-fee-fresher {
+    background-color: #d45b13;
+  }
+
+  .item-detail {
+    display: none;
+    position: absolute;
+    z-index: 1;
+    padding: 4px 8px;
+    width: 100%;
+    border-radius: 8px;
+    background-color: rgba(142, 177, 218, 0.8);
+    font-size: smaller;
+
+    .day {
+      margin-bottom: 4px;
+      font-weight: bold;
+    }
+
+    .info {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 36px;
+
+      .label {
+        display: flex;
+        align-items: center;
+        font-weight: bold;
+      }
+
+      .data {
+        text-decoration: underline;
+      }
+    }
+  }
+
+  &:hover .item-detail {
+    display: block;
+  }
+}
+
+// css item of week
+.item-week-wrapper {
+  position: relative;
+  margin-top: 4px;
+  font-size: small;
+  cursor: default;
+
+  .item {
+    display: inline-block;
+    max-width: 160px;
+    padding: 4px 8px;
+    border-radius: 8px;
+    word-break: break-all;
+    color: var(--white-color);
+  }
+
+  .intern {
+    background-color: #2d3748;
+  }
+  .fresher {
+    background-color: #ff7568;
+  }
+
+  .online-fee-fresher {
+    background-color: #2f903f;
+  }
+
+  .offline-fee-fresher {
+    background-color: #d45b13;
+  }
+
+  .item-detail {
+    display: none;
+    position: absolute;
+    right: 50%;
+    transform: translateX(+50%);
+    z-index: 1;
+    padding: 4px 8px;
+    width: 120%;
+    border-radius: 8px;
+    background-color: rgba(142, 177, 218, 0.8);
+    font-size: smaller;
+
+    .class {
+      margin-bottom: 4px;
+      font-weight: bold;
+    }
+
+    .day {
+      margin-bottom: 4px;
+    }
+
+    .info {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 36px;
+
+      .label {
+        display: flex;
+        align-items: center;
+        font-weight: bold;
+        width: 40%;
+      }
+
+      .data {
+        width: 60%;
+      }
+    }
+  }
+
+  &:hover .item-detail {
+    display: block;
   }
 }

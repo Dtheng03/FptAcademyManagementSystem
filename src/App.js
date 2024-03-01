@@ -139,17 +139,12 @@ function App() {
                 />
                 <Route path="/class-list" element={<ClassListPage />} />
                 {/* <Route path="/view-class-detail/:id" element={<ViewClassDetail />} /> */}
-                <Route
-                  path="/training-calendar"
-                  element={<TrainingCalendarPage />}
-                />
-                <Route path="/create-class" element={<CreateClass />} />
-                <Route path="/user-list" element={<UserListPage />} />
-                <Route
-                  path="/user-permission"
-                  element={<UserPermissionPage />}
-                />
-                <Route path="/materials" element={<LearningMaterials />} />
+                <Route path='/training-calendar' element={<TrainingCalendarPage />} />
+                <Route path='/create-class' element={<CreateClass />} />
+                <Route path='/user-list' element={<UserListPage />} />
+                <Route path='/user-permission' element={<UserPermissionPage />} />
+                <Route path='/materials' element={<LearningMaterials />} />
+                <Route path='/view-class-detail' element={<ViewClass />} />
               </>
             ) : (
               <Route path="/login" element={<Login onLogin={handleLogin} />} />

@@ -6,7 +6,6 @@ import { SearchIcon } from "../../Components/Common/Icons/DocManageIcons";
 import { Pagination, Tag } from "antd";
 import { useEffect, useState } from "react";
 import TableRow from "./TableRow";
-import Filter from "./Filter";
 import ModalAddUser from "./ModalAddUser";
 import ModalEditUser from "./ModalEditUser";
 import axios from "axios";
@@ -31,42 +30,61 @@ function UserListPage() {
 
     const [data, setData] = useState([]);
 
+    const [sortConfig, setSortConfig] = useState(null);
+    const sortedData = () => {
+        if (!sortConfig) {
+            return data;
+        }
+
+        const { key, direction } = sortConfig;
+        return [...data].sort((a, b) => {
+            if (a[key].toLowerCase() < b[key].toLowerCase()) {
+                return direction === 'asc' ? -1 : 1;
+            }
+            if (a[key].toLowerCase() > b[key].toLowerCase()) {
+                return direction === 'asc' ? 1 : -1;
+            }
+            return 0;
+        });
+    };
+
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage, setItemsPerPage] = useState(10);
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
-    const currentPageData = data.slice(startIndex, endIndex);
+    const currentItems = sortedData().slice(startIndex, endIndex);
 
     const [searchValue, setSearchValue] = useState("");
     const [searchList, setSearchList] = useState([]);
-    const [filterLs, setFilterLs] = useState([]);
 
     const [showAddModal, setShowAddModal] = useState(false);
     const [showEditModal, setShowEditModal] = useState(false);
     const [isDomChange, setIsDomChange] = useState(false);
 
-    // ham xu ly khi nhap input search
-    const handleInputSearch = (e) => {
-        const value = e.target.value;
-        setSearchValue(value);
-        const searchList = data.filter(
-            result => result.fullName.toLowerCase().includes(value.toLowerCase())
-                || result.email.toLowerCase().includes(value.toLowerCase())
-        );
-        setSearchList(searchList);
+    const requestSort = (key) => {
+        let direction = 'asc';
+        if (sortConfig && sortConfig.key === key && sortConfig.direction === 'asc') {
+            direction = 'desc';
+        }
+        setSortConfig({ key, direction });
     };
 
-    // ham xu ly filter
-    const handleFilter = (filter, sort) => {
-        async function getUser() {
-            try {
-                const response = await axios.get(`http://fams-group1-net03.ptbiology.com/api/user/view-user-list?filter-by=${filter}&sort-by=${sort}`);
-                setData(response.data.data);
-            } catch (error) {
-                console.error(error);
+    // ham xu ly khi nhap input search
+    const handleInputSearch = (e) => {
+        setSearchValue(e.target.value);
+        if (e.target.value === "") {
+            setSearchList([]);
+        } else if (e.target.value !== "") {
+            const searchList = data.filter(
+                result => result.fullName.toLowerCase().includes(e.target.value.toLowerCase())
+                    || result.email.toLowerCase().includes(e.target.value.toLowerCase())
+            );
+            if (searchList.length > 0) {
+                setSearchList(searchList);
+            } else {
+                setSearchList([]);
             }
         }
-        getUser();
     };
 
     useEffect(() => {
@@ -79,7 +97,7 @@ function UserListPage() {
             }
         }
         getUser();
-    }, [showAddModal, showEditModal, isDomChange])
+    }, [showAddModal, showEditModal, isDomChange]);
 
     return (
         <div className={cx("container")}>
@@ -93,13 +111,22 @@ function UserListPage() {
                         <input
                             className={cx('input-contain')}
                             type="text"
-                            disabled={filterLs.length >= 4 ? true : false}
                             value={searchValue}
                             onChange={handleInputSearch}
-                            placeholder="Search by..."
+                            placeholder="Search by fullname, email"
                         />
+                        {searchValue !== "" &&
+                            <button
+                                className={cx("clear-btn")}
+                                onClick={() => {
+                                    setSearchValue("");
+                                    setSearchList([]);
+                                }}
+                            >
+                                <CancleIcon />
+                            </button>
+                        }
                     </div>
-                    <Filter handleFilter={handleFilter} setFilterLs={setFilterLs} />
                 </div>
                 {(roleName === "Super Admin" || roleName === "Admin") && <Button
                     title={"Add User"}
@@ -110,44 +137,22 @@ function UserListPage() {
                 />}
             </div>
 
-            {/* phan hien thi gia tri filter da chon */}
-            <div className={cx("filter-result")}>
-                {filterLs.map(((item, index) => (
-                    <Tag
-                        key={index}
-                        className={cx("filter")}
-                        color="#474747"
-                    >
-                        {item}
-                    </Tag>
-                )))}
-                {filterLs.length > 0 &&
-                    < button
-                        className={cx("clear")}
-                        onClick={() => {
-                            setFilterLs([]);
-                            handleFilter();
-                        }}
-                    >
-                        <CancleIcon />
-                    </button>}
-            </div>
-
             {/* phan hien thi thong tin */}
-            <table className={cx("table")}>
-                <thead className={cx("thead")}>
-                    <tr className={cx("tr")}>
-                        <th className={cx("th")}><button className={cx("title")}>Full name <SortIcon /></button></th>
-                        <th className={cx("th")}><button className={cx("title")}>Email <SortIcon /></button></th>
-                        <th className={cx("th")}><button className={cx("title")}>Date of birth <SortIcon /></button></th>
-                        <th className={cx("th")}><button className={cx("title")}>Gender <SortIcon /></button></th>
-                        <th className={cx("th")}><button className={cx("title")}>Type <SortIcon /></button></th>
-                        <th className={cx("th")}><button className={cx("title")}>Status <SortIcon /></button></th>
-                        {roleName === "Super Admin" && <th className={cx("th")}></th>}
-                    </tr>
-                </thead>
-                {searchList.length > 0 ?
-                    <tbody className={cx("tbody")}>
+            {
+                searchValue !== "" && searchList.length > 0 &&
+                < table className={cx("table")}>
+                    <thead className={cx("thead")}>
+                        <tr className={cx("tr")}>
+                            <th className={cx("th")}><button className={cx("title")}>Full name</button></th>
+                            <th className={cx("th")}><button className={cx("title")}>Email</button></th>
+                            <th className={cx("th")}><button className={cx("title")}>Date of birth</button></th>
+                            <th className={cx("th")}><button className={cx("title")}>Gender</button></th>
+                            <th className={cx("th")}><button className={cx("title")}>Type</button></th>
+                            <th className={cx("th")}><button className={cx("title")}>Status</button></th>
+                            {roleName === "Super Admin" && <th className={cx("th")}></th>}
+                        </tr>
+                    </thead>
+                    <tbody>
                         {searchList.map((item, index) => (
                             <TableRow
                                 key={index}
@@ -155,26 +160,51 @@ function UserListPage() {
                                 openEdit={() => setShowEditModal(true)}
                                 domChange={() => setIsDomChange(true)}
                                 domChangeSuccess={() => setIsDomChange(false)}
+                                refresh={() => {
+                                    setSearchList([]);
+                                    setSearchValue("");
+                                }}
                             />
                         ))}
                     </tbody>
-                    :
-                    <tbody className={cx("tbody")}>
-                        {currentPageData.map(item => (
+                </table>
+            }
+            {
+                (searchValue === "" && searchList.length === 0) &&
+                <table className={cx("table")}>
+                    <thead className={cx("thead")}>
+                        <tr className={cx("tr")}>
+                            <th className={cx("th")}><button className={cx("title")} onClick={() => requestSort("fullName")}>Full name <SortIcon /></button></th>
+                            <th className={cx("th")}><button className={cx("title")} onClick={() => requestSort("email")}>Email <SortIcon /></button></th>
+                            <th className={cx("th")}><button className={cx("title")} onClick={() => requestSort("dob")}>Date of birth <SortIcon /></button></th>
+                            <th className={cx("th")}><button className={cx("title")} onClick={() => requestSort("gender")}>Gender <SortIcon /></button></th>
+                            <th className={cx("th")}><button className={cx("title")} onClick={() => requestSort("roleName")}>Type <SortIcon /></button></th>
+                            <th className={cx("th")}><button className={cx("title")} onClick={() => requestSort("status")}>Status <SortIcon /></button></th>
+                            {roleName === "Super Admin" && <th className={cx("th")}></th>}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {currentItems.map((item, index) => (
                             <TableRow
-                                key={item.id}
+                                key={index}
                                 item={item}
                                 openEdit={() => setShowEditModal(true)}
                                 domChange={() => setIsDomChange(true)}
                                 domChangeSuccess={() => setIsDomChange(false)}
+                                refresh={() => {
+                                    setSearchList([]);
+                                    setSearchValue("");
+                                }}
                             />
                         ))}
-                    </tbody>}
-            </table>
+                    </tbody>
+                </table>
+            }
+            {searchValue !== "" && searchList.length === 0 && <p className={cx("no-data")}>Oops! There are no matching data.</p>}
 
             {/* phan chuyen trang */}
             {
-                (searchList.length > 0 || data.length > 0) && <div className={cx("pagination")}>
+                searchValue !== "" || searchList.length === 0 && <div className={cx("pagination")}>
                     <Pagination
                         onChange={(page, pageSize) => {
                             setItemsPerPage(pageSize)
@@ -189,10 +219,16 @@ function UserListPage() {
             }
 
             {/* modal add new user */}
-            {showAddModal && <ModalAddUser closeModal={() => { setShowAddModal(false) }} />}
+            {showAddModal && <ModalAddUser closeModal={() => { setShowAddModal(false) }} domChange={() => {
+                setSearchList([]);
+                setSearchValue("");
+            }} />}
 
             {/* modal edit user */}
-            {showEditModal && <ModalEditUser closeModal={() => { setShowEditModal(false) }} />}
+            {showEditModal && <ModalEditUser closeModal={() => { setShowEditModal(false) }} domChange={() => {
+                setSearchList([]);
+                setSearchValue("");
+            }} />}
         </div >
     );
 }

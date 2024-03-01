@@ -7,7 +7,7 @@ import { CreateIcon } from "../../../Components/Common/Icons/DocManageIcons"
 import { Popover } from 'antd';
 import { useDispatch } from "react-redux";
 import { setUpdateUser } from "../../../Redux/Reducer/UserSlice";
-import { notification, Popconfirm } from 'antd';
+import { notification, Modal } from 'antd';
 import axios from "axios";
 import crypto from "crypto-js";
 
@@ -47,7 +47,7 @@ function StatusChip({ status }) {
     );
 }
 
-function TableRow({ item, openEdit, domChange, domChangeSuccess }) {
+function TableRow({ item, openEdit, domChange, domChangeSuccess, refresh }) {
     const style = {
         backgroundColor: "transparent",
         border: "none",
@@ -80,10 +80,19 @@ function TableRow({ item, openEdit, domChange, domChangeSuccess }) {
     const [open, setOpen] = useState(false);
     const [newRole, setNewRole] = useState(item.roleName);
 
+    const [showRoleModal, setShowRoleModal] = useState(false);
+    const [isLoadingRole, setIsLoadingRole] = useState(false);
+
+    const [showStatusModal, setShowStatusModal] = useState(false);
+    const [isLoadingStatus, setIsLoadingStatus] = useState(false);
+
     // hàm xử lý thay đổi role
     const handleChangeRole = () => {
+        setIsLoadingRole(true);
         axios.put(`http://fams-group1-net03.ptbiology.com/api/user/grant-permission`, { id: item.id, userType: newRole })
             .then(() => {
+                setIsLoadingRole(false);
+                setShowRoleModal(!showRoleModal);
                 notification.success({
                     message: "Change role successfully",
                 });
@@ -95,13 +104,19 @@ function TableRow({ item, openEdit, domChange, domChangeSuccess }) {
                     message: "Change role failed",
                     description: "Something wrong! Please try again later!"
                 })
+                setIsLoadingRole(false);
+                setShowRoleModal(!showRoleModal);
             });
+        refresh();
     };
 
     // hàm xử lý thay đổi status
     const handleChangeStatus = () => {
+        setIsLoadingStatus(true);
         axios.put(`http://fams-group1-net03.ptbiology.com/api/user/active-deactive-user?id=${item.id}`)
             .then(() => {
+                setIsLoadingStatus(false);
+                setShowStatusModal(!showStatusModal);
                 notification.success({
                     message: "Change status successfully",
                 });
@@ -113,128 +128,133 @@ function TableRow({ item, openEdit, domChange, domChangeSuccess }) {
                     message: "Change status failed",
                     description: "Something wrong! Please try again later!"
                 })
+                setIsLoadingStatus(false);
+                setShowStatusModal(!showStatusModal);
             });
+        refresh();
     }
 
     return (
-        <tr className={cx("tr")}>
-            <td className={cx("td", "name")}>{item.fullName}</td>
-            <td className={cx("td")}>{item.email}</td>
-            <td className={cx("td")}>{item.dob}</td>
-            <td className={cx("td")}>{item.gender === "Male" ? <MaleIcon /> : <FemaleIcon />}</td>
-            <td className={cx("td")}><TypeChip roleName={item.roleName} /></td>
-            <td className={cx("td")}><StatusChip status={item.status} /></td>
-            {roleName === "Super Admin" && < td className={cx("td")}>
-                <Popover
-                    trigger="click"
-                    placement="left"
-                    open={open}
-                    onOpenChange={() => { setOpen(!open) }}
-                    content={
-                        <>
-                            <button style={style} onClick={() => {
-                                dispatch(setUpdateUser(item))
-                                setOpen(false)
-                                openEdit()
-                            }}>
-                                <CreateIcon />
-                                Edit user
-                            </button>
-                            <Popover
-                                trigger="click"
-                                placement="left"
-                                content={
-                                    <>
-                                        <Popconfirm
-                                            trigger={"click"}
-                                            title="Change role"
-                                            description="Are you sure to change role of this user?"
-                                            placement="left"
-                                            onConfirm={handleChangeRole}
-                                        >
+        <>
+            <tr className={cx("tr")}>
+                <td className={cx("td", "name")}>{item.fullName}</td>
+                <td className={cx("td")}>{item.email}</td>
+                <td className={cx("td")}>{item.dob}</td>
+                <td className={cx("td")}>{item.gender === "Male" ? <MaleIcon /> : <FemaleIcon />}</td>
+                <td className={cx("td")}><TypeChip roleName={item.roleName} /></td>
+                <td className={cx("td")}><StatusChip status={item.status} /></td>
+                {roleName === "Super Admin" && < td className={cx("td")}>
+                    <Popover
+                        trigger="click"
+                        placement="left"
+                        open={open}
+                        onOpenChange={() => { setOpen(!open) }}
+                        content={
+                            <>
+                                <button style={style} onClick={() => {
+                                    dispatch(setUpdateUser(item));
+                                    setOpen(!open);
+                                    openEdit();
+                                }}>
+                                    <CreateIcon />
+                                    Edit user
+                                </button>
+                                <Popover
+                                    trigger="hover"
+                                    placement="left"
+                                    content={
+                                        <>
                                             <button
                                                 style={{ ...style, width: "100px" }}
                                                 onClick={() => {
-                                                    setNewRole("SuperAdmin");
+                                                    setOpen(!open);
+                                                    setNewRole("Super Admin");
+                                                    setShowRoleModal(true);
                                                     domChange();
                                                 }}
                                             >
                                                 Super Admin
                                             </button>
-                                        </Popconfirm>
-                                        <Popconfirm
-                                            trigger={"click"}
-                                            title="Change role"
-                                            description="Are you sure to change role of this user?"
-                                            placement="left"
-                                            onConfirm={handleChangeRole}
-                                        >
                                             <button
                                                 style={{ ...style, width: "100px" }}
                                                 onClick={() => {
-                                                    setNewRole("Admin")
+                                                    setOpen(!open);
+                                                    setNewRole("Admin");
+                                                    setShowRoleModal(true);
                                                     domChange();
                                                 }}
                                             >
                                                 Class Admin
                                             </button>
-                                        </Popconfirm>
-                                        <Popconfirm
-                                            trigger={"click"}
-                                            title="Change role"
-                                            description="Are you sure to change role of this user?"
-                                            placement="left"
-                                            onConfirm={handleChangeRole}
-                                        >
                                             <button
                                                 style={{ ...style, width: "100px" }}
                                                 onClick={() => {
-                                                    setNewRole("Trainer")
+                                                    setOpen(!open);
+                                                    setNewRole("Trainer");
+                                                    setShowRoleModal(true);
                                                     domChange();
                                                 }}
                                             >
                                                 Trainer
                                             </button>
-                                        </Popconfirm>
-                                    </>
-                                }
-                            >
-                                <button style={style}>
-                                    <RoleIcon />
-                                    Change role
-                                </button>
-                            </Popover>
-                            <Popconfirm
-                                trigger={"click"}
-                                title="Change status"
-                                description="Are you sure to change status of this user?"
-                                placement="left"
-                                onConfirm={handleChangeStatus}
-                            >
+                                        </>
+                                    }
+                                >
+                                    <button style={style}>
+                                        <RoleIcon />
+                                        Change role
+                                    </button>
+                                </Popover>
                                 {item.status === "Active" ?
                                     <button style={style} onClick={() => {
+                                        setOpen(!open);
+                                        setShowStatusModal(true);
                                         domChange();
                                     }}>
                                         <VisibilityOffIcon />
                                         De-activate user
                                     </button> :
                                     <button style={style} onClick={() => {
+                                        setOpen(!open);
+                                        setShowStatusModal(true);
                                         domChange();
                                     }}>
                                         <VisibilityIcon />
                                         Activate user
                                     </button>
                                 }
-                            </Popconfirm>
-                        </>
-                    }
-                >
-                    <button className={cx("more-btn")} onClick={() => { setOpen(!open) }}>
-                        <MoreIcon />
-                    </button>
-                </Popover>
-            </td>}
-        </tr >
+                            </>
+                        }
+                    >
+                        <button className={cx("more-btn")} onClick={() => { setOpen(!open) }}>
+                            <MoreIcon />
+                        </button>
+                    </Popover>
+                </td>}
+            </tr >
+
+            {/* modal confirm change role */}
+            <Modal
+                title="Are you sure to change role of user?"
+                open={showRoleModal}
+                onOk={() => { handleChangeRole() }}
+                onCancel={() => { setShowRoleModal(false) }}
+                confirmLoading={isLoadingRole}
+                width={360}
+                centered={true}
+            />
+
+            {/* modal comfirm change status */}
+            <Modal
+                title="Are you sure to change status of user?"
+                open={showStatusModal}
+                onOk={() => { handleChangeStatus() }}
+                onCancel={() => { setShowStatusModal(false) }}
+                confirmLoading={isLoadingStatus}
+                width={360}
+                centered={true}
+            />
+        </>
     );
 }
 

@@ -7,8 +7,6 @@ import CreateOutline from "./CreateOutline";
 import Syllabus from "../../Components/Common/SyllabusTab/syllabus/syllabus";
 import SyllabusDetail from "../../Components/Common/SyllabusDetail";
 
-const name = "General"
-
 const steps = [
   {
     title: "General",
@@ -16,7 +14,7 @@ const steps = [
   },
   {
     title: "Outline",
-    content: <CreateOutline/>,
+    content: <CreateOutline />,
   },
   {
     title: "Others",
@@ -41,20 +39,43 @@ const CreateSyllabusPage = () => {
     innerHeight: "636px",
     // textAlign: "center",
     // color: token.colorTextTertiary,
-    backgroundColor: token.colorFillAlter,
+    backgroundColor: "#FFFFFF",
     borderRadius: token.borderRadiusLG,
     // border: `1px solid ${token.colorBorder}`,
-    marginTop: 16,
+    marginTop: 0,
   };
   return (
     <div className="container">
-      <h4 style={{ padding: "20px", margin: "0" }}>
-        Syllabus
-      </h4>
+      <h4 style={{ padding: "20px", margin: "0" }}>Syllabus</h4>
       <div className="create-syllabus-content">
-        <Steps size="small" current={current} items={items} style={{width: "90%", paddingBottom: "20px", marginLeft: "20px" , borderBottom: "1px solid black"}}/>
+        <Steps
+          size="small"
+          current={current}
+          items={items}
+          style={{
+            width: "97%",
+            paddingBottom: "20px",
+            marginLeft: "20px",
+            borderBottom: "1px solid black",
+            display: "flex",
+            alignItems: "center",
+          }}
+        />
         <CreateSyllabusHeader />
-        
+
+        <div className="syllabus_tab" style={{ marginLeft: "21px" }}>
+          <div className="syllabus_tab_button" style={{ display: "flex" }}>
+            {current < steps.length - 1 && (
+              <Syllabus name={"General"} onClick={() => setCurrent(0)} />
+            )}
+            {current < steps.length - 1 && (
+              <Syllabus name={"Outline"} onClick={() => setCurrent(1)} />
+            )}
+            {current < steps.length - 1 && (
+              <Syllabus name={"Other"} onClick={() => setCurrent(2)} />
+            )}
+          </div>
+        </div>
 
         <div style={contentStyle}>{steps[current].content}</div>
         <div
@@ -84,8 +105,6 @@ const CreateSyllabusPage = () => {
             >
               Previous
             </Button>
-
-            
           )}
         </div>
       </div>

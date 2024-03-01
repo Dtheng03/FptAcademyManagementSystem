@@ -13,7 +13,7 @@ const TimeAllocation = () => {
       className="timeAllocationContainer"
       style={{ display: "flex", flexDirection: "column" }}
     >
-      <div className="timeAllocationHeader">Time Allocation</div>
+      <div className="timeAllocationHeader subtitle1">Time Allocation</div>
       <div className="timeAllocationContent">
         <div className="timeAllocationPie">
           <PipeChart
@@ -30,3 +30,4 @@ const TimeAllocation = () => {
 };
 
 export default TimeAllocation;
+

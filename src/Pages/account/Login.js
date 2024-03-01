@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { Button, Form, Input, message } from "antd";
+import React, { useEffect, useState } from "react";
+import { Button, Form, Input, Spin, message } from "antd";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import "./Login.scss";
 import { useNavigate } from "react-router-dom";
@@ -7,6 +7,7 @@ import { loginUser } from "./api";
 
 const Login = ({ onLogin }) => {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const isLoggedIn = sessionStorage.getItem("isLoggedIn");
@@ -17,6 +18,8 @@ const Login = ({ onLogin }) => {
 
   const onFinish = async (values) => {
     try {
+      setLoading(true);
+
       const { user } = await loginUser(values.email, values.password);
 
       if (user) {
@@ -32,79 +35,87 @@ const Login = ({ onLogin }) => {
       }
     } catch (error) {
       console.error("Error during login:", error);
-      message.error(
-        "An error occurred during login. Please try again later."
-      );
+      message.error("An error occurred during login. Please try again later.");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="login-container">
-      <div className="login-tilte">
-        <img src="/fptLogo.png" style={{ width: "50%", height: "auto" }} />
-        <h2 style={{ margin: "10px 0" }}>FPT Fresh Academy Training Management</h2>
-      </div>
-      <div className="login-content">
-        <Form
-          className="login-form"
-          name="normal_login"
-          initialValues={{
-            remember: true,
-          }}
-          onFinish={onFinish}
-        >
-          <Form.Item
-            style={{ paddingBottom: "12px" }}
-            className="login-label"
-            name="email"
-            rules={[
-              {
-                required: true,
-                type: "email",
-                message: "Please input your email!",
-              },
-            ]}
+    <Spin spinning={loading} size="large" >
+      <div className="login-container">
+        <div className="login-tilte">
+          <img
+            src="/fptLogo.png"
+            style={{ width: "50%", height: "auto" }}
+            alt="FPT Logo"
+          />
+          <h2 style={{ margin: "10px 0" }}>
+            FPT Fresh Academy Training Management
+          </h2>
+        </div>
+        <div className="login-content">
+          <Form
+            className="login-form"
+            name="normal_login"
+            initialValues={{
+              remember: true,
+            }}
+            onFinish={onFinish}
           >
-            <Input
-              className="login-input"
-              prefix={<UserOutlined />}
-              placeholder="Email"
-              type="email"
-              maxLength={40}
-            />
-          </Form.Item>
-          <Form.Item
-            className="login-label"
-            name="password"
-            rules={[
-              {
-                required: true,
-                message: "Please input your password!",
-              },
-            ]}
-          >
-            <Input.Password
-              className="login-input"
-              prefix={<LockOutlined />}
-              type="password"
-              placeholder="Password"
-              maxLength={12}
-            />
-          </Form.Item>
-          <Form.Item className="login-label">
-            <Button
-              style={{ marginTop: "36px", height: "48px" }}
-              className="login-input"
-              type="primary"
-              block
-              htmlType="submit"
+            <Form.Item
+              style={{ paddingBottom: "12px" }}
+              className="login-label"
+              name="email"
+              rules={[
+                {
+                  required: true,
+                  type: "email",
+                  message: "Please input your email!",
+                },
+              ]}
             >
-              Log in
-            </Button>
-          </Form.Item>
-        </Form>
+              <Input
+                className="login-input"
+                prefix={<UserOutlined />}
+                placeholder="Email"
+                type="email"
+                maxLength={40}
+              />
+            </Form.Item>
+            <Form.Item
+              className="login-label"
+              name="password"
+              rules={[
+                {
+                  required: true,
+                  message: "Please input your password!",
+                },
+              ]}
+            >
+              <Input.Password
+                className="login-input"
+                prefix={<LockOutlined />}
+                type="password"
+                placeholder="Password"
+                maxLength={12}
+              />
+            </Form.Item>
+            <Form.Item className="login-label">
+              <Button
+                style={{ marginTop: "36px", height: "48px" }}
+                className="login-input"
+                type="primary"
+                block
+                htmlType="submit"
+              >
+                Log in
+              </Button>
+            </Form.Item>
+          </Form>
+        </div>
       </div>
-    </div>
+    </Spin>
   );
 };
 

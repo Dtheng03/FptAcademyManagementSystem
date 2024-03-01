@@ -10,16 +10,18 @@ import crypto from "crypto-js";
 import Login from "./Pages/account/Login";
 import HomePage from "./Pages/HomePage/HomePage";
 import SyllabusList from "./Pages/SyllabusList/SyllabusList";
-import SyllabusDetailInformation from './Pages/SyllabusDetailInformation';
+import SyllabusDetailInformation from "./Pages/SyllabusDetailInformation";
 import CreateSyllabusPage from "./Pages/CreateSyllabus/CreateSyllabusPage";
 import TranningListPage from "./Pages/TranningProgramListPage";
-import TranningProgramDetail from './Pages/TrainingProgramDetail';
+import TranningProgramDetail from "./Pages/TrainingProgramDetail";
 import ClassListPage from "./Pages/ClassListPage";
+import ViewClass from "./Pages/ViewClass";
 import CreateClass from "./Pages/CreateClass/CreateClass";
-import TrainingCalendarPage from './Pages/TrainingCalendarPage';
-import UserListPage from './Pages/UserListPage';
-import UserPermissionPage from './Pages/UserPermissionPage';
-import LearningMaterials from './Pages/LearningMaterials/LearningMaterials';
+import TrainingCalendarPage from "./Pages/TrainingCalendarPage";
+import UserListPage from "./Pages/UserListPage";
+import UserPermissionPage from "./Pages/UserPermissionPage";
+import LearningMaterials from "./Pages/LearningMaterials/LearningMaterials";
+import { message } from "antd";
 
 function App() {
   const [decryptedRoleName, setDecryptedRoleName] = useState("");
@@ -42,31 +44,45 @@ function App() {
     }
   }, [isLoggedIn, navigate, location.pathname]);
 
-  const handleLogin = (user) => {
-    setLoggedIn(true);
-    sessionStorage.setItem("isLoggedIn", JSON.stringify(true));
+  const handleLogin = async (user) => {
+    try {
+      setLoggedIn(true);
+      sessionStorage.setItem("isLoggedIn", JSON.stringify(true));
 
-    // Mã hóa roleName trc khi set vào session
-    const encryptedRoleName = crypto.AES.encrypt(
-      user.roleName,
-      "react02"
-    ).toString();
-    sessionStorage.setItem("roleName", encryptedRoleName);
+      // Mã hóa roleName trc khi set vào session
 
-    sessionStorage.setItem("fullName", user.fullName);
+      const encryptedRoleName = crypto.AES.encrypt(
+        user.roleName,
+        "react02"
+      ).toString();
+      sessionStorage.setItem("roleName", encryptedRoleName);
+      sessionStorage.setItem("fullName", user.fullName);
 
-    const token = sessionStorage.getItem("token");
-    const decodedToken = jwtDecode(token); //token này là token nhận vào mai mốt làm thì gán dô
+      const token = sessionStorage.getItem("token");
+      const decodedToken = jwtDecode(token);
 
-    // Kỉm tra coi thời hạn token còn bao nhiêu (theo giây)
-    const isTokenValid = decodedToken.exp > Date.now() / 1000;
-    if (!isTokenValid) {
-      // Token hết đát
+      // Kỉm tra coi thời hạn token còn bao nhiêu (theo giây)
+      const isTokenValid = decodedToken.exp > Date.now() / 1000;
+      if (!isTokenValid) {
+        // Token hết đát
+        handleLogout();
+        return;
+      }
+
+      navigate("/home");
+    } catch (error) {
+      // Handle API response errors
+      const errorMessage =
+        error.response && error.response.data
+          ? error.response.data.message
+          : "Incorrect email or password. Please try again.";
+
+      // Display error message using Ant Design message.error
+      message.error(errorMessage);
+
+      // Perform logout if needed
       handleLogout();
-      return;
     }
-
-    navigate("/home");
   };
 
   const handleLogout = () => {
@@ -74,6 +90,8 @@ function App() {
     sessionStorage.removeItem("isLoggedIn");
     sessionStorage.removeItem("roleName");
     sessionStorage.removeItem("token");
+    sessionStorage.removeItem("fullName");
+
     navigate("/login");
   };
 
@@ -102,29 +120,28 @@ function App() {
             {isLoggedIn ? (
               <>
                 {/* ROUTE CODE TRONG ĐÂY NHA MẤY NÍ */}
-                <Route path='/home' element={<SyllabusDetailInformation />} />
-                <Route path='/view-syllabus' element={<SyllabusList />} />
-                <Route path='/view-syllabus-detail' element={<SyllabusDetailInformation />} />
-                <Route path='/create-syllabus' element={<CreateSyllabusPage />} />
-                <Route path='/tranning-program-list' element={<TranningListPage />} />
-                <Route path='/view-tranning-program-detail/:id' element={<TranningProgramDetail />} />
-                <Route path='/class-list' element={<ClassListPage />} />
-                {/* <Route path="/view-class-detail/:id" element={<ViewClassDetail />} /> */}
-                <Route path='/training-calendar' element={<TrainingCalendarPage />} />
+                <Route path="/home" element={<HomePage />} />
+                <Route path="/view-syllabus" element={<SyllabusList />} />
+                <Route path="/view-syllabus-detail" element={<SyllabusDetailInformation />} />
+                <Route path="/create-syllabus" element={<CreateSyllabusPage />} />
+                <Route path="/tranning-program-list" element={<TranningListPage />} />
+                <Route path="/view-tranning-program-detail/:id" element={<TranningProgramDetail />} />
+                <Route path="/class-list" element={<ClassListPage />} />
+                <Route path="/view-class-detail/:id" element={<ViewClass />} />
                 <Route path='/create-class' element={<CreateClass />} />
+                <Route path='/training-calendar' element={<TrainingCalendarPage />} />
                 <Route path='/user-list' element={<UserListPage />} />
                 <Route path='/user-permission' element={<UserPermissionPage />} />
                 <Route path='/materials' element={<LearningMaterials />} />
               </>
             ) : (
               <Route path="/login" element={<Login onLogin={handleLogin} />} />
-            )
-            }
-          </Routes >
-        </Layout >
+            )}
+          </Routes>
+        </Layout>
         {isLoggedIn && location.pathname !== "/login" && <Footer />}
-      </Layout >
-    </div >
+      </Layout>
+    </div>
   );
 }
 

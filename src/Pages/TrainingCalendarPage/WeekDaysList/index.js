@@ -23,16 +23,16 @@ const RenderWeekDaysList = ({ year, week }) => {
     );
 };
 
-const WeekDaysList = () => {
+const WeekDaysList = ({ showData }) => {
     const [selectedDate, setSelectedDate] = useState(moment());
     const [selectedWeekOfYear, setSelectedWeekOfYear] = useState(null);
 
     const handleDateChange = (event) => {
-        console.log(event.target.value);
         const date = moment(event.target.value);
         const weekOfYear = date.isoWeek();
         setSelectedDate(date);
         setSelectedWeekOfYear(weekOfYear);
+        showData();
     };
 
     return (

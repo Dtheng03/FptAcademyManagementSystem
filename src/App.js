@@ -20,6 +20,7 @@ import TrainingCalendarPage from './Pages/TrainingCalendarPage';
 import UserListPage from './Pages/UserListPage';
 import UserPermissionPage from './Pages/UserPermissionPage';
 import LearningMaterials from './Pages/LearningMaterials/LearningMaterials';
+import ViewClass from './Pages/ViewClass/index';
 
 function App() {
   const [decryptedRoleName, setDecryptedRoleName] = useState("");
@@ -115,6 +116,7 @@ function App() {
                 <Route path='/user-list' element={<UserListPage />} />
                 <Route path='/user-permission' element={<UserPermissionPage />} />
                 <Route path='/materials' element={<LearningMaterials />} />
+                <Route path='/view-class-detail' element={<ViewClass />} />
               </>
             ) : (
               <Route path="/login" element={<Login onLogin={handleLogin} />} />

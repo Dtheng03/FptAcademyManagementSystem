@@ -160,6 +160,10 @@ function UserListPage() {
                                 openEdit={() => setShowEditModal(true)}
                                 domChange={() => setIsDomChange(true)}
                                 domChangeSuccess={() => setIsDomChange(false)}
+                                refresh={() => {
+                                    setSearchList([]);
+                                    setSearchValue("");
+                                }}
                             />
                         ))}
                     </tbody>
@@ -187,6 +191,10 @@ function UserListPage() {
                                 openEdit={() => setShowEditModal(true)}
                                 domChange={() => setIsDomChange(true)}
                                 domChangeSuccess={() => setIsDomChange(false)}
+                                refresh={() => {
+                                    setSearchList([]);
+                                    setSearchValue("");
+                                }}
                             />
                         ))}
                     </tbody>
@@ -211,10 +219,16 @@ function UserListPage() {
             }
 
             {/* modal add new user */}
-            {showAddModal && <ModalAddUser closeModal={() => { setShowAddModal(false) }} />}
+            {showAddModal && <ModalAddUser closeModal={() => { setShowAddModal(false) }} domChange={() => {
+                setSearchList([]);
+                setSearchValue("");
+            }} />}
 
             {/* modal edit user */}
-            {showEditModal && <ModalEditUser closeModal={() => { setShowEditModal(false) }} />}
+            {showEditModal && <ModalEditUser closeModal={() => { setShowEditModal(false) }} domChange={() => {
+                setSearchList([]);
+                setSearchValue("");
+            }} />}
         </div >
     );
 }

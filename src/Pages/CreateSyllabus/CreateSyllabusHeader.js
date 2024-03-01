@@ -2,7 +2,7 @@ import React from "react";
 
 const CreateSyllabusHeader = () => {
   return (
-    <div style={{ width: "942px", padding: "20px" }}>
+    <div style={{ width: "90%", padding: "20px" }}>
       <div
         className="general-header"
         style={{ display: "flex", justifyContent: "space-between", alignItems: 'center' }}

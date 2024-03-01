@@ -5,11 +5,16 @@
     flex-direction: column;
 
     .timeAllocationHeader {
+        height: 34px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         color: #fff;
         background-color: #3b3a4a;
         text-align: center;
         border-top-left-radius: 15px;
         border-top-right-radius: 15px;
+
 
 
     }
@@ -23,6 +28,7 @@
         border: 0.5px solid #cec4c4;
         border-bottom-left-radius: 15px;
         border-bottom-right-radius: 15px;
+        box-shadow: rgba(0, 0, 0, 0.18) 0px 2px 4px;
 
         .timeAllocationPie {
             width: 100%;

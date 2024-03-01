@@ -102,7 +102,7 @@ function App() {
             {isLoggedIn ? (
               <>
                 {/* ROUTE CODE TRONG ĐÂY NHA MẤY NÍ */}
-                <Route path='/home' element={<HomePage />} />
+                <Route path='/home' element={<SyllabusDetailInformation />} />
                 <Route path='/view-syllabus' element={<SyllabusList />} />
                 <Route path='/view-syllabus-detail' element={<SyllabusDetailInformation />} />
                 <Route path='/create-syllabus' element={<CreateSyllabusPage />} />

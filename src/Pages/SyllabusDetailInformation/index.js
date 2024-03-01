@@ -2,19 +2,17 @@ import Syllabus from "../../Components/Common/SyllabusTab/syllabus/syllabus";
 import React, { useState } from "react";
 import style from "./SyllabusDetailInformation.module.scss";
 import General from "./SyllabusGeneral";
-import Outline from "./SyllabusOutline"
+import Outline from "./SyllabusOutline";
+import Order from "./SyllabusOrder";
 import classNames from "classnames/bind";
 import SyllabusHeader from "./SyllabusHeader";
 import SyllabusDescription from "./SyllabusDescription";
 
 export default function SyllabusDetailInformation() {
-  const name = "general";
-  const name1 = "outline";
-  const name2 = "order";
   const cx = classNames.bind(style);
-  const [activeComponent, setActiveComponent] = useState(null);
+  const [activeComponent, setActiveComponent] = useState(""); 
 
-  const handleButtonClick = (component) => {
+  const handleTabClick = (component) => {
     setActiveComponent(component);
   };
 
@@ -26,33 +24,33 @@ export default function SyllabusDetailInformation() {
         <SyllabusDescription />
 
         <div className={cx("category")}>
-        <button
+          <div
             className={cx("button", { clicked: activeComponent === "General" })}
-            onClick={() => handleButtonClick("General")}
+            onClick={() => setActiveComponent("General")}
           >
-            <Syllabus name={name} />
-          </button>
+            <Syllabus name="general" />
+          </div>
 
-          <button
+          <div
             className={cx("button", { clicked: activeComponent === "Outline" })}
-            onClick={() => handleButtonClick("Outline")}
+            onClick={() => setActiveComponent("Outline")}
           >
-            <Syllabus name={name1} />
-          </button>
+            <Syllabus name="outline" />
+          </div>
 
-          <button
+          <div
             className={cx("button", { clicked: activeComponent === "Order" })}
-            onClick={() => handleButtonClick("Order")}
+            onClick={() => setActiveComponent("Order")}
           >
-            <Syllabus name={name2} />
-          </button>
+            <Syllabus name="order" />
+          </div>
         </div>
       </div>
 
       <div className={cx("content-container")}>
         {activeComponent === "General" && <General />}
         {activeComponent === "Outline" && <Outline />}
-        {activeComponent === "Order" && <General/>}
+        {activeComponent === "Order" && <Order />}
       </div>
     </div>
   );

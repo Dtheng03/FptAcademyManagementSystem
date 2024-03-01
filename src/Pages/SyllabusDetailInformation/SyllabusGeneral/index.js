@@ -23,10 +23,10 @@ export default function General() {
               <div className={cx("icon")}>
                 <GradeIcon />
               </div>
-              <body2 className={cx("text")}>Lever</body2>
+              <p className={cx("text")}>Lever</p>
             </div>
 
-            <body2 className={cx("level")}>All lever</body2>
+            <p className={cx("level")}>All lever</p>
           </div>
 
           <div className={cx("line-2")}>
@@ -34,9 +34,9 @@ export default function General() {
               <div className={cx("icon")}>
                 <UserManagementIcon />
               </div>
-              <body2 className={cx("text")}>Attendee number</body2>
+              <p className={cx("text")}>Attendee number</p>
             </div>
-            <body2 className={cx("number")}>20</body2>
+            <p className={cx("number")}>20</p>
           </div>
 
           <div className={cx("line-3")}>
@@ -44,7 +44,7 @@ export default function General() {
               <div className={cx("icon")}>
                 <VerifiedUserIcon />
               </div>
-              <body2 className={cx("text")}>Output standard</body2>
+              <p className={cx("text")}>Output standard</p>
             </div>
             <div className={cx("standar")}>
               <StatusChip title={"H4SD"} /> <StatusChip title={"K6SD"} />

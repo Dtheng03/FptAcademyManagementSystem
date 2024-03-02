@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styles from "./Table.module.scss";
 import classNames from "classnames/bind";
-import { Popconfirm, Popover, notification, Button } from "antd";
+import { Popconfirm, Popover, notification, Button, Modal } from "antd";
 import { LearningMaterialsIcon } from "../../../Components/Common/Icons/NavMenuIcons";
 import {
   CopyIcon,
@@ -54,69 +54,91 @@ export default function Table({ item, domChange, domChangeSuccess }) {
     cursor: "pointer",
   };
   const [open, setOpen] = useState(false);
+
+  const [isModalVisible, setIsModalVisible] = useState(false);
   const [newStatus, setNewStatus] = useState(item.status);
+  const [modalAction, setModalAction] = useState("");
 
-  const handleDelete = () => {
-    axios
-      .delete(`https://65411666f0b8287df1fdc4fa.mockapi.io/program/${item.id}`)
-      .then(() => {
-        notification.success({
-          message: "Delete class successfully",
-        });
-        domChangeSuccess();
-      })
-      .catch(function (error) {
-        console.log(error);
-        notification.error({
-          message: "Delete class failed",
-          description: "Please try again",
-        });
-      });
+  const handleAction = (action) => {
+    setModalAction(action);
+    setNewStatus("");
+    setIsModalVisible(true);
+    setOpen(false);
   };
 
-  const handleChangeStatus = () => {
-    const nextStatus = newStatus === "Active" ? "Inactive" : "Active";
-    axios
-      .put(`https://65411666f0b8287df1fdc4fa.mockapi.io/program/${item.id}`, {
-        status: nextStatus,
-      })
-      .then(() => {
-        notification.success({
-          message: "Status updated successfully",
+  const performAction = () => {
+    if (modalAction === "duplicate") {
+      const duplicatedProgram = { ...item };
+      delete duplicatedProgram.id;
+      axios
+        .post(
+          "https://65411666f0b8287df1fdc4fa.mockapi.io/program",
+          duplicatedProgram
+        )
+        .then(() => {
+          notification.success({
+            message: "Duplicate class successfully",
+          });
+          domChangeSuccess();
+        })
+        .catch(function (error) {
+          console.log(error);
+          notification.error({
+            message: "Duplicate class failed",
+            description: "Please try again",
+          });
         });
-        domChangeSuccess();
-      })
-      .catch(function (error) {
-        console.log(error);
-        notification.error({
-          message: "Status update failed",
-          description: "Try Again!",
+    } else if (modalAction === "delete") {
+      axios
+        .delete(
+          `https://65411666f0b8287df1fdc4fa.mockapi.io/program/${item.id}`
+        )
+        .then(() => {
+          notification.success({
+            message: "Delete class successfully",
+          });
+          domChangeSuccess();
+        })
+        .catch(function (error) {
+          console.log(error);
+          notification.error({
+            message: "Delete class failed",
+            description: "Please try again",
+          });
         });
-      });
+    } else if (modalAction === "changeStatus") {
+      let nextStatus = "";
+      if (item.status === "Inactive") {
+        nextStatus = "Active";
+      } else if (item.status === "Active") {
+        nextStatus = "Draft";
+      } else if (item.status === "Draft") {
+        nextStatus = "Active";
+      }
+      axios
+        .put(`https://65411666f0b8287df1fdc4fa.mockapi.io/program/${item.id}`, {
+          status: nextStatus,
+        })
+        .then(() => {
+          notification.success({
+            message: "Status updated successfully",
+          });
+          domChangeSuccess();
+        })
+        .catch(function (error) {
+          console.log(error);
+          notification.error({
+            message: "Status update failed",
+            description: "Try Again!",
+          });
+        });
+    }
+    setIsModalVisible(false);
   };
 
-  const handleDuplicate = () => {
-    const duplicatedProgram = { ...item };
-    delete duplicatedProgram.id;
-    axios
-      .post(
-        "https://65411666f0b8287df1fdc4fa.mockapi.io/program",
-        duplicatedProgram
-      )
-      .then(() => {
-        notification.success({
-          message: "Duplicate class successfully",
-        });
-        domChangeSuccess();
-      })
-      .catch(function (error) {
-        console.log(error);
-        notification.error({
-          message: "Duplicate class failed",
-          description: "Please try again",
-        });
-      });
-  };
+  const handleDelete = () => {};
+
+  const handleDuplicate = () => {};
 
   return (
     <tr className={cx("tr")} onDoubleClick={() => handleViewDetail(item)}>
@@ -159,10 +181,9 @@ export default function Table({ item, domChange, domChangeSuccess }) {
               </button>
 
               <button
-                
                 style={style}
                 onClick={() => {
-                  handleDuplicate();
+                  handleAction("duplicate");
                   setOpen(false);
                   domChange();
                 }}
@@ -171,59 +192,37 @@ export default function Table({ item, domChange, domChangeSuccess }) {
                 Duplicate program
               </button>
 
-              <Popconfirm
-                trigger={"click"}
-                title="Delete program"
-                description={
-                  <div>
-                    {`Do you want to delete the "${item.programName}" `}
-                    <br />
-                    {"This program cannot be restored!"}
-                  </div>
-                }
-                placement="left"
-                onConfirm={handleDelete}
-                okText="Delete"
-                okButtonProps={{
-                  style: { backgroundColor: "#2D3748", color: "#FFF" },
-                }}
-                cancelButtonProps={{
-                  style: { color: "#ff0000", border: "none" },
+              <button
+                style={style}
+                onClick={() => {
+                  handleAction("changeStatus");
+                  domChange();
                 }}
               >
-                <button
-                  
-                  style={{ ...style, color: "red" }}
-                  onClick={() => domChange()}
-                >
-                  <DeleteForeverIcon />
-                  Delete Program
-                </button>
-              </Popconfirm>
-
-              <Popconfirm
-                trigger="click"
-                title="Change Status"
-                description={`Are you sure you want to change the status to ${
-                  newStatus === "Active" ? "Inactive" : "Active"
-                }?`}
-                placement="left"
-                onConfirm={handleChangeStatus}
-                okText="Yes"
-                cancelText="No"
-              >
-                {newStatus === "Active" ? (
-                  <button style={style} onClick={() => domChange()}>
-                    <VisibilityOffIcon />
-                    Deactivate
-                  </button>
-                ) : (
-                  <button style={style} onClick={() => domChange()} >
+                {item.status === "Active" || item.status === "Inactive" ? (
+                  <>
                     <VisibilityIcon />
                     Activate
-                  </button>
+                  </>
+                ) : (
+                  <>
+                    <VisibilityOffIcon />
+                    De-activate
+                  </>
                 )}
-              </Popconfirm>
+              </button>
+
+              <button
+                style={{ ...style, color: "red" }}
+                onClick={() => {
+                  handleAction("delete");
+                  setOpen(false);
+                  domChange();
+                }}
+              >
+                <DeleteForeverIcon />
+                Delete program
+              </button>
             </>
           }
         >
@@ -231,6 +230,28 @@ export default function Table({ item, domChange, domChangeSuccess }) {
             <MoreIcon />
           </button>
         </Popover>
+
+        <Modal
+          title={
+            modalAction === "delete"
+              ? "Delete Confirm"
+              : modalAction === "duplicate"
+              ? "Duplicate Confirm"
+              : "Change Status Confirm"
+          }
+          open={isModalVisible}
+          onOk={performAction}
+          onCancel={() => setIsModalVisible(false)}
+          okText={modalAction === "delete" ? "Delete" : "Duplicate"}
+          okButtonProps={{ style: { backgroundColor: "#C70039" } }}
+          cancelButtonProps={{ style: { color: "#C70039", border: "none" } }}
+        >
+          {modalAction === "delete"
+            ? `Do you want to delete the "${item.name}" ? This process cannot be restored!!`
+            : modalAction === "duplicate"
+            ? `Do you want to duplicate the "${item.name}" ?`
+            : `Do you want to change the status of the "${item.name}" class to "${newStatus}"?`}
+        </Modal>
       </td>
     </tr>
   );

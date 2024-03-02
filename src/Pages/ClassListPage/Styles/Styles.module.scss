@@ -1,0 +1,54 @@
+.attendee-style {
+    display: inline-block;
+    min-width: 60px;
+    height: 28px;
+    line-height: 28px;
+    border-radius: 50px;
+    color: var(--white-color);
+    text-align: center;
+    font-size: small;
+}
+
+.fresher {
+    background-color: #FF7568;
+}
+
+.intern {
+    background-color: #2D3748;
+}
+
+.online-fee-fresher {
+    width: 130px;
+    background-color: #2F903F;
+}
+
+.offline-fee-fresher {
+    width: 130px;
+    background-color: #D45B13;
+}
+
+.status-style {
+    display: inline-block;
+    min-width: 60px;
+    height: 28px;
+    line-height: 28px;
+    border-radius: 50px;
+    color: var(--white-color);
+    text-align: center;
+    font-size: small;
+}
+
+.planning {
+    width: 80px;
+    background-color: #285D9A;
+}
+
+.opening {
+    width: 80px;
+    background-color: #2F903F;
+}
+
+.closed {
+    width: 80px;
+    background-color: #D45B13;
+}

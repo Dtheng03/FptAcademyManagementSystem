@@ -22,7 +22,6 @@ function ClassListPage() {
     const currentPageData = data.slice(startIndex, endIndex);
 
     const [searchValue, setSearchValue] = useState("");
-    const [filterLs, setFilterLs] = useState([]);
     const [search, setSearch] = useState([]);
 
     const [isDomChange, setIsDomChange] = useState(false);
@@ -58,9 +57,9 @@ function ClassListPage() {
         else if (columnKey === 'attendee') {
             return a.attendee.localeCompare(b.attendee) * order;
         }
-        // else if (columnKey === 'status') {
-        //     return a.status.localeCompare(b.status) * order;
-        // }
+        else if (columnKey === 'status') {
+            return a.status.localeCompare(b.status) * order;
+        }
         else if (columnKey === 'location') {
             return a.location.localeCompare(b.location) * order;
         }
@@ -78,12 +77,16 @@ function ClassListPage() {
 
         if (value.trim() === "") {
             setSearch([]);
-        } else {
+        } else if (value !== "") {
             const searchResults = data.filter(
                 result => result.classNames.toLowerCase().includes(value.toLowerCase())
                     || result.classCode.toLowerCase().includes(value.toLowerCase())
             );
-            setSearch(searchResults);
+            if (searchResults.length > 0) {
+                setSearch(searchResults);
+            } else {
+                setSearch([]);
+            }
         }
     };
 
@@ -110,11 +113,19 @@ function ClassListPage() {
                         <input
                             className={cx('input-contain')}
                             type="text"
-                            disabled={filterLs.length >= 4 ? true : false}
                             value={searchValue}
                             onChange={handleInputSearch}
-                            placeholder="Search by..."
+                            placeholder="Search..."
                         />
+                        <button
+                            className={cx("clear-search-btn")}
+                            onClick={() => {
+                                setSearch([]);
+                                setSearchValue("");
+                            }}
+                        >
+                            X
+                        </button>
                     </div>
                     <Popover
                         trigger="click"
@@ -142,59 +153,41 @@ function ClassListPage() {
 
             </div>
 
-            <table className={cx("table")}>
-                <thead className={cx("thead")}>
-                    <tr className={cx("tr")}>
-                        {/* <th className={cx("th")}><button className={cx("title")}>ID <SortIcon /></button></th> */}
-                        <th className={cx('th', 'name')}>
-                            <button className={cx('title')} onClick={() => handleSort('classNames')}>
-                                Class <SortIcon />
-                            </button>
-                        </th>
-                        <th className={cx('th')}>
-                            <button className={cx('title')} onClick={() => handleSort('classCode')}>
-                                Class Code <SortIcon />
-                            </button>
-                        </th>
-                        <th className={cx('th')}>
-                            <button className={cx('title')} onClick={() => handleSort('createdOn')}>
-                                Created On <SortIcon />
-                            </button>
-                        </th>
-                        <th className={cx('th')}>
-                            <button className={cx('title')} onClick={() => handleSort('createdBy')}>
-                                Created By <SortIcon />
-                            </button>
-                        </th>
-                        <th className={cx('th')}>
-                            <button className={cx('title')} onClick={() => handleSort('duration')}>
-                                Duration <SortIcon />
-                            </button>
-                        </th>
-                        <th className={cx('th')}>
-                            <button className={cx('title')} onClick={() => handleSort('attendee')}>
-                                Attendee <SortIcon />
-                            </button>
-                        </th>
-                        {/* <th className={cx('th')}>
-                            <button className={cx('title')} onClick={() => handleSort('status')}>
-                                Status <SortIcon />
-                            </button>
-                        </th> */}
-                        <th className={cx('th')}>
-                            <button className={cx('title')} onClick={() => handleSort('location')}>
-                                Location <SortIcon />
-                            </button>
-                        </th>
-                        <th className={cx('th')}>
-                            <button className={cx('title')} onClick={() => handleSort('fsu')}>
-                                FSU <SortIcon />
-                            </button>
-                        </th>
-                        <th className={cx('th')}></th>
-                    </tr>
-                </thead>
-                {search.length > 0 ?
+            {searchValue !== "" && search.length > 0 &&
+                <table className={cx("table")}>
+                    <thead className={cx("thead")}>
+                        <tr className={cx("tr")}>
+                            {/* <th className={cx("th")}><button className={cx("title")}>ID <SortIcon /></button></th> */}
+                            <th className={cx('th', 'name')}>
+                                <button className={cx('title')} onClick={() => handleSort('classNames')}>Class <SortIcon /></button>
+                            </th>
+                            <th className={cx('th')}>
+                                <button className={cx('title')} onClick={() => handleSort('classCode')}>Class Code <SortIcon /></button>
+                            </th>
+                            <th className={cx('th')}>
+                                <button className={cx('title')} onClick={() => handleSort('createdOn')}>Created On</button>
+                            </th>
+                            <th className={cx('th')}>
+                                <button className={cx('title')} onClick={() => handleSort('createdBy')}>Created By <SortIcon /></button>
+                            </th>
+                            <th className={cx('th')}>
+                                <button className={cx('title')} onClick={() => handleSort('duration')}>Duration <SortIcon /></button>
+                            </th>
+                            <th className={cx('th')}>
+                                <button className={cx('title')} onClick={() => handleSort('attendee')}>Attendee <SortIcon /></button>
+                            </th>
+                            {/* <th className={cx('th')}>
+                                <button className={cx('title')} onClick={() => handleSort('status')}>Status <SortIcon /></button>
+                            </th> */}
+                            <th className={cx('th')}>
+                                <button className={cx('title')} onClick={() => handleSort('location')}>Location <SortIcon /></button>
+                            </th>
+                            <th className={cx('th')}>
+                                <button className={cx('title')} onClick={() => handleSort('fsu')}>FSU <SortIcon /></button>
+                            </th>
+                            <th className={cx('th')}></th>
+                        </tr>
+                    </thead>
                     <tbody className={cx("tbody")}>
                         {search.map((item, index) => (
                             <TableRow
@@ -202,36 +195,87 @@ function ClassListPage() {
                                 item={item}
                                 domChange={() => setIsDomChange(true)}
                                 domChangeSuccess={() => setIsDomChange(false)}
+                                reloading={() => {
+                                    setSearch([]);
+                                    setSearchValue("");
+                                }}
                             />
                         ))}
                     </tbody>
-                    :
+                </table>}
+
+            {(searchValue === "" && search.length === 0) &&
+                <table className={cx("table")}>
+                    <thead className={cx("thead")}>
+                        <tr className={cx("tr")}>
+                            {/* <th className={cx("th")}><button className={cx("title")}>ID <SortIcon /></button></th> */}
+                            <th className={cx('th', 'name')}>
+                                <button className={cx('title')} onClick={() => handleSort('classNames')}>Class <SortIcon /></button>
+                            </th>
+                            <th className={cx('th')}>
+                                <button className={cx('title')} onClick={() => handleSort('classCode')}>Class Code <SortIcon /></button>
+                            </th>
+                            <th className={cx('th')}>
+                                <button className={cx('title')} onClick={() => handleSort('createdOn')}>Created On</button>
+                            </th>
+                            <th className={cx('th')}>
+                                <button className={cx('title')} onClick={() => handleSort('createdBy')}>Created By <SortIcon /></button>
+                            </th>
+                            <th className={cx('th')}>
+                                <button className={cx('title')} onClick={() => handleSort('duration')}>Duration <SortIcon /></button>
+                            </th>
+                            <th className={cx('th')}>
+                                <button className={cx('title')} onClick={() => handleSort('attendee')}>Attendee <SortIcon /></button>
+                            </th>
+                            {/* <th className={cx('th')}>
+                                <button className={cx('title')} onClick={() => handleSort('status')}>Status <SortIcon /></button>
+                            </th> */}
+                            <th className={cx('th')}>
+                                <button className={cx('title')} onClick={() => handleSort('location')}>Location <SortIcon /></button>
+                            </th>
+                            <th className={cx('th')}>
+                                <button className={cx('title')} onClick={() => handleSort('fsu')}>FSU <SortIcon /></button>
+                            </th>
+                            <th className={cx('th')}></th>
+                        </tr>
+                    </thead>
                     <tbody className={cx("tbody")}>
-                        {currentPageData.map(item => (
+                        {currentPageData.map((item, index) => (
                             <TableRow
-                                key={item.id}
+                                key={index}
                                 item={item}
                                 domChange={() => setIsDomChange(true)}
                                 domChangeSuccess={() => setIsDomChange(false)}
+                                reloading={() => {
+                                    setSearch([]);
+                                    setSearchValue("");
+                                }}
                             />
                         ))}
-                    </tbody>}
-            </table>
+                    </tbody>
+                </table>}
 
             {
-                (search.length > 0 || data.length > 0) && <div className={cx("pagination")}>
-                    <Pagination
-                        onChange={(page, pageSize) => {
-                            setItemsPerPage(pageSize)
-                            setCurrentPage(page);
-                        }}
-                        showSizeChanger
-                        onShowSizeChange={(pageSize) => { setItemsPerPage(pageSize) }}
-                        current={currentPage}
-                        total={data.length}
-                    />
-                </div>
+                searchValue !== "" && search.length === 0 &&
+                <p className={cx("null-result")}>
+                    Search results are not accurate!
+                </p>
             }
+
+            {(searchValue !== "") || (search.length === 0 && <div className={cx("pagination")}>
+                <Pagination
+                    onChange={(page, pageSize) => {
+                        setItemsPerPage(pageSize);
+                        setCurrentPage(page);
+                    }}
+                    showSizeChanger
+                    onShowSizeChange={(pageSize) => {
+                        setItemsPerPage(pageSize);
+                    }}
+                    current={currentPage}
+                    total={data.length}
+                />
+            </div>)}
         </div >
     );
 }

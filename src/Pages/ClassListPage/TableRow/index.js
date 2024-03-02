@@ -5,34 +5,12 @@ import { MoreIcon, VisibilityIcon, VisibilityOffIcon } from "../../../Components
 import { DeleteForeverIcon, CreateIcon, CopyIcon } from "../../../Components/Common/Icons/DocManageIcons";
 import { Popover, notification, Modal, Button } from 'antd';
 import { useNavigate } from "react-router-dom";
+import { AttendeeStyle, StatusStyle } from "../Styles";
 import axios from "axios";
 
 const cx = classNames.bind(styles);
 
-function AttendeeStyle({ attendee }) {
-    var className, title;
-    if (attendee === "Fresher") {
-        className = "fresher"
-        title = "Fresher"
-    } else if (attendee === "Intern") {
-        className = "intern"
-        title = "Intern"
-    } else if (attendee === "Online fee-fresher") {
-        className = "online-fee-fresher"
-        title = "Online fee-fresher"
-    } else if (attendee === "Offline fee-fresher") {
-        className = "offline-fee-fresher"
-        title = "Offline fee-fresher"
-    }
-
-    return (
-        <span className={cx("attendee-style", className)}>
-            {title}
-        </span>
-    );
-}
-
-function TableRow({ item, domChange, domChangeSuccess }) {
+function TableRow({ item, domChange, domChangeSuccess, reloading }) {
     const style = {
         backgroundColor: "transparent",
         border: "none",
@@ -64,71 +42,83 @@ function TableRow({ item, domChange, domChangeSuccess }) {
         setOpen(false);
     };
 
+    const handleDelete = () => {
+        axios
+            .delete(`https://653d1d13f52310ee6a99e3b7.mockapi.io/class/${item.id}`)
+            .then(() => {
+                notification.success({
+                    message: 'Delete class successfully',
+                });
+                domChangeSuccess();
+            })
+            .catch(function (error) {
+                console.log(error);
+                notification.error({
+                    message: 'Delete class failed',
+                    description: 'Please try again!',
+                });
+            });
+        reloading();
+    }
+
+    const handleDuplicate = () => {
+        const duplicatedClass = { ...item };
+        delete duplicatedClass.id;
+        axios
+            .post('https://653d1d13f52310ee6a99e3b7.mockapi.io/class', duplicatedClass)
+            .then(() => {
+                notification.success({
+                    message: 'Duplicate class successfully',
+                });
+                domChangeSuccess();
+            })
+            .catch(function (error) {
+                console.log(error);
+                notification.error({
+                    message: 'Duplicate class failed',
+                    description: 'Please try again!',
+                });
+            });
+        reloading();
+    }
+
+    const handleChangeStatus = () => {
+        let nextStatus = ""
+        if (item.status === "Planning") {
+            nextStatus = "Opening"
+        }
+        else if (item.status === "Opening") {
+            nextStatus = "Closed"
+        }
+        else if (item.status === "Closed") {
+            nextStatus = "Opening"
+        }
+        axios
+            .put(`https://653d1d13f52310ee6a99e3b7.mockapi.io/class/${item.id}`, { status: nextStatus })
+            .then(() => {
+                notification.success({
+                    message: 'Status changed successfully',
+                });
+                domChangeSuccess();
+            })
+            .catch(function (error) {
+                console.log(error);
+                notification.error({
+                    message: 'Status change failed',
+                    description: 'Please try again!',
+                });
+            });
+        reloading();
+    }
+
     const performAction = () => {
         if (modalAction === 'duplicate') {
-            // Duplicate class
-            const duplicatedClass = { ...item };
-            delete duplicatedClass.id;
-            axios
-                .post('https://653d1d13f52310ee6a99e3b7.mockapi.io/class', duplicatedClass)
-                .then(() => {
-                    notification.success({
-                        message: 'Duplicate class successfully',
-                    });
-                    domChangeSuccess();
-                })
-                .catch(function (error) {
-                    console.log(error);
-                    notification.error({
-                        message: 'Duplicate class failed',
-                        description: 'Please try again!',
-                    });
-                });
+            handleDuplicate();
         } else if (modalAction === 'delete') {
-            //delete class
-            axios
-                .delete(`https://653d1d13f52310ee6a99e3b7.mockapi.io/class/${item.id}`)
-                .then(() => {
-                    notification.success({
-                        message: 'Delete class successfully',
-                    });
-                    domChangeSuccess();
-                })
-                .catch(function (error) {
-                    console.log(error);
-                    notification.error({
-                        message: 'Delete class failed',
-                        description: 'Please try again!',
-                    });
-                });
+            handleDelete();
         } else if (modalAction === 'changeStatus') {
-            let nextStatus = ""
-            if (item.status === "Planning") {
-                nextStatus = "Opening"
-            }
-            else if (item.status === "Opening") {
-                nextStatus = "Closed"
-            }
-            else if (item.status === "Closed") {
-                nextStatus = "Opening"
-            }
-            axios
-                .put(`https://653d1d13f52310ee6a99e3b7.mockapi.io/class/${item.id}`, { status: nextStatus })
-                .then(() => {
-                    notification.success({
-                        message: 'Status changed successfully',
-                    });
-                    domChangeSuccess();
-                })
-                .catch(function (error) {
-                    console.log(error);
-                    notification.error({
-                        message: 'Status change failed',
-                        description: 'Please try again!',
-                    });
-                });
+            handleChangeStatus();
         }
-
         setModalVisible(false);
     };
 
@@ -141,7 +131,7 @@ function TableRow({ item, domChange, domChangeSuccess }) {
             <td className={cx("td")}>{item.createdBy}</td>
             <td className={cx("td")}>{item.duration} days</td>
             <td className={cx("td")}><AttendeeStyle attendee={item.attendee} /></td>
-            {/* <td className={cx("td")}>{item.status}</td> */}
+            {/* <td className={cx("td")}><StatusStyle status={item.status} /></td> */}
             <td className={cx("td")}>{item.location}</td>
             <td className={cx("td")}>{item.fsu}</td>
             <td className={cx("td")}>
@@ -173,14 +163,6 @@ function TableRow({ item, domChange, domChangeSuccess }) {
                             </button>
 
                             <button
-                                style={{ ...style, color: 'red' }}
-                                onClick={() => { handleAction('delete'); domChange() }}
-                            >
-                                <DeleteForeverIcon />
-                                Delete class
-                            </button>
-
-                            <button
                                 style={style}
                                 onClick={() => { handleAction('changeStatus'); domChange(); }}
                             >
@@ -196,6 +178,14 @@ function TableRow({ item, domChange, domChangeSuccess }) {
                                     </>
                                 )}
                             </button>
+
+                            <button
+                                style={{ ...style, color: 'red' }}
+                                onClick={() => { handleAction('delete'); domChange() }}
+                            >
+                                <DeleteForeverIcon />
+                                Delete class
+                            </button>
                         </>
                     }
                 >
@@ -207,10 +197,10 @@ function TableRow({ item, domChange, domChangeSuccess }) {
                 <Modal
                     title={
                         modalAction === 'delete'
-                            ? 'Confirm Deletion'
+                            ? 'Delete Class'
                             : modalAction === 'duplicate'
-                                ? 'Confirm Duplication'
-                                : 'Confirm Status Change'
+                                ? 'Duplicate Class'
+                                : 'Change Status Class'
                     }
                     open={isModalVisible}
                     onOk={performAction}
@@ -225,14 +215,15 @@ function TableRow({ item, domChange, domChangeSuccess }) {
                         style: { backgroundColor: '#2D3748', color: '#fff' },
                     }}
                     cancelButtonProps={{
-                        style: { color: '#ff0000', border: 'none', textDecoration: 'underline' },
+                        style: { color: '#ff0000', border: 'none' },
                     }}
+                    centered={true}
                 >
                     {modalAction === 'delete'
                         ? `Do you want to delete the "${item.classNames}" class? This action cannot be undone.`
                         : modalAction === 'duplicate'
                             ? `Do you want to duplicate the "${item.classNames}" class?`
-                            : `Do you want to change the status of the "${item.classNames}" class to "${newStatus}"?`}
+                            : `Do you want to change the status of the "${item.classNames}" class?`}
                 </Modal>
             </td>
         </tr >

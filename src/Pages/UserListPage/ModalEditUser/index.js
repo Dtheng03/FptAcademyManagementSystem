@@ -20,11 +20,11 @@ const schema = yup
     })
     .required()
 
-function ModalEditUser({ closeModal, domChange }) {
+function ModalEditUser({ closeModal, domChange, domChangeSuccess, refresh }) {
     const token = sessionStorage.getItem("token");
     axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
-    const updateUser = useSelector(state => state.user.updateUser);
+    const updateUser = useSelector(state => state.users.updateUser);
     const [gender, setGender] = useState(updateUser.gender);
     const [status, setStatus] = useState(updateUser.status);
     const [isLoading, setIsLoading] = useState(false);
@@ -40,6 +40,7 @@ function ModalEditUser({ closeModal, domChange }) {
     })
 
     const onSubmit = (data, event) => {
+        domChange();
         setIsLoading(true);
         event.preventDefault();
         const finalData = { ...data, id: updateUser.id, gender: gender, status: status }
@@ -50,6 +51,8 @@ function ModalEditUser({ closeModal, domChange }) {
                 notification.success({
                     message: "Update user successfully!"
                 });
+                domChangeSuccess();
+                refresh();
             })
             .catch(function (error) {
                 notification.error({
@@ -60,7 +63,6 @@ function ModalEditUser({ closeModal, domChange }) {
                 closeModal();
             });
         reset();
-        domChange();
     }
 
     return (

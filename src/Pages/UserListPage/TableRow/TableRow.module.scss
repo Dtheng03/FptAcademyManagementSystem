@@ -14,9 +14,85 @@
     padding: 0.5%;
     height: 40px;
 
-    .more-btn {
-      background-color: transparent;
-      border: none;
+    .more {
+      position: relative;
+
+      .more-btn {
+        background-color: transparent;
+        border: none;
+      }
+
+      .more-menu {
+        display: none;
+        position: absolute;
+        top: -180%;
+        right: 120%;
+        background-color: var(--white-color);
+        border-radius: 10px;
+        box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+
+        &::after {
+          content: "";
+          position: absolute;
+          top: 0;
+          right: -20;
+          width: 50px;
+          height: 100%;
+          background-color: transparent;
+        }
+
+        .option {
+          width: 160px;
+          height: 40px;
+          border-radius: 10px;
+          border: none;
+          display: flex;
+          align-items: center;
+          gap: 12%;
+          color: var(--primary-color);
+          font-weight: bold;
+          cursor: pointer;
+
+          &:hover {
+            background-color: white;
+          }
+        }
+
+        .role-menu {
+          display: none;
+          position: absolute;
+          top: 4%;
+          right: 100%;
+          border-radius: 10px;
+          background-color: var(--white-color);
+          box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+
+          .role {
+            width: 100px;
+            height: 36px;
+            border-radius: 10px;
+            border: none;
+            display: flex;
+            align-items: center;
+            gap: 12%;
+            color: var(--primary-color);
+            font-weight: bold;
+            cursor: pointer;
+
+            &:hover {
+              background-color: white;
+            }
+          }
+        }
+
+        .change-role:hover .role-menu {
+          display: block;
+        }
+      }
+
+      &:hover .more-menu {
+        display: block;
+      }
     }
   }
 

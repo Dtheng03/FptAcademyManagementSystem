@@ -4,9 +4,8 @@ import { useState } from "react";
 import { MoreIcon, VisibilityIcon, VisibilityOffIcon } from "../../../Components/Common/Icons/ActionIcons";
 import { FemaleIcon, MaleIcon, RoleIcon } from "../../../Components/Common/Icons/OtherIcons";
 import { CreateIcon } from "../../../Components/Common/Icons/DocManageIcons"
-import { Popover } from 'antd';
 import { useDispatch } from "react-redux";
-import { setUpdateUser } from "../../../Redux/Reducer/UserSlice";
+import { setUpdateUser } from "../../../Redux/Reducer/UsersSlice";
 import { notification, Modal } from 'antd';
 import axios from "axios";
 import crypto from "crypto-js";
@@ -48,19 +47,6 @@ function StatusChip({ status }) {
 }
 
 function TableRow({ item, openEdit, domChange, domChangeSuccess, refresh }) {
-    const style = {
-        backgroundColor: "transparent",
-        border: "none",
-        display: "flex",
-        alignItems: "center",
-        gap: "12%",
-        width: "160px",
-        height: "40px",
-        fontWeight: "bold",
-        color: "#4F6181",
-        cursor: "pointer",
-    }
-
     const token = sessionStorage.getItem("token");
     axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
@@ -77,7 +63,6 @@ function TableRow({ item, openEdit, domChange, domChangeSuccess, refresh }) {
 
     const dispatch = useDispatch();
 
-    const [open, setOpen] = useState(false);
     const [newRole, setNewRole] = useState(item.roleName);
 
     const [showRoleModal, setShowRoleModal] = useState(false);
@@ -144,97 +129,89 @@ function TableRow({ item, openEdit, domChange, domChangeSuccess, refresh }) {
                 <td className={cx("td")}><TypeChip roleName={item.roleName} /></td>
                 <td className={cx("td")}><StatusChip status={item.status} /></td>
                 {roleName === "Super Admin" && < td className={cx("td")}>
-                    <Popover
-                        trigger="click"
-                        placement="left"
-                        open={open}
-                        onOpenChange={() => { setOpen(!open) }}
-                        content={
-                            <>
-                                <button style={style} onClick={() => {
-                                    dispatch(setUpdateUser(item));
-                                    setOpen(!open);
-                                    openEdit();
-                                }}>
-                                    <CreateIcon />
-                                    Edit user
-                                </button>
-                                <Popover
-                                    trigger="hover"
-                                    placement="left"
-                                    content={
-                                        <>
-                                            <button
-                                                style={{ ...style, width: "100px" }}
-                                                onClick={() => {
-                                                    setOpen(!open);
-                                                    setNewRole("Super Admin");
-                                                    setShowRoleModal(true);
-                                                    domChange();
-                                                }}
-                                            >
-                                                Super Admin
-                                            </button>
-                                            <button
-                                                style={{ ...style, width: "100px" }}
-                                                onClick={() => {
-                                                    setOpen(!open);
-                                                    setNewRole("Admin");
-                                                    setShowRoleModal(true);
-                                                    domChange();
-                                                }}
-                                            >
-                                                Class Admin
-                                            </button>
-                                            <button
-                                                style={{ ...style, width: "100px" }}
-                                                onClick={() => {
-                                                    setOpen(!open);
-                                                    setNewRole("Trainer");
-                                                    setShowRoleModal(true);
-                                                    domChange();
-                                                }}
-                                            >
-                                                Trainer
-                                            </button>
-                                        </>
-                                    }
-                                >
-                                    <button style={style}>
-                                        <RoleIcon />
-                                        Change role
-                                    </button>
-                                </Popover>
-                                {item.status === "Active" ?
-                                    <button style={style} onClick={() => {
-                                        setOpen(!open);
-                                        setShowStatusModal(true);
-                                        domChange();
-                                    }}>
-                                        <VisibilityOffIcon />
-                                        De-activate user
-                                    </button> :
-                                    <button style={style} onClick={() => {
-                                        setOpen(!open);
-                                        setShowStatusModal(true);
-                                        domChange();
-                                    }}>
-                                        <VisibilityIcon />
-                                        Activate user
-                                    </button>
-                                }
-                            </>
-                        }
-                    >
-                        <button className={cx("more-btn")} onClick={() => { setOpen(!open) }}>
+                    <div className={cx("more")}>
+                        <button
+                            className={cx("more-btn")}
+                        >
                             <MoreIcon />
                         </button>
-                    </Popover>
+                        <div className={cx("more-menu")}>
+                            {/* btn edit */}
+                            <button
+                                className={cx("option")}
+                                onClick={() => {
+                                    dispatch(setUpdateUser(item));
+                                    openEdit();
+                                }}>
+                                <CreateIcon />
+                                Edit user
+                            </button>
+
+                            {/* btn change role */}
+                            <div className={cx("change-role")}>
+                                <button
+                                    className={cx("option")}
+                                >
+                                    <RoleIcon />
+                                    Change role
+                                </button>
+                                <div className={cx("role-menu")}>
+                                    <button
+                                        className={cx("role")}
+                                        onClick={() => {
+                                            setNewRole("Super Admin");
+                                            setShowRoleModal(true);
+                                            domChange();
+                                        }}
+                                    >
+                                        Super Admin
+                                    </button>
+                                    <button
+                                        className={cx("role")}
+                                        onClick={() => {
+                                            setNewRole("Admin");
+                                            setShowRoleModal(true);
+                                            domChange();
+                                        }}
+                                    >
+                                        Class Admin
+                                    </button>
+                                    <button
+                                        className={cx("role")}
+                                        onClick={() => {
+                                            setNewRole("Trainer");
+                                            setShowRoleModal(true);
+                                            domChange();
+                                        }}
+                                    >
+                                        Trainer
+                                    </button>
+                                </div>
+                            </div>
+
+                            {/* btn change status */}
+                            {item.status === "Active" ?
+                                <button className={cx("option")} onClick={() => {
+                                    setShowStatusModal(true);
+                                    domChange();
+                                }}>
+                                    <VisibilityOffIcon />
+                                    De-activate user
+                                </button> :
+                                <button className={cx("option")} onClick={() => {
+                                    setShowStatusModal(true);
+                                    domChange();
+                                }}>
+                                    <VisibilityIcon />
+                                    Activate user
+                                </button>}
+                        </div>
+                    </div>
                 </td>}
             </tr >
 
             {/* modal confirm change role */}
-            <Modal
+            < Modal
                 title="Are you sure to change role of user?"
                 open={showRoleModal}
                 onOk={() => { handleChangeRole() }}
@@ -245,7 +222,7 @@ function TableRow({ item, openEdit, domChange, domChangeSuccess, refresh }) {
             />
 
             {/* modal comfirm change status */}
-            <Modal
+            < Modal
                 title="Are you sure to change status of user?"
                 open={showStatusModal}
                 onOk={() => { handleChangeStatus() }}

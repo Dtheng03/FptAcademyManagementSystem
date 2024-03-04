@@ -20,7 +20,7 @@ const schema = yup
     })
     .required()
 
-function ModalAddUser({ closeModal, domChange }) {
+function ModalAddUser({ closeModal, domChange, domChangeSuccess, refresh }) {
     const token = sessionStorage.getItem("token");
     axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
@@ -39,6 +39,7 @@ function ModalAddUser({ closeModal, domChange }) {
     })
 
     const onSubmit = (data, event) => {
+        domChange();
         setIsLoading(true);
         event.preventDefault();
         const finalData = { ...data, gender: gender, status: status }
@@ -49,6 +50,8 @@ function ModalAddUser({ closeModal, domChange }) {
                 notification.success({
                     message: "Add new user successfully!"
                 })
+                domChangeSuccess();
+                refresh();
             })
             .catch(function (error) {
                 notification.error({
@@ -59,7 +62,6 @@ function ModalAddUser({ closeModal, domChange }) {
                 closeModal();
             });
         reset();
-        domChange();
     }
 
     return (

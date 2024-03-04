@@ -1,0 +1,29 @@
+.create-program__actions_group {
+    width: 100%;
+    display: flex;
+   
+    justify-content: space-between;
+  }
+
+.create-program__actions button{
+  height: 32px;
+    border: none;
+    border-radius: 8px;
+    padding: 2px 25px;
+    background-color: #2D3748;
+  
+    font-family: "Inter", sans-serif;
+    font-weight: bold;
+    font-size: 14px;
+    line-height: 24px;
+    color: white
+}
+
+ .create-program__actions button:hover {
+    cursor: pointer;
+    opacity: 0.9;
+  }
+
+
+  
+ 

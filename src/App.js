@@ -22,6 +22,7 @@ import UserListPage from "./Pages/UserListPage";
 import UserPermissionPage from "./Pages/UserPermissionPage";
 import LearningMaterials from "./Pages/LearningMaterials/LearningMaterials";
 import { message } from "antd";
+import CreateProgram from "./Pages/CreateProgram/CreateProgram";
 
 function App() {
   const [decryptedRoleName, setDecryptedRoleName] = useState("");
@@ -133,6 +134,7 @@ function App() {
                 <Route path='/user-list' element={<UserListPage />} />
                 <Route path='/user-permission' element={<UserPermissionPage />} />
                 <Route path='/materials' element={<LearningMaterials />} />
+                <Route path="/create-program" element={<CreateProgram />} />
               </>
             ) : (
               <Route path="/login" element={<Login onLogin={handleLogin} />} />

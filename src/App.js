@@ -14,6 +14,7 @@ import SyllabusDetailInformation from "./Pages/SyllabusDetailInformation";
 import CreateSyllabusPage from "./Pages/CreateSyllabus/CreateSyllabusPage";
 import TranningListPage from "./Pages/TranningProgramListPage";
 import TranningProgramDetail from "./Pages/TrainingProgramDetail";
+import CreateProgram from "./Pages/CreateProgram/CreateProgram";
 import ClassListPage from "./Pages/ClassListPage";
 import ViewClass from "./Pages/ViewClass";
 import CreateClass from "./Pages/CreateClass/CreateClass";
@@ -22,7 +23,6 @@ import UserListPage from "./Pages/UserListPage";
 import UserPermissionPage from "./Pages/UserPermissionPage";
 import LearningMaterials from "./Pages/LearningMaterials/LearningMaterials";
 import { message } from "antd";
-import CreateProgram from "./Pages/CreateProgram/CreateProgram";
 
 function App() {
   const [decryptedRoleName, setDecryptedRoleName] = useState("");
@@ -127,6 +127,7 @@ function App() {
                 <Route path="/create-syllabus" element={<CreateSyllabusPage />} />
                 <Route path="/tranning-program-list" element={<TranningListPage />} />
                 <Route path="/view-tranning-program-detail/:id" element={<TranningProgramDetail />} />
+                <Route path="/create-program" element={<CreateProgram />} />
                 <Route path="/class-list" element={<ClassListPage />} />
                 <Route path="/view-class-detail/:id" element={<ViewClass />} />
                 <Route path='/create-class' element={<CreateClass />} />
@@ -134,7 +135,6 @@ function App() {
                 <Route path='/user-list' element={<UserListPage />} />
                 <Route path='/user-permission' element={<UserPermissionPage />} />
                 <Route path='/materials' element={<LearningMaterials />} />
-                <Route path="/create-program" element={<CreateProgram />} />
               </>
             ) : (
               <Route path="/login" element={<Login onLogin={handleLogin} />} />

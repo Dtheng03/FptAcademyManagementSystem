@@ -43,7 +43,7 @@ function Sidebar() {
         },
         {
           title: 'Create program',
-          to: '',
+          to: '/create-program',
         },
       ],
     },

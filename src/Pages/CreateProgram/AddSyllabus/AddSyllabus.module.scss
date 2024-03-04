@@ -1,0 +1,102 @@
+
+
+  .search-input {
+    display: flex;
+    width: 300px;
+    height: 36px;
+    padding: 10px 16px;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+    border-radius: 8px;
+    border: 1px solid var(--Un-modified, #8b8b8b);
+    background: #fff;
+  }
+
+  .input-contain {
+    flex: 1;
+    border: none;
+    outline: none;
+    width: 100%;
+    height: 100%;
+    font-size: 12px;
+    font-style: italic;
+    font-weight: bold;
+    line-height: 18px;
+
+    &:hover,
+    &:focus {
+      border: none;
+    }
+
+    :disabled {
+      pointer-events: none;
+    }
+
+    &::placeholder {
+      color: black !important;
+    }
+  }
+  .add-syllabus-form {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 20px;
+
+    p {
+      color: #000;
+      font-size: 16px;
+      font-weight: bold;
+    }
+  }
+  .text {
+    display: flex;
+    margin-left: 40px;
+    font-size: larger;
+    font-weight: bold;
+}
+  .create-program__syllabuses .add-syllabus-form {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 50px 0;
+  }
+  
+  .create-program__syllabuses .add-syllabus-form > label {
+    font-family: "Inter", sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 24px;
+  }
+  
+  .create-program__syllabuses .add-syllabus-form  input {
+    width: 100%;
+    border: none;
+    background-color: transparent;
+    
+    font-family: "Inter", sans-serif;
+    font-weight: 500;
+    font-style: italic;
+    font-size: 12px;
+    line-height: 18px;
+  }
+  
+  .create-program__syllabuses .add-syllabus-form  input:focus {
+    outline: none;
+  }
+  
+   .add-syllabus-form__suggests {
+    width: 100%;
+    position: absolute;
+    top: 100%;
+  }
+  
+ .add-syllabus-form__suggests > .suggest {
+    list-style-type: none;
+  }
+  
+  .add-syllabus-form__suggests > .suggest:hover > div {
+    background-color: #DFDEDE !important;
+    cursor: pointer;
+  }

@@ -10,7 +10,7 @@ import axios from "axios";
 
 const cx = classNames.bind(styles);
 
-function TableRow({ item, domChange, domChangeSuccess, reloading }) {
+function TableRow({ item, domChange, domChangeSuccess, reload }) {
     const style = {
         backgroundColor: "transparent",
         border: "none",
@@ -58,7 +58,7 @@ function TableRow({ item, domChange, domChangeSuccess, reloading }) {
                     description: 'Please try again!',
                 });
             });
-        reloading();
+        reload();
     }
 
     const handleDuplicate = () => {
@@ -79,7 +79,7 @@ function TableRow({ item, domChange, domChangeSuccess, reloading }) {
                     description: 'Please try again!',
                 });
             });
-        reloading();
+        reload();
     }
 
     const handleChangeStatus = () => {
@@ -108,7 +108,7 @@ function TableRow({ item, domChange, domChangeSuccess, reloading }) {
                     description: 'Please try again!',
                 });
             });
-        reloading();
+        reload();
     }
 
     const performAction = () => {

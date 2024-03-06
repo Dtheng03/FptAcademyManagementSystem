@@ -8,7 +8,7 @@ import { useState } from "react";
 
 const cx = classNames.bind(styles);
 
-function SearchResult({ searchList, openEdit, domChange, domChangeSuccess, refresh }) {
+function SearchResult({ setSearchValue, searchList, openEdit, loading, fetchUsers }) {
     // Decode roleName đã mã hóa
     var decryptedRoleName;
     const encryptedRoleName = sessionStorage.getItem("roleName");
@@ -79,23 +79,24 @@ function SearchResult({ searchList, openEdit, domChange, domChangeSuccess, refre
                                     key={index}
                                     item={item}
                                     openEdit={openEdit}
-                                    domChange={domChange}
-                                    domChangeSuccess={domChangeSuccess}
-                                    refresh={refresh}
+                                    loading={loading}
+                                    fetchUsers={fetchUsers}
+                                    setSearchValue={setSearchValue}
                                 />
                             ))}
                         </tbody>
                     </table>
                     <div className={cx("pagination")}>
                         <Pagination
+                            showTotal={(total) => <strong>Total: {total} users</strong>}
+                            current={currentPage}
+                            showSizeChanger
+                            pageSize={itemsPerPage}
+                            total={searchList.length}
                             onChange={(page, pageSize) => {
-                                setItemsPerPage(pageSize)
+                                setItemsPerPage(pageSize);
                                 setCurrentPage(page);
                             }}
-                            showSizeChanger
-                            onShowSizeChange={(pageSize) => { setItemsPerPage(pageSize) }}
-                            current={currentPage}
-                            total={searchList.length}
                         />
                     </div>
                 </>

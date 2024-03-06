@@ -46,7 +46,7 @@ function StatusChip({ status }) {
     );
 }
 
-function TableRow({ item, openEdit, domChange, domChangeSuccess, refresh }) {
+function TableRow({ item, openEdit, loading, fetchUsers, setSearchValue = () => { } }) {
     const token = sessionStorage.getItem("token");
     axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
@@ -64,59 +64,59 @@ function TableRow({ item, openEdit, domChange, domChangeSuccess, refresh }) {
     const dispatch = useDispatch();
 
     const [newRole, setNewRole] = useState(item.roleName);
-
     const [showRoleModal, setShowRoleModal] = useState(false);
-    const [isLoadingRole, setIsLoadingRole] = useState(false);
-
     const [showStatusModal, setShowStatusModal] = useState(false);
-    const [isLoadingStatus, setIsLoadingStatus] = useState(false);
 
     // hàm xử lý thay đổi role
     const handleChangeRole = () => {
-        setIsLoadingRole(true);
-        axios.put(`http://fams-group1-net03.ptbiology.com/api/user/grant-permission`, { id: item.id, userType: newRole })
-            .then(() => {
-                setIsLoadingRole(false);
-                setShowRoleModal(!showRoleModal);
+        setSearchValue("");
+        setShowRoleModal(false);
+        loading(true);
+        async function changeRole() {
+            try {
+                const response = await axios.put(`http://fams-group1-net03.ptbiology.com/api/user/grant-permission`, { id: item.id, userType: newRole });
+                // console.log(response);
                 notification.success({
                     message: "Change role successfully",
                 });
-                domChangeSuccess();
-            })
-            .catch(function (error) {
-                console.log(error);
+                loading(false);
+                fetchUsers();
+            } catch (error) {
+                // console.log(error);
                 notification.error({
                     message: "Change role failed",
                     description: "Something wrong! Please try again later!"
-                })
-                setIsLoadingRole(false);
-                setShowRoleModal(!showRoleModal);
-            });
-        refresh();
+                });
+                loading(false);
+            }
+        };
+        changeRole();
     };
 
     // hàm xử lý thay đổi status
     const handleChangeStatus = () => {
-        setIsLoadingStatus(true);
-        axios.put(`http://fams-group1-net03.ptbiology.com/api/user/active-deactive-user?id=${item.id}`)
-            .then(() => {
-                setIsLoadingStatus(false);
-                setShowStatusModal(!showStatusModal);
+        setSearchValue("");
+        setShowStatusModal(false);
+        loading(true);
+        async function changeStatus() {
+            try {
+                const response = await axios.put(`http://fams-group1-net03.ptbiology.com/api/user/active-deactive-user?id=${item.id}`);
+                // console.log(response);
                 notification.success({
                     message: "Change status successfully",
                 });
-                domChangeSuccess();
-            })
-            .catch(function (error) {
-                console.log(error);
+                loading(false);
+                fetchUsers();
+            } catch (error) {
+                // console.log(error);
                 notification.error({
                     message: "Change status failed",
                     description: "Something wrong! Please try again later!"
-                })
-                setIsLoadingStatus(false);
-                setShowStatusModal(!showStatusModal);
-            });
-        refresh();
+                });
+                loading(false);
+            }
+        };
+        changeStatus();
     }
 
     return (
@@ -161,7 +161,6 @@ function TableRow({ item, openEdit, domChange, domChangeSuccess, refresh }) {
                                         onClick={() => {
                                             setNewRole("Super Admin");
                                             setShowRoleModal(true);
-                                            domChange();
                                         }}
                                     >
                                         Super Admin
@@ -171,7 +170,6 @@ function TableRow({ item, openEdit, domChange, domChangeSuccess, refresh }) {
                                         onClick={() => {
                                             setNewRole("Admin");
                                             setShowRoleModal(true);
-                                            domChange();
                                         }}
                                     >
                                         Class Admin
@@ -181,7 +179,6 @@ function TableRow({ item, openEdit, domChange, domChangeSuccess, refresh }) {
                                         onClick={() => {
                                             setNewRole("Trainer");
                                             setShowRoleModal(true);
-                                            domChange();
                                         }}
                                     >
                                         Trainer
@@ -193,14 +190,12 @@ function TableRow({ item, openEdit, domChange, domChangeSuccess, refresh }) {
                             {item.status === "Active" ?
                                 <button className={cx("option")} onClick={() => {
                                     setShowStatusModal(true);
-                                    domChange();
                                 }}>
                                     <VisibilityOffIcon />
                                     De-activate user
                                 </button> :
                                 <button className={cx("option")} onClick={() => {
                                     setShowStatusModal(true);
-                                    domChange();
                                 }}>
                                     <VisibilityIcon />
                                     Activate user
@@ -216,7 +211,6 @@ function TableRow({ item, openEdit, domChange, domChangeSuccess, refresh }) {
                 open={showRoleModal}
                 onOk={() => { handleChangeRole() }}
                 onCancel={() => { setShowRoleModal(false) }}
-                confirmLoading={isLoadingRole}
                 width={360}
                 centered={true}
             />
@@ -227,7 +221,6 @@ function TableRow({ item, openEdit, domChange, domChangeSuccess, refresh }) {
                 open={showStatusModal}
                 onOk={() => { handleChangeStatus() }}
                 onCancel={() => { setShowStatusModal(false) }}
-                confirmLoading={isLoadingStatus}
                 width={360}
                 centered={true}
             />

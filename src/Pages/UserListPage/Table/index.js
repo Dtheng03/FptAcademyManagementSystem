@@ -9,7 +9,7 @@ import { useSelector } from "react-redux";
 
 const cx = classNames.bind(styles);
 
-function Table({ openEdit, domChange, domChangeSuccess, refresh }) {
+function Table({ openEdit, loading, fetchUsers }) {
     // Decode roleName đã mã hóa
     var decryptedRoleName;
     const encryptedRoleName = sessionStorage.getItem("roleName");
@@ -23,10 +23,13 @@ function Table({ openEdit, domChange, domChangeSuccess, refresh }) {
 
     const usersList = useSelector(state => state.users.usersList);
 
-    const [currentPage, setCurrentPage] = useState(1);
-    const [itemsPerPage, setItemsPerPage] = useState(10);
+    const page = sessionStorage.getItem("currentPage");
+    const items = sessionStorage.getItem("itemsPerPage");
+
+    const [currentPage, setCurrentPage] = useState(page != null ? page : 1);
+    const [itemsPerPage, setItemsPerPage] = useState(items != null ? items : 10);
     const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
+    const endIndex = Number(startIndex) + Number(itemsPerPage);
 
     // state config sort
     const [sortConfig, setSortConfig] = useState(null);
@@ -80,23 +83,25 @@ function Table({ openEdit, domChange, domChangeSuccess, refresh }) {
                             key={index}
                             item={item}
                             openEdit={openEdit}
-                            domChange={domChange}
-                            domChangeSuccess={domChangeSuccess}
-                            refresh={refresh}
+                            loading={loading}
+                            fetchUsers={fetchUsers}
                         />
                     ))}
                 </tbody>
             </table>
             <div className={cx("pagination")}>
                 <Pagination
-                    onChange={(page, pageSize) => {
-                        setItemsPerPage(pageSize)
-                        setCurrentPage(page);
-                    }}
-                    showSizeChanger
-                    onShowSizeChange={(pageSize) => { setItemsPerPage(pageSize) }}
+                    showTotal={(total) => <strong>Total: {total} users</strong>}
                     current={currentPage}
+                    showSizeChanger
+                    pageSize={itemsPerPage}
                     total={usersList.length}
+                    onChange={(page, pageSize) => {
+                        setItemsPerPage(pageSize);
+                        sessionStorage.setItem("itemsPerPage", Number(pageSize));
+                        setCurrentPage(page);
+                        sessionStorage.setItem("currentPage", Number(page));
+                    }}
                 />
             </div>
         </>

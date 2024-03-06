@@ -53,7 +53,7 @@ function App() {
       // Mã hóa roleName trc khi set vào session
 
       const encryptedRoleName = crypto.AES.encrypt(
-        user.roleName,
+        user.role.roleName,
         "react02"
       ).toString();
       sessionStorage.setItem("roleName", encryptedRoleName);

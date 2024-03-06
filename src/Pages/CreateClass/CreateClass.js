@@ -21,9 +21,9 @@ function CreateClass() {
 
   const handleCreateButton = () => {
     if (!className) {
-      notification.error({
-        message: "Error",
-        description: "Class name is required",
+      notification.warning({
+        message: 'Class name cannot be empty!',
+        placement: 'topRight',
       });
       return; // Don't proceed if class name is empty
     }

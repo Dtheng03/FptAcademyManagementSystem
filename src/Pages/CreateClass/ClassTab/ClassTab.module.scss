@@ -1,3 +1,5 @@
+$primary-color: #2d3748;
+
 .create-trainning-program{
     width: 100%;
     display: flex;
@@ -6,6 +8,7 @@
 
     .syllabus_tab_button{
         display: flex;
+        width: 100%;
         flex-direction: row;
         gap: 1px;
     }
@@ -89,7 +92,15 @@
                   }
                 }
               }              
-            }        
+            }       
+            
+        // .select-tranning-program-body{
+        //     .SyllybusCard{
+        //       .image{
+                    
+        //       }
+        //     }
+        // }
     
         .select-tranning-program-footer{
             height: 16px;

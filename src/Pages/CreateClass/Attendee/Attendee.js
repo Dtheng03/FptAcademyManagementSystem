@@ -1,4 +1,4 @@
-import React, { useState } from "react"; // Import React
+import React, { useState, useRef } from "react"; // Import React
 import styles from "./Attendee.module.scss";
 import classNames from "classnames/bind";
 import { DropDownCircleIcon } from "../../../Components/Common/Icons/ActionIcons/index";
@@ -9,23 +9,55 @@ const cx = classNames.bind(styles);
 function Attendee() {
   const [isButtonClicked, setIsButtonClicked] = useState(false);
   const [popupOpen, setPopupOpen] = useState(false);
+  const selectRef = useRef(null);
+  const buttonRef = useRef(null);
+  const dropdownContentRef = useRef(null);
 
   const handleButtonClick = () => {
     setIsButtonClicked(!isButtonClicked);
     setPopupOpen(!popupOpen);
   };
 
+  const handleSelectClick = (e) => {
+    e.stopPropagation();
+  };
+
+  const handleDocumentClick = (e) => {
+    if (
+      buttonRef.current && buttonRef.current.contains(e.target) ||
+      selectRef.current && selectRef.current.contains(e.target) ||
+      dropdownContentRef.current && dropdownContentRef.current.contains(e.target)
+    ) {
+      return; // Clicked inside the button, select or dropdown content, don't close dropdown
+    }
+    setIsButtonClicked(false);
+    setPopupOpen(false);
+  };
+
+  React.useEffect(() => {
+    document.addEventListener("mousedown", handleDocumentClick);
+    return () => {
+      document.removeEventListener("mousedown", handleDocumentClick);
+    };
+  }, []);
+
   return (
     <div className={cx("attendee")}>
       <div className={cx("dropdown")}>
         <button
+          ref={buttonRef}
           className={cx("dropdown-button", { clicked: isButtonClicked })}
           onClick={handleButtonClick}
         >
           <div className={cx("conner-left")}>
             <GradeIcon />
             <p>General</p>
-            <select className={cx("select")} defaultValue="default">
+            <select
+              ref={selectRef}
+              className={cx("select")}
+              defaultValue="default"
+              onClick={handleSelectClick}
+            >
               <option value="default" hidden>
                 Select
               </option>
@@ -37,18 +69,21 @@ function Attendee() {
           </div>
         </button>
         {isButtonClicked && (
-          <div className={cx('dropdown-content', { 'opened': popupOpen })}>
+          <div
+            ref={dropdownContentRef}
+            className={cx("dropdown-content", { opened: popupOpen })}
+          >
             <div className={cx("dropdown-option1")}>
               <p>Planned</p>
-              <input type="text" />
+              <input type="text" onClick={(e) => e.stopPropagation()} />
             </div>
             <div className={cx("dropdown-option2")}>
               <p>Accepted</p>
-              <input type="text" />
+              <input type="text" onClick={(e) => e.stopPropagation()} />
             </div>
             <div className={cx("dropdown-option3")}>
               <p>Actual</p>
-              <input type="text" />
+              <input type="text" onClick={(e) => e.stopPropagation()} />
             </div>
           </div>
         )}

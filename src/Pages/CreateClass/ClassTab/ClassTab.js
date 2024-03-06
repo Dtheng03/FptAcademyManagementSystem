@@ -17,6 +17,8 @@ const syllabusOptions = [
 ];
 
 function ClassTab() {
+  const [cancelIconVisible, setCancelIconVisible] = React.useState(true);
+
   const [value, setValue] = useState("");
   const syllabusNames = [
     "Training Program",
@@ -87,6 +89,42 @@ function ClassTab() {
           </div>
         </div>
         <div className={cx("select-tranning-program-body")}>
+          <div className={cx("SyllybusCard")}>
+            <div className={cx("image")}>
+                <Avatar size="large" icon={<UserOutlined />} alt="" src=""/>
+            </div>
+            <SyllabusCard />
+          </div>
+          <div className={cx("SyllybusCard")}>
+            <div className={cx("image")}>
+                <Avatar size="large" icon={<UserOutlined />} alt="" src=""/>
+            </div>
+            <SyllabusCard/>
+          </div>
+          <div className={cx("SyllybusCard")}>
+            <div className={cx("image")}>
+                <Avatar size="large" icon={<UserOutlined />} alt="" src=""/>
+            </div>
+            <SyllabusCard/>
+          </div>
+          <div className={cx("SyllybusCard")}>
+            <div className={cx("image")}>
+                <Avatar size="large" icon={<UserOutlined />} alt="" src=""/>
+            </div>
+            <SyllabusCard/>
+          </div>
+          <div className={cx("SyllybusCard")}>
+            <div className={cx("image")}>
+                <Avatar size="large" icon={<UserOutlined />} alt="" src=""/>
+            </div>
+            <SyllabusCard/>
+          </div>
+          <div className={cx("SyllybusCard")}>
+            <div className={cx("image")}>
+                <Avatar size="large" icon={<UserOutlined />} alt="" src=""/>
+            </div>
+            <SyllabusCard/>
+          </div>
           <div className={cx("SyllybusCard")}>
             <div className={cx("image")}>
                 <Avatar size="large" icon={<UserOutlined />} alt="" src=""/>

@@ -30,8 +30,9 @@ const Login = ({ onLogin }) => {
         } else {
           message.error("Your account has been locked");
         }
-      } else {
-        message.error("Incorrect email or password. Please try again.");
+      }
+       else {
+        message.error("Incorrect email or password. Please try againnn");
       }
     } catch (error) {
       console.error("Error during login:", error);

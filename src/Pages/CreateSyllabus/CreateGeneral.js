@@ -6,15 +6,19 @@ import TimeAllocation from "../../Components/Common/TimeAllocation/TimeAllocatio
 
 const CreateGeneral = () => {
   const [courseObjectives, setCourseObjectives] = useState("");
+  const [technicalRequirement, setTechnicalRequirement] = useState("");
+
+  // const [demoText, setDemoText] = useState({ __html: "" });
+  // const handleSave = async () => {
+  //   const htmlContent = document.querySelector(".ql-editor").innerHTML;
+
+  //   setDemoText({ __html: htmlContent });
+  //   console.log("HTML: ", htmlContent);
+  // };
 
   return (
-    <div
-      className="syllabusTabContainer"
-      
-    >
-      <div
-        className="syllabusTabContent"
-      >
+    <div className="syllabusTabContainer">
+      <div className="syllabusTabContent">
         <div className="baseGeneralSetup">
           <div className="selectLevel" style={{ display: "flex" }}>
             <p className="subtitle1" style={{ paddingRight: "40px" }}>
@@ -35,16 +39,43 @@ const CreateGeneral = () => {
           <p className="subtitle1" style={{ paddingBottom: "10px" }}>
             Technical Requirement(s){" "}
           </p>
-          <textarea
+          
+          <ReactQuill
+            theme="snow"
             style={{
-              padding: "10px",
+              marginBottom: "10px",
               width: "98%",
               height: "138px",
-              border: "0.5px solid #b3a9a9",
-              borderRadius: "10px",
               resize: "none",
               overflowY: "auto",
+              border: "0.5px solid #b3a9a9",
+              borderRadius: "10px"
             }}
+            className="ql-container-technical-requirement"
+            value={technicalRequirement}
+            onChange={(value) => setTechnicalRequirement(value)}
+            modules={{
+              toolbar: false,
+            }}
+            formats={[
+              "header",
+              "font",
+              "size",
+              "bold",
+              "italic",
+              "underline",
+              "strike",
+              "blockquote",
+              "list",
+              "bullet",
+              "link",
+              "image",
+              "video",
+              "code-block",
+              "color",
+              "background",
+              "align",
+            ]}
           />
         </div>
 
@@ -58,15 +89,15 @@ const CreateGeneral = () => {
             style={{
               width: "98%",
               height: "310px",
-              borderRadius: "10px", 
+              borderRadius: "10px",
+              
             }}
-            className="ql-container"
+            className="ql-container-course-objectives"
             value={courseObjectives}
             onChange={(value) => setCourseObjectives(value)}
             modules={{
               toolbar: {
                 container: [
-                  ["undo", "redo"],
                   [{ header: [1, 2, 3, 4, 5, 6, false] }],
                   [{ align: [] }],
                   [{ color: [] }, { background: [] }],
@@ -99,9 +130,11 @@ const CreateGeneral = () => {
           />
         </div>
       </div>
-      <div className="timeAllocation" style={{width: "18%"}}>
+      <div className="timeAllocation" style={{ width: "18%" }}>
         <TimeAllocation />
       </div>
+      {/* <button onClick={handleSave}>Lưu</button>
+      <div className="demoText" dangerouslySetInnerHTML={demoText} /> */}
     </div>
   );
 };

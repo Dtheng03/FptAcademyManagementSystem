@@ -13,7 +13,7 @@ export const loginUser = async (email, password) => {
     const responseData = response.data;
 
     if (responseData.isSuccess) {
-      const user = responseData.data.userResModel;
+      const user = responseData.data.loginResModel;
       const token = responseData.data.token;
       sessionStorage.setItem("token", token);
 

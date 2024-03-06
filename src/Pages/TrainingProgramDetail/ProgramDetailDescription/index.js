@@ -3,7 +3,7 @@ import classNames from "classnames/bind";
 
 
 const cx = classNames.bind(styles);
-function DetailDescription(props) {
+function DetailDescription({author, createDate}) {
   return (
     <div className={cx("description-title")}>
       <div className={cx("line-1")}>
@@ -15,9 +15,9 @@ function DetailDescription(props) {
 
       <div className={cx("line-2")}>
         <subtitle2 className={cx("description-text")}>
-          Modified on 23/07/2022 by
+          Modified on {createDate} by
         </subtitle2>
-        <subtitle2 className={cx("author")}>Warrior Tran</subtitle2>
+        <subtitle2 className={cx("author")}>{author}</subtitle2>
       </div>
     </div>
   );

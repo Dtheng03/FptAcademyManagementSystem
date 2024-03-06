@@ -1,0 +1,78 @@
+.table {
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    margin: 0 0.5%;
+    width: 99%;
+    box-shadow: 0 0 2px gray;
+    border-collapse: collapse;
+    font-weight: 500;
+
+    .thead {
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        background-color: var(--primary-color);
+
+        .tr {
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+              text-align: left;
+
+              :first-child {
+                  border-top-left-radius: 10px;
+              }
+
+              :last-child {
+                  border-top-right-radius: 10px;
+              }
+
+              .th {
+                  height: 40px;
+
+                  .title {
+                      border: none;
+                      outline: none;
+                      gap: 4px;
+                      display: flex;
+                      align-items: center;
+                      background-color: transparent;
+                      color: var(--white-color);
+                      font-weight: bold;
+                  }
+              }
+
+              .name {
+                  padding-left: 2.5%;
+              }
+          }
+      }
+  }
+
+  .pagination {
+      margin: 2%;
+      text-align: center;
+  }
+
+//   .no-data{
+//     margin-top: 10px;
+//     text-align: center;
+//     font-size: 30px;
+//     font-weight: bolder;
+//     color: #2D3748;
+//   }
+.no-data {
+  font-size: 32px;
+  color: #555; /* Text color */
+  text-align: center;
+  margin: 20px 0; /* Adjust margin as needed */
+  font-weight: bolder;
+  color: #2D3748;
+  margin-top: 15%;
+}
+
+/* Optionally, you can add additional styling */
+.no-data::before {
+  content: "\1F61E"; /* Unicode for 'sad face' emoji */
+  display: block;
+  font-size: 50px;
+  margin-bottom: 10px;
+}

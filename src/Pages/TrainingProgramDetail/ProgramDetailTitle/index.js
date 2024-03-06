@@ -17,6 +17,7 @@ import {
 } from "../../../Components/Common/Icons/DocManageIcons";
 
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 function DetailTitle({ itemId, domChange, domChangeSuccess }) {
   const [loading, setLoading] = useState(true);
@@ -31,6 +32,8 @@ function DetailTitle({ itemId, domChange, domChangeSuccess }) {
   const [open, setOpen] = useState(false);
   const [isModalVisible, setModalVisible] = useState(false);
   const [modalAction, setModalAction] = useState("");
+
+  const navigate = useNavigate(); 
 
   const style = {
     backgroundColor: "transparent",
@@ -107,6 +110,7 @@ function DetailTitle({ itemId, domChange, domChangeSuccess }) {
           message: "Delete program successfully",
         });
         domChangeSuccess();
+        navigate("/tranning-program-list")
       })
       .catch(function (error) {
         console.log(error);

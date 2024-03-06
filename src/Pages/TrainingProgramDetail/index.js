@@ -3,37 +3,41 @@ import styles from "../TrainingProgramDetail/TrainingProgramDetail.module.scss";
 import DetailTitle from "../TrainingProgramDetail/ProgramDetailTitle";
 import DetailDescription from "./ProgramDetailDescription";
 import { SyllabusCard } from "../../Components/Common/SyllabusCard";
-import ProgramManageBox from "./ProgamDetailManageBox";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
+import { useParams } from "react-router-dom";
 
-function TrainingProgramDetail({ onClick }) {
+function TrainingProgramDetail() {
+  const { id } = useParams();
+  const [data, setData] = useState([]);
+  const [isDomChange, setIsDomChange] = useState(false);
+  const [loading, setLoading] = useState(true);
+
   const cx = classNames.bind(styles);
-  const [isProgramManageBoxVisible, setIsProgramManageBoxVisible] = useState(false);
 
-  const handleMoreIconClick = () => {
-    setIsProgramManageBoxVisible(!isProgramManageBoxVisible);
-  };
+  {/*useEffect(() => {
+    async function getProgramDetail() {
+      try {
+        const response = await axios.get(
+          "https://65411666f0b8287df1fdc4fa.mockapi.io/program"
+        );
+        setData(response.data);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    getProgramDetail();
+  }, []);*/}
 
   return (
     <div className={cx("container")}>
       <DetailTitle
-        onClick={handleMoreIconClick}
-        isVisible={isProgramManageBoxVisible}
-        setIsVisible={setIsProgramManageBoxVisible}
+        itemId={id}
+        domChange={() => setIsDomChange(true)}
+        domChangeSuccess={() => setIsDomChange(false)}
       />
-
-        {isProgramManageBoxVisible && (
-          <ProgramManageBox
-            onClose={() => setIsProgramManageBoxVisible(false)}
-          />
-        )}
-      <DetailDescription />
       <div className={cx("content-container")}>
         <subtitle1 className={cx("text")}>Content</subtitle1>
-        <SyllabusCard />
-        <SyllabusCard />
-        <SyllabusCard />
-        <SyllabusCard />
         <SyllabusCard />
         <SyllabusCard />
       </div>

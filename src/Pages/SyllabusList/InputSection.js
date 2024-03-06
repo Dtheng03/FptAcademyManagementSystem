@@ -5,11 +5,18 @@ import { useNavigate } from 'react-router-dom';
 import CalendarPopover from './CalendarPopover';
 import ImportSyllabusModal from './ImportModal';
 
-const InputSection = ({ apiData, searchInput, setSearchBy, onSearchInputChange }) => {
+const InputSection = ({
+  apiData,
+  searchInput,
+  setSearchBy,
+  onSearchInputChange,
+  setSearchByDateRange,
+}) => {
   const navigate = useNavigate();
   const [isModalVisible, setModalVisible] = useState(false);
   const [suggestions, setSuggestions] = useState([]);
   const [selectedTags, setSelectedTags] = useState([]);
+  const [selectedDateRange, setSelectedDateRange] = useState([]);
 
   useEffect(() => {
     if (apiData) {
@@ -69,6 +76,14 @@ const InputSection = ({ apiData, searchInput, setSearchBy, onSearchInputChange }
     setSelectedTags((prevTags) => prevTags.filter((t) => t !== tag));
   };
 
+  const handleDateRangeChange = (dates) => {
+    if (dates.length > 0) {
+      setSelectedDateRange(dates);
+      onSearchInputChange([dates[0], dates[1]]);
+    }
+    setSearchByDateRange('date');
+  };
+
   return (
     <Flex justify='space-between' style={{ width: '100%' }}>
       {/* Left side */}
@@ -87,7 +102,7 @@ const InputSection = ({ apiData, searchInput, setSearchBy, onSearchInputChange }
               prefix={<SearchOutlined />}
             />
           </AutoComplete>
-          <CalendarPopover />
+          <CalendarPopover onDateRangeChange={handleDateRangeChange} />
         </Flex>
         <Flex style={{ marginTop: '16px' }}>
           {/* Display selected tags */}

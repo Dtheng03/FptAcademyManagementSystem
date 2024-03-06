@@ -1,0 +1,122 @@
+.filter-popip {
+    padding: 10px 20px;
+    border: 1px solid #000;
+    border-radius: 5px;
+
+    .filter-search {
+        width: 100%;
+        display: flex;
+        gap: 50px;
+        justify-content: space-between;
+
+        .location-title {
+            color: var(--Main, #2d3748);
+            font-family: Inter;
+            font-size: 14px;
+            font-style: normal;
+            font-weight: 600;
+            line-height: 22px;
+        }
+
+        .time-line {
+            align-items: flex-start;
+
+            .time-title {
+                color: var(--Main, #2d3748);
+                font-family: Inter;
+                font-size: 14px;
+                font-style: normal;
+                font-weight: 600;
+                line-height: 22px;
+            }
+
+            .time-content {
+                display: flex;
+                align-items: center;
+                gap: 15px;
+            }
+        }
+    }
+
+    .filter-form {
+        display: flex;
+        align-items: flex-start;
+        gap: 79px;
+        align-self: stretch;
+
+        .checkbox-form {
+            display: flex;
+            margin-top: 25px;
+            align-items: flex-start;
+            gap: 40px;
+
+            .checkbox-title {
+                color: var(--Main, #2d3748);
+                font-size: 14px;
+                font-style: normal;
+                font-weight: 600;
+                line-height: 22px;
+            }
+
+            .checkbox-content {
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+
+                input {
+                    color: var(--Main, #2d3748);
+                    font-size: 14px;
+                    font-style: normal;
+                    font-weight: 500;
+                    line-height: 22px;
+                }
+            }
+        }
+    }
+
+    .filter-possion {
+        width: 100%;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        gap: 100px;
+        margin: 25px 0px;
+
+        .possion {
+            height: 30px;
+            display: flex;
+            align-items: center;
+            gap: 32px;
+            margin-top: 20px;
+
+            .select-title {
+                color: var(--Main, #2d3748);
+                font-size: 14px;
+                font-style: normal;
+                font-weight: 500;
+                line-height: 22px;
+            }
+
+            .select-option {
+                display: flex;
+                height: 30px;
+                justify-content: space-between;
+                align-items: center;
+                border-radius: 5px;
+
+                .select {
+                    width: 100px;
+                }
+            }
+        }
+    }
+
+    .saving-button {
+        display: flex;
+        justify-content: right;
+        align-items: center;
+        margin: 25px 0px 0px;
+        gap: 10px;
+    }
+}

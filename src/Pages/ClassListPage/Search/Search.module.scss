@@ -40,6 +40,10 @@
                     cursor: pointer;
                 }
             }
+
+            .name {
+                padding-left: 2.55%;
+            }
         }
     }
 }
@@ -55,4 +59,10 @@
     font-size: 30px;
     font-weight: bolder;
     color: #2D3748;
+}
+
+.null-result::before {
+    content: "\1F61E";
+    display: block;
+    font-size: larger;
 }

@@ -49,7 +49,7 @@ function Search({ search, domChange, domChangeSuccess, reload }) {
                     <table className={cx("table")}>
                         <thead className={cx("thead")}>
                             <tr className={cx("tr")}>
-                                <th className={cx("th")}><button className={cx("title")} onClick={() => { sortColumn("classNames") }}>Class <SortIcon /></button></th>
+                                <th className={cx("th", "name")}><button className={cx("title")} onClick={() => { sortColumn("classNames") }}>Class <SortIcon /></button></th>
                                 <th className={cx("th")}><button className={cx("title")} onClick={() => { sortColumn("classCode") }}>Class Code <SortIcon /></button></th>
                                 <th className={cx("th")}><button className={cx("title")} onClick={() => { sortColumn("createdOn") }}>Created On <SortIcon /></button></th>
                                 <th className={cx("th")}><button className={cx("title")} onClick={() => { sortColumn("createdBy") }}>Created By<SortIcon /></button></th>
@@ -88,6 +88,7 @@ function Search({ search, domChange, domChangeSuccess, reload }) {
                 </>
                 :
                 <p className={cx("null-result")}>
+                    
                     Search results are not accurate!
                 </p>
             }

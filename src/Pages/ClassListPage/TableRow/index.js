@@ -126,13 +126,13 @@ function TableRow({ item, domChange, domChangeSuccess, reload }) {
         <tr className={cx("tr")} onDoubleClick={() => handleDoubleClick(item)}>
             {/* <td className={cx("td", "id")}>{item.id}</td> */}
             <td className={cx("td", "name")}>{item.classNames}</td>
-            <td className={cx("td")}>{item.classCode}</td>
-            <td className={cx("td")}>{item.createdOn}</td>
-            <td className={cx("td")}>{item.createdBy}</td>
-            <td className={cx("td")}>{item.duration} days</td>
-            <td className={cx("td")}><AttendeeStyle attendee={item.attendee} /></td>
+            <td className={cx("td", "code")}>{item.classCode}</td>
+            <td className={cx("td", "createdon")}>{item.createdOn}</td>
+            <td className={cx("td", "createdby")}>{item.createdBy}</td>
+            <td className={cx("td", "duration")}>{item.duration} days</td>
+            <td className={cx("td", "attendee")}><AttendeeStyle attendee={item.attendee} /></td>
             {/* <td className={cx("td")}><StatusStyle status={item.status} /></td> */}
-            <td className={cx("td")}>{item.location}</td>
+            <td className={cx("td", "location")}>{item.location}</td>
             <td className={cx("td")}>{item.fsu}</td>
             <td className={cx("td")}>
                 <Popover

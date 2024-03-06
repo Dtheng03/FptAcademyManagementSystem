@@ -51,14 +51,14 @@ function ClassList({ domChange, domChangeSuccess, reload }) {
             <table className={cx("table")}>
                 <thead className={cx("thead")}>
                     <tr className={cx("tr")}>
-                        <th className={cx("th")}><button className={cx("title")} onClick={() => { sortColumn("classNames") }}>Class <SortIcon /></button></th>
+                        <th className={cx("th", "name")}><button className={cx("title")} onClick={() => { sortColumn("classNames") }}>Class <SortIcon /></button></th>
                         <th className={cx("th")}><button className={cx("title")} onClick={() => { sortColumn("classCode") }}>Class Code <SortIcon /></button></th>
                         <th className={cx("th")}><button className={cx("title")} onClick={() => { sortColumn("createdOn") }}>Created On <SortIcon /></button></th>
                         <th className={cx("th")}><button className={cx("title")} onClick={() => { sortColumn("createdBy") }}>Created By<SortIcon /></button></th>
                         <th className={cx("th")}><button className={cx("title")} onClick={() => { sortColumn("duration") }}>Duration <SortIcon /></button></th>
-                        <th className={cx("th")}><button className={cx("title")} onClick={() => { sortColumn("attendee") }}>Attendee <SortIcon /></button></th>
+                        <th className={cx("th", "attendee")}><button className={cx("title")} onClick={() => { sortColumn("attendee") }}>Attendee <SortIcon /></button></th>
                         {/* <th className={cx("th")}><button className={cx("title")} onClick={() => { sortColumn("status") }}>Status <SortIcon /></button></th> */}
-                        <th className={cx("th")}><button className={cx("title")} onClick={() => { sortColumn("location") }}>Location <SortIcon /></button></th>
+                        <th className={cx("th", "location")}><button className={cx("title")} onClick={() => { sortColumn("location") }}>Location <SortIcon /></button></th>
                         <th className={cx("th")}><button className={cx("title")} onClick={() => { sortColumn("fsu") }}>FSU <SortIcon /></button></th>
                         <th className={cx("th")}></th>
                     </tr>

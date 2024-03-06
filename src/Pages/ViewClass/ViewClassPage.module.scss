@@ -353,6 +353,13 @@
 
 }
 
+.syllabus_tab_button {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    gap: 1px;
+}
+
 .button-training-program {
     padding: 5px 60px 5px 60px;
     // border-start-start-radius: 100px 100px;
@@ -429,10 +436,20 @@
 .header-footer-sider {
     color: #fff;
     padding: 10px 0px 8px 0px;
+    border-top-left-radius: 15px;
 }
 
 .header-footer-content {
     padding: 10px 0px 8px 0px;
+    border-top-right-radius: 15px;
+    box-shadow: 0.6px 0px 0px 0px rgb(199, 198, 198);
+    top: 0;
+    right: 0;
+    width: 1px;
+    /* Độ dài của đường kẻ đen */
+    height: 100%;
+    /* Chiều cao của đường kẻ đen */
+
 }
 
 .avata {
@@ -444,7 +461,7 @@
     /* Tạo hình tròn */
     object-fit: cover;
     /* Đảm bảo hình ảnh không bị méo khi điều chỉnh kích thước */
-    margin: 0px 5px 0px 5px;
+    margin: 0px 4px 0px 7.5px;
 }
 
 .header-footer-content-linux {
@@ -452,6 +469,7 @@
     font-size: 30px;
     margin-top: 5px;
     margin-left: 17px;
+
 }
 
 .header-footer-edit {
@@ -483,16 +501,22 @@
     margin: 20px 0px 0px 17px;
     letter-spacing: 1px;
 }
-.layout-box-shadow{
+
+.header-footer-information {
+    margin-left: 3px;
+}
+
+.layout-box-shadow {
     box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.35);
-    
-    
+
 }
-.header-footer-2{
+
+.header-footer-2 {
     margin-bottom: 17px;
-    
+
 }
-.header-footer-3{
+
+.header-footer-3 {
     margin-bottom: 17px;
 
 }

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styles from "./Table.module.scss";
 import classNames from "classnames/bind";
-import { Popconfirm, Popover, notification, Button, Modal } from "antd";
+import {  Popover, notification, Modal } from "antd";
 import { LearningMaterialsIcon } from "../../../Components/Common/Icons/NavMenuIcons";
 import {
   CopyIcon,
@@ -34,7 +34,7 @@ function StatusStyle({ status }) {
   return <span className={cx("status-style", className)}>{title}</span>;
 }
 
-export default function Table({ item, domChange, domChangeSuccess }) {
+export default function Table({ item, domChange, domChangeSuccess,reload }) {
   const link = useNavigate();
 
   const handleViewDetail = (selectedItem) => {
@@ -88,6 +88,7 @@ export default function Table({ item, domChange, domChangeSuccess }) {
             description: "Please try again",
           });
         });
+        reload();
     } else if (modalAction === "delete") {
       axios
         .delete(
@@ -106,15 +107,14 @@ export default function Table({ item, domChange, domChangeSuccess }) {
             description: "Please try again",
           });
         });
+        reload();
     } else if (modalAction === "changeStatus") {
       let nextStatus = "";
       if (item.status === "Inactive") {
         nextStatus = "Active";
       } else if (item.status === "Active") {
-        nextStatus = "Draft";
-      } else if (item.status === "Draft") {
-        nextStatus = "Active";
-      }
+        nextStatus = "Inactive";
+      } 
       axios
         .put(`https://65411666f0b8287df1fdc4fa.mockapi.io/program/${item.id}`, {
           status: nextStatus,
@@ -132,13 +132,15 @@ export default function Table({ item, domChange, domChangeSuccess }) {
             description: "Try Again!",
           });
         });
+        reload();
+
     }
     setIsModalVisible(false);
   };
 
-  const handleDelete = () => {};
+  // const handleDelete = () => {};
 
-  const handleDuplicate = () => {};
+  // const handleDuplicate = () => {};
 
   return (
     <tr className={cx("tr")} onDoubleClick={() => handleViewDetail(item)}>
@@ -199,7 +201,7 @@ export default function Table({ item, domChange, domChangeSuccess }) {
                   domChange();
                 }}
               >
-                {item.status === "Active" || item.status === "Inactive" ? (
+                {item.status === "Inactive" ? (
                   <>
                     <VisibilityIcon />
                     Activate
@@ -237,12 +239,19 @@ export default function Table({ item, domChange, domChangeSuccess }) {
               ? "Delete Confirm"
               : modalAction === "duplicate"
               ? "Duplicate Confirm"
+
               : "Change Status Confirm"
           }
           open={isModalVisible}
           onOk={performAction}
           onCancel={() => setIsModalVisible(false)}
-          okText={modalAction === "delete" ? "Delete" : "Duplicate"}
+          okText={
+            modalAction === "delete"
+              ? "Delete"
+              : modalAction === "duplicate"
+              ? "Duplicate"
+              : "Change status"
+          }
           okButtonProps={{ style: { backgroundColor: "#C70039" } }}
           cancelButtonProps={{ style: { color: "#C70039", border: "none" } }}
         >

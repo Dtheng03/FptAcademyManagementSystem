@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ConfigProvider, Flex, Modal, Table } from 'antd';
+import { ConfigProvider, Flex, Modal, Spin, Table, Typography } from 'antd';
 import './SyllabusList.scss';
 import { OutputStandard } from './OutputStandard';
 import { Status } from './Status';
@@ -7,23 +7,29 @@ import { FilterOutlined } from '@ant-design/icons';
 import axios from 'axios';
 import InputSection from './InputSection';
 import MenuOption from './MenuOption';
+import { useNavigate } from 'react-router-dom';
 
 const SyllabusList = () => {
+  const navigate = useNavigate();
   const [apiData, setApiData] = useState();
   const [sortedInfo, setSortedInfo] = useState({});
   const [searchInput, setSearchInput] = useState('');
   const [searchBy, setSearchBy] = useState('');
+  const [searchByDateRange, setSearchByDateRange] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const handleSort = (columnKey) => {
     let sortOrder =
       sortedInfo.columnKey === columnKey && sortedInfo.order === 'ascend' ? 'descend' : 'ascend';
     setSortedInfo({ columnKey, order: sortOrder });
   };
+  let data = [];
 
-  const data = [];
   useEffect(() => {
+    setLoading(true); // Set loading to true when starting to fetch data
     axios.get('https://6541299af0b8287df1fdf263.mockapi.io/Syllabus-API').then((response) => {
       setApiData(response.data);
+      setLoading(false); // Set loading to false when data is received
     });
   }, []);
 
@@ -31,14 +37,6 @@ const SyllabusList = () => {
   // handle Search Input
   useEffect(() => {
     params = {};
-
-    // Check if searchInput is not empty before adding it to params
-    // if (searchInput.trim() !== '') {
-    //   params = {
-    //     syllabus: searchInput,
-    //   };
-    //   console.log('searchby ' + searchBy.includes('code_'));
-    // }
     if (searchBy.trim() !== '') {
       if (searchBy.includes('syllabus_')) {
         params = {
@@ -72,12 +70,21 @@ const SyllabusList = () => {
       });
   }, [searchBy]);
 
+  useEffect(() => {
+    console.log('hehe');
+  }, [searchByDateRange]);
+
+  // data from API
   if (apiData) {
-    apiData.map((item) => {
-      data.push({
+    data = apiData.map((item) => {
+      return {
         key: item.id,
         id: item.id,
-        syllabus: item.syllabus,
+        syllabus: (
+          <Typography onClick={() => navigate('/view-syllabus-detail/' + item.id)}>
+            {item.syllabus}
+          </Typography>
+        ),
         code: item.code,
         createdOn: new Date(item.createdOn).toLocaleDateString('en-GB'),
         createdBy: item.createdBy,
@@ -85,7 +92,7 @@ const SyllabusList = () => {
         outputStandard: item.outputStandard.map((o) => <OutputStandard key={o} data={o} />),
         status: <Status data={item.status} />,
         options: <MenuOption apiData={apiData} item={item} setApiData={setApiData} />,
-      });
+      };
     });
   }
 
@@ -220,21 +227,24 @@ const SyllabusList = () => {
             apiData={apiData}
             searchInput={searchInput}
             setSearchBy={setSearchBy}
+            setSearchByDateRange={setSearchByDateRange}
             onSearchInputChange={setSearchInput}
           />
         </Flex>
-        <Table
-          pagination={{
-            position: ['bottomCenter'],
-            style: {
-              textAlign: 'center',
-            },
-            showSizeChanger: true,
-            pageSizeOptions: ['10', '20', '50', '100'],
-          }}
-          columns={columns}
-          dataSource={data}
-        />
+        <Spin spinning={loading} tip='Loading...'>
+          <Table
+            pagination={{
+              position: ['bottomCenter'],
+              style: {
+                textAlign: 'center',
+              },
+              showSizeChanger: true,
+              pageSizeOptions: ['10', '20', '50', '100'],
+            }}
+            columns={columns}
+            dataSource={data}
+          />
+        </Spin>
       </Flex>
     </ConfigProvider>
   );

@@ -12,9 +12,9 @@ import { DatePicker, Dropdown } from 'antd';
 import { Link } from 'react-router-dom';
 import { CreateIcon } from '../../Components/Common/Icons/DocManageIcons';
 import TrainingProgram from './ComponentTab/TrainingProgram';
-import AttendeeList from './ComponentTab/AttendeeList';
-import BudGetTab from './ComponentTab/BudGetTab';
-import Others from './ComponentTab/Others';
+import Syllabus from '../../Components/Common/SyllabusTab/syllabus/syllabus'
+import DatePickerCalender from './CalenderTimeFrame/DatePickerCalender';
+import Month from './CalenderTimeFrame/Month';
 
 
 
@@ -34,13 +34,13 @@ const { RangePicker } = DatePicker;
 
 
 function ViewClass() {
-    // Test ... Menu
-    // const [buttonClicked, setButtonClicked] = React.useState(false);
 
-    // const handleButtonClicked = () => {
-    //     setButtonClicked(!buttonClicked);
-    // }
-
+    const syllabusNames = [
+        "Training Program",
+        "Attendee List",
+        "Budget",
+        "Others",
+    ];
     const items = [
         {
             label: <Link className={cx("menu-icon")} to path="view-class"><CreateIcon style={{ margin: "0px 5px 0px 0px", width: "18%" }} /> Edit class</Link>,
@@ -114,8 +114,6 @@ function ViewClass() {
                     </div>
                 </div>
             </div>
-            {/* Hiển thị thông báo khi button được click
-            {buttonClicked && <div>Button MoreIcon clicked!</div>} */}
 
             <div className={cx("body")}>
                 <Layout className={cx("layout-style")}>
@@ -134,7 +132,7 @@ function ViewClass() {
                             >
 
 
-                                <Collapse style={{ backgroundColor: '#2D3748', flex: '1', color: '#fff' }} expandIconPosition='right'>
+                                <Collapse style={{ backgroundColor: '#2D3748', flex: '1', color: '#fff' }} expandIconPosition='end'>
                                     <Collapse.Panel header={<div className={cx("sider-header")}><TrainingCalendarIcon /> General </div>} key="1">
                                         <div className={cx("sider-body-alarm")}>
                                             <AlarmIcon />
@@ -224,7 +222,7 @@ function ViewClass() {
                                     components: {
                                         Collapse: {
                                             colorTextHeading: "#fff",
-                                            headerPadding: "13px 16px 13px 16px"
+                                            headerPadding: "12px 16px 12px 16px"
 
 
                                         }
@@ -232,7 +230,7 @@ function ViewClass() {
                                 }}
                             >
                                 <div className={cx("attendee-position")}>
-                                    <Collapse style={{ backgroundColor: '#2D3748', flex: '1', color: '#fff' }} expandIconPosition='right'>
+                                    <Collapse style={{ backgroundColor: '#2D3748', flex: '1', color: '#fff' }} expandIconPosition='end'>
                                         <Collapse.Panel header={<div className={cx("sider-header")} style={{ width: "100%", margin: "auto" }}><GradeIcon /> Attendee <p className={cx("attendee-name")}>Fresher</p> </div>} key="1">
                                             {/* Nội dung và icon */}
                                             <div className={cx("attendee-content")}>
@@ -264,7 +262,7 @@ function ViewClass() {
 
                                         Collapse: {
                                             colorTextHeading: "#fff",
-                                            headerPadding: "10px 16px 10px 16px"
+                                            headerPadding: "11.3px 15px 9px 15px"
                                         },
                                         RangePicker: {
 
@@ -272,7 +270,7 @@ function ViewClass() {
                                     },
                                 }}
                             >
-                                <Collapse style={{ backgroundColor: '#2D3748', flex: '1', color: '#fff' }} expandIconPosition='right'>
+                                <Collapse style={{ backgroundColor: '#2D3748', flex: '1', color: '#fff' }} expandIconPosition='end'>
                                     <Collapse.Panel header={
                                         <div className={cx("sider-header")}>
                                             <div onClick={(e) => e.stopPropagation()} className={cx("sider-header")}>
@@ -287,7 +285,8 @@ function ViewClass() {
                                         <div className={cx("collapse-content")}>
                                             <div>
 
-                                                kkkkkkkkkkkk
+                                               {/* <DatePickerCalender /> */}
+                                               <Month />
                                             </div>
                                         </div>
                                     </Collapse.Panel>
@@ -298,43 +297,19 @@ function ViewClass() {
                     </Layout>
 
                     <div className={cx("footer-style")}>
-                        <button
-                            className={cx("button-training-program", { clicked: activeComponent === "TrainingProgram" })}
-                            onClick={() => handleTabClick("TrainingProgram")}
-                        >
-                            TrainingProgram
-
-
-                        </button>
-
-                        <button
-                            className={cx("button-attendee-list", { clicked: activeComponent === "AttendeeList" })} style={{ backgroundColor: "green", color: "black" }}
-                            onClick={() => handleTabClick("AttendeeList")}
-                        >
-                            Attendee List
-                        </button>
-
-                        <button
-                            className={cx("button-budget", { clicked: activeComponent === "BudGetTab" })} style={{ backgroundColor: "yellow", color: "black" }}
-                            onClick={() => handleTabClick("BudGetTab")}
-                        >
-                            Budget
-                        </button>
-
-                        <button
-                            className={cx("button-others", { clicked: activeComponent === "Others" })} style={{ backgroundColor: "purple", color: "black" }}
-                            onClick={() => handleTabClick("Others")}
-                        >
-                            Others
-                        </button>
+                        <div className={cx("syllabus_tab_button")}>
+                            {syllabusNames.map((name, index) => (
+                                <Syllabus key={index} name={name} />
+                            ))}
+                        </div>
                         {/* Add more buttons for other tabs if needed */}
 
                         <div className={cx("content-container")}>
                             {activeComponent === "TrainingProgram" && <TrainingProgram />}
                             {/* Add more conditions for other components */}
-                            {activeComponent === "AttendeeList" && <AttendeeList />}
-                            {activeComponent === "BudGetTab" && <BudGetTab />}
-                            {activeComponent === "Others" && <Others />}
+                            {activeComponent === "AttendeeList"}
+                            {activeComponent === "BudGetTab"}
+                            {activeComponent === "Others"}
                         </div>
 
                     </div>

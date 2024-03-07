@@ -1,3 +1,5 @@
+$primary-color: #2d3748;
+
 .create-trainning-program{
     width: 100%;
     display: flex;
@@ -6,6 +8,7 @@
 
     .syllabus_tab_button{
         display: flex;
+        width: 100%;
         flex-direction: row;
         gap: 1px;
     }
@@ -89,7 +92,31 @@
                   }
                 }
               }              
-            }        
+            }       
+            
+        .select-tranning-program-body{
+          width: 100%;
+          display: flex;
+          flex-direction: column;
+          gap: 10px;
+
+            .SyllybusCard{
+              width: 100%;
+              height: 96px;
+              display: flex;
+              flex-direction: row;
+              align-items: center;
+              .image{
+                width: 20%;
+                height: 100%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                background-color: #2D3748;
+                border-radius: 20px;
+              }
+            }
+        }
     
         .select-tranning-program-footer{
             height: 16px;

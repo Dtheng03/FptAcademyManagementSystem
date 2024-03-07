@@ -8,6 +8,7 @@ export function SyllabusCard({
   date = "4 days (12 hours)",
   modifyDate = "23/07/2022",
   author = "Johny Deep",
+  cancelIconVisible = false, // Default value is false
   onClick,
 }) {
   return (
@@ -17,7 +18,7 @@ export function SyllabusCard({
           <h4 className="title">{name}</h4>
           <StatusChip title={"Active"} />
         </div>
-        <CancleIcon visiblility={"hidden"}/>
+        {cancelIconVisible && <CancleIcon />}
       </div>
 
       <div className="body_container">

@@ -3,7 +3,7 @@ import styles from "./CreateClass.module.scss";
 import classNames from "classnames/bind";
 import Button from "../../Components/Common/Button";
 import General from "./General/General";
-import Calender from "./Calender/Calender";
+import Schedule from "./Schedule/Schedule";
 import Attendee from "./Attendee/Attendee";
 import ClassTab from "./ClassTab/ClassTab";
 import { notification } from 'antd';
@@ -21,9 +21,9 @@ function CreateClass() {
 
   const handleCreateButton = () => {
     if (!className) {
-      notification.error({
-        message: "Error",
-        description: "Class name is required",
+      notification.warning({
+        message: 'Class name cannot be empty!',
+        placement: 'topRight',
       });
       return; // Don't proceed if class name is empty
     }
@@ -77,8 +77,8 @@ function CreateClass() {
           )}
         </div>
         <div className={cx("top-content")}>
-          {isClassCreated && <General />}
-          {isClassCreated && <Calender />}
+          {isClassCreated && < General />}
+          {isClassCreated && < Schedule />}
         </div>
         <div className={cx("middle-content")}>
           {isClassCreated && <Attendee />}

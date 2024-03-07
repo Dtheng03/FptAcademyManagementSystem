@@ -85,6 +85,7 @@ function ClassList({ domChange, domChangeSuccess, reload }) {
                     onShowSizeChange={(pageSize) => { setItemsPerPage(pageSize) }}
                     current={currentPage}
                     total={classList.length}
+                    showTotal={(total) => <p className={cx("total")}>Total: {total} classes</p>}
                 />
             </div>
         </>

@@ -83,12 +83,13 @@ function Search({ search, domChange, domChangeSuccess, reload }) {
                             onShowSizeChange={(pageSize) => { setItemsPerPage(pageSize) }}
                             current={currentPage}
                             total={search.length}
+                            showTotal={(total) => <p className={cx("total")}>Total: {total} classes</p>}
                         />
                     </div>
                 </>
                 :
                 <p className={cx("null-result")}>
-                    
+
                     Search results are not accurate!
                 </p>
             }

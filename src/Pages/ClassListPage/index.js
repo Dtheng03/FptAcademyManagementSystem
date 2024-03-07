@@ -9,7 +9,7 @@ import FilterPopip from "../../Components/Common/FilterPopip/FilterPopip"
 import { Link } from "react-router-dom";
 import Search from "./Search";
 import ClassList from "./ClassList";
-import { Popover, Spin } from "antd";
+import { Popover, Spin, notification } from "antd";
 import { LoadingOutlined } from '@ant-design/icons';
 import { useDispatch } from "react-redux";
 import { setClassList } from "../../Redux/Reducer/ClassSlice";
@@ -49,20 +49,23 @@ function ClassListPage() {
     };
 
     //Gọi API
-    useEffect(() => {
-        async function getClass() {
-            try {
-                setLoading(true);
-                const response = await axios.get("https://653d1d13f52310ee6a99e3b7.mockapi.io/class");
-                // const response = await axios.get("http://fams-group1-net03.ptbiology.com/api/class/view-class-list");
-                setData(response.data);
-                dispatch(setClassList(response.data));
-            } catch (error) {
-                console.error(error);
-            } finally {
-                setLoading(false);
-            }
+    async function getClass() {
+        setLoading(true);
+        try {
+            const response = await axios.get("https://653d1d13f52310ee6a99e3b7.mockapi.io/class");
+            // const response = await axios.get("http://fams-group1-net03.ptbiology.com/api/class/view-class-list");
+            // setData(response.data);
+            dispatch(setClassList(response.data));
+            setLoading(false);
+        } catch (error) {
+            notification.error({
+                message: error.message,
+            });
+            setLoading(false);
         }
+    }
+
+    useEffect(() => {
         getClass();
     }, [isDomChange])
 

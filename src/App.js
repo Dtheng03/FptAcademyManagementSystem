@@ -152,35 +152,17 @@ function App() {
                 {/* ROUTE CODE TRONG ĐÂY NHA MẤY NÍ */}
                 <Route path="/home" element={<HomePage />} />
                 <Route path="/view-syllabus" element={<SyllabusList />} />
-                <Route
-                  path="/view-syllabus-detail"
-                  element={<SyllabusDetailInformation />}
-                />
-                <Route
-                  path="/create-syllabus"
-                  element={<CreateSyllabusPage />}
-                />
-                <Route
-                  path="/tranning-program-list"
-                  element={<TranningListPage />}
-                />
-                <Route
-                  path="/view-tranning-program-detail/:id"
-                  element={<TranningProgramDetail />}
-                />
+                <Route path="/view-syllabus-detail" element={<SyllabusDetailInformation />} />
+                <Route path="/create-syllabus" element={<CreateSyllabusPage />} />
+                <Route path="/tranning-program-list" element={<TranningListPage />} />
+                <Route path="/view-tranning-program-detail/:id" element={<TranningProgramDetail />} />
                 <Route path="/create-program" element={<CreateProgram />} />
                 <Route path="/class-list" element={<ClassListPage />} />
                 <Route path="/view-class-detail/:id" element={<ViewClass />} />
                 <Route path="/create-class" element={<CreateClass />} />
-                <Route
-                  path="/training-calendar"
-                  element={<TrainingCalendarPage />}
-                />
+                <Route path="/training-calendar" element={<TrainingCalendarPage />} />
                 <Route path="/user-list" element={<UserListPage />} />
-                <Route
-                  path="/user-permission"
-                  element={<UserPermissionPage />}
-                />
+                <Route path="/user-permission" element={<UserPermissionPage />} />
                 <Route path="/materials" element={<LearningMaterials />} />
               </>
             ) : (

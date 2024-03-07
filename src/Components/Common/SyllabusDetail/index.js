@@ -10,10 +10,10 @@ const cx = classNames.bind(styles);
 function SyllabusDetail({ title, standard, status, time, type }) {
   const numericTime = parseInt(time, 10);
 
-  if (isNaN(numericTime)) {
-    console.error("Time must be the number");
-    return null; 
-  }
+  // if (isNaN(numericTime)) {
+  //   console.error("Time must be the number");
+  //   return null; 
+  // }
 
   const displayTime =
     numericTime === 1 ? `${numericTime}min` : `${numericTime}mins`;

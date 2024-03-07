@@ -1,6 +1,7 @@
 import React from "react";
 import styles from "./Calender.module.scss";
 import classNames from "classnames/bind";
+import { LeftOutlined, RightOutlined } from '@ant-design/icons';
 
 const cx = classNames.bind(styles);
 
@@ -37,11 +38,11 @@ const Calendar = ({ initialDate, onChangeMonth, onSelectDate }) => {
   return (
     <div className={cx("calender")}>
       <div className={cx("button-display")}>
-        <button className={cx("small-button")} onClick={prevMonth}>{"<"}</button>
+        <button className={cx("small-button")} onClick={prevMonth}><LeftOutlined /></button>
         <p>{`${initialDate.toLocaleString("default", {
           month: "long",
         })} ${initialDate.getFullYear()}`}</p>
-        <button className={cx("small-button")} onClick={nextMonth}>{">"}</button>
+        <button className={cx("small-button")} onClick={nextMonth}><RightOutlined /></button>
       </div>
       <div className={cx("strange-line-calender")}></div>
       <div className={cx("calender-choose")}>

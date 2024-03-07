@@ -57,6 +57,7 @@
       padding: 10px;
 
       &.opened {
+        width: 100%;
         height: auto;
       }
 
@@ -68,7 +69,6 @@
           width: 100%;
           display: flex;
           justify-content: start;
-          align-items: center;
           gap: 10px;
         }
       }

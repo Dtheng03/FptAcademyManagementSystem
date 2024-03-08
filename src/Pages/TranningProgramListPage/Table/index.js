@@ -144,13 +144,13 @@ export default function Table({ item, domChange, domChangeSuccess,reload }) {
 
   return (
     <tr className={cx("tr")} onDoubleClick={() => handleViewDetail(item)}>
-      <td className={cx("td")}>{item.id}</td>
-      <td className={cx("td")}>{item.name}</td>
-      <td className={cx("td")}>{item.createOn}</td>
-      <td className={cx("td")}>{item.createBy}</td>
-      <td className={cx("td")}>{item.duration}</td>
-      <td className={cx("td")}>
-        <StatusStyle status={item.status} />
+      <td className={cx("td", "id")}>{item.id}</td>
+      <td className={cx("td", "name")}>{item.name}</td>
+      <td className={cx("td", "createOn")}>{item.createOn}</td>
+      <td className={cx("td","createBy")}>{item.createBy}</td>
+      <td className={cx("td","duration")}>{item.duration} days</td>
+      <td className={cx("td","style")}>
+        <StatusStyle  status={item.status} />
       </td>
       <td className={cx("td")}>
         <Popover

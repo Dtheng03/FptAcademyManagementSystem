@@ -60,7 +60,7 @@ function Research({ search, domChange, domChangeSuccess, reload }) {
                   </button>
                 </th>
 
-                <th className={cx("th", "id")}>
+                <th className={cx("th", "name")}>
                   <button
                     className={cx("title")}
                     onClick={() => sortedColumn("name")}
@@ -127,6 +127,7 @@ function Research({ search, domChange, domChangeSuccess, reload }) {
               }}
               current={currentPage}
               total={search.length}
+              showTotal={(total) => <p className={cx("total")}>Total: {total} program</p>}
             />
           </div>
         </>

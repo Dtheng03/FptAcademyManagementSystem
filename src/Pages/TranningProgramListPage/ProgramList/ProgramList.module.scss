@@ -42,6 +42,19 @@
 
               .name {
                   padding-left: 2.5%;
+                  width: 35%;
+              }
+              .id{
+                padding-left: 2.55%;
+              }
+              .createOn{
+                padding-left: 2.55%;
+              }
+              .createBy{
+                padding-left: 2.55%;
+              }
+              .duration{
+                padding-left: 2.55%;
               }
           }
       }
@@ -51,3 +64,14 @@
       margin: 2%;
       text-align: center;
   }
+
+  .total {
+    position: absolute;
+    right: 5%;
+    font-size: medium;
+    font-weight: bolder;
+    color: #2d3748;
+
+    
+  }
+  

@@ -13,7 +13,6 @@ const cx = classNames.bind(styles);
 function CreateClass() {
   const [className, setClassName] = useState("");
   const [isClassCreated, setIsClassCreated] = useState(false);
-  const [clickedValue, setClickedValue] = useState(null); // State to capture clicked value
 
   const handleInputChange = (event) => {
     setClassName(event.target.value);
@@ -28,6 +27,12 @@ function CreateClass() {
       return; // Don't proceed if class name is empty
     }
     setIsClassCreated(true);
+  };
+
+  const handleKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      handleCreateButton();
+    }
   };
 
   useEffect(() => {
@@ -66,6 +71,7 @@ function CreateClass() {
                   type="text"
                   placeholder="Name the class"
                   onChange={handleInputChange}
+                  onKeyPress={handleKeyPress}
                 />
               </div>
               <Button
@@ -86,7 +92,6 @@ function CreateClass() {
         <div className={cx("bottom-content")}>
           {isClassCreated && <ClassTab />}
         </div>
-        <div className={cx("button-content")}>
           {isClassCreated && (
             <div className={cx("button-content")}>
               <div className={cx("left-button-content")}>
@@ -103,7 +108,6 @@ function CreateClass() {
           )}
         </div>
       </div>
-    </div>
   );
 }
 

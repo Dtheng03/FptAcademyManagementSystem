@@ -13,6 +13,7 @@
     .td {
         padding: 0.5%;
         height: 40px;
+    
 
         .more-btn {
             background-color: transparent;
@@ -24,6 +25,23 @@
         font-weight: bold;
         padding-left: 3%;
         width: 300px;
+    }
+
+    .duration{
+        padding-right: 5%  ;
+        
+    }
+    .id{
+        padding-left: 3.5%;
+    }
+    .createOn{
+        padding-left: 3%;
+    }
+    .createBy{
+        padding-left: 2%;
+    }
+    .style{
+        padding-left: 2.9%;
     }
 }
 

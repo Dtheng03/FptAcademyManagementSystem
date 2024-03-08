@@ -3,7 +3,7 @@ import styles from "./CreateClass.module.scss";
 import classNames from "classnames/bind";
 import Button from "../../Components/Common/Button";
 import General from "./General/General";
-import Calender from "./Calender/Calender";
+import Schedule from "./Schedule/Schedule";
 import Attendee from "./Attendee/Attendee";
 import ClassTab from "./ClassTab/ClassTab";
 import { notification } from 'antd';
@@ -13,7 +13,6 @@ const cx = classNames.bind(styles);
 function CreateClass() {
   const [className, setClassName] = useState("");
   const [isClassCreated, setIsClassCreated] = useState(false);
-  const [clickedValue, setClickedValue] = useState(null); // State to capture clicked value
 
   const handleInputChange = (event) => {
     setClassName(event.target.value);
@@ -21,13 +20,19 @@ function CreateClass() {
 
   const handleCreateButton = () => {
     if (!className) {
-      notification.error({
-        message: "Error",
-        description: "Class name is required",
+      notification.warning({
+        message: 'Class name cannot be empty!',
+        placement: 'topRight',
       });
       return; // Don't proceed if class name is empty
     }
     setIsClassCreated(true);
+  };
+
+  const handleKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      handleCreateButton();
+    }
   };
 
   useEffect(() => {
@@ -66,6 +71,7 @@ function CreateClass() {
                   type="text"
                   placeholder="Name the class"
                   onChange={handleInputChange}
+                  onKeyPress={handleKeyPress}
                 />
               </div>
               <Button
@@ -77,8 +83,8 @@ function CreateClass() {
           )}
         </div>
         <div className={cx("top-content")}>
-          {isClassCreated && <General />}
-          {isClassCreated && <Calender />}
+          {isClassCreated && < General />}
+          {isClassCreated && < Schedule />}
         </div>
         <div className={cx("middle-content")}>
           {isClassCreated && <Attendee />}
@@ -86,7 +92,6 @@ function CreateClass() {
         <div className={cx("bottom-content")}>
           {isClassCreated && <ClassTab />}
         </div>
-        <div className={cx("button-content")}>
           {isClassCreated && (
             <div className={cx("button-content")}>
               <div className={cx("left-button-content")}>
@@ -103,7 +108,6 @@ function CreateClass() {
           )}
         </div>
       </div>
-    </div>
   );
 }
 

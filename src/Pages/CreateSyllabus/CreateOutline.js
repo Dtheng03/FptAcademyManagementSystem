@@ -22,6 +22,7 @@ import AddUnitPopup from "./AddUnitPopup";
 const CreateOutline = () => {
   const dispatch = useDispatch();
   const outline = useSelector((state) => state.outline);
+  const [isDayContentVisible, setIsDayContentVisible] = useState(true);
   const [showAddSyllabusPopup, setShowAddSyllabusPopup] = useState(false);
   const [selectedDayIndex, setSelectedDayIndex] = useState(null);
   const [selectedUnitIndex, setSelectedUnitIndex] = useState(null);
@@ -53,6 +54,31 @@ const CreateOutline = () => {
     const newVisibility = [...unitSyllabusVisibility];
     newVisibility[unitIndex] = !newVisibility[unitIndex];
     setUnitSyllabusVisibility(newVisibility);
+  }
+
+  // const [outlineDays, setOutlineDays] = useState([
+  //   {
+  //     dayNumber: 1,
+  //     units: [
+  //       {
+  //         unitNumber: 1,
+  //         unitName: ".NET Introduction",
+  //         syllabus: [
+  //           {
+  //             title: ".NET Introduction",
+  //             standard: "H4SD",
+  //             status: "online",
+  //             time: "30",
+  //             type: "lecture",
+  //           },
+  //         ],
+  //       },
+  //     ],
+  //   },
+  // ]);
+
+  const toggleDayContent = () => {
+    setIsDayContentVisible(!isDayContentVisible);
   };
 
   const handleAddDay = () => {
@@ -86,6 +112,16 @@ const CreateOutline = () => {
       setNewUnitName("");
       setShowAddUnitPopup(false);
     }
+  };
+
+  const handleAddUnit = (dayIndex) => {
+    const newUnitNumber = outline[dayIndex].units.length + 1;
+    const newUnit = {
+      unitNumber: newUnitNumber,
+      unitName: "",
+      syllabus: [],
+    };
+    dispatch(addUnit({ dayIndex, unit: newUnit }));
   };
 
   const handleAddSyllabus = (dayIndex, unitIndex) => {
@@ -191,8 +227,8 @@ const CreateOutline = () => {
                     <button onClick={() => handleRemoveDay(dayIndex)}>
                       Remove
                     </button>
-                  </div>
-                </div>
+                  </div >
+                </div >
 
                 <div
                   className="dayContent"
@@ -251,20 +287,22 @@ const CreateOutline = () => {
                                       fontWeight: "400",
                                     }}
                                   >
-                                    {renderTotalTrainingTime(
-                                      dayIndex,
-                                      unitIndex
-                                    )}
-                                  </p>
-                                </div>
-                              </div>
+                                    {
+                                      renderTotalTrainingTime(
+                                        dayIndex,
+                                        unitIndex
+                                      )
+                                    }
+                                  </p >
+                                </div >
+                              </div >
 
                               <div className="unitEditBtn">
                                 <button>
                                   <EditOutlined />
                                 </button>
-                              </div>
-                            </div>
+                              </div >
+                            </div >
                             <div className="unitDropDownBtn">
                               <button
                                 className="dropDownBtn"
@@ -275,7 +313,7 @@ const CreateOutline = () => {
                                 <DownCircleOutlined />
                               </button>
                             </div>
-                          </div>
+                          </div >
 
                           <div
                             className="syllabusDetails"
@@ -303,12 +341,46 @@ const CreateOutline = () => {
                                 }
                               >
                                 <PlusCircleOutlined />
-                              </button>
-                            </div>
+                              </button >
+                            </div >
+                          </div >
+                        </div >
+                      </div >
+
+                      <div
+                        className="popup-create-dayUnit"
+                        style={{
+                          padding: "20px",
+                          borderBottom: "1px solid #adadad",
+                          display: "flex",
+                          alignItems: "center",
+                        }}
+                      >
+                        <div className="create-unitNumber">
+                          <p className="subtitle1">Unit 2</p>
+                        </div>
+                        <div
+                          className="create-unitLable"
+                          style={{
+                            width: "100%",
+                            height: "46px",
+                            display: "flex",
+                            alignItems: "center",
+                          }}
+                        >
+                          <div className="create-InputUnitName">
+                            <input
+                              className="InputUnitName"
+                              type="text"
+                              placeholder="Unit name"
+                            />
+                          </div>
+                          <div className="create-createUnitBtn">
+                            <Button title={"Create"} />
                           </div>
                         </div>
                       </div>
-                    </div>
+                    </div >
                   ))}
                   <div className="addUnitBtn">
                     <Button
@@ -317,8 +389,8 @@ const CreateOutline = () => {
                       title={"Add Unit"}
                     />
                   </div>
-                </div>
-              </div>
+                </div >
+              </div >
             ))}
             <div className="addDayBtn">
               <Button
@@ -327,48 +399,52 @@ const CreateOutline = () => {
                 onClick={handleAddDay}
               />
             </div>
-          </div>
-        </div>
-      </div>
+          </div >
+        </div >
+      </div >
       <div className="timeAllocation" style={{ width: "18%" }}>
         <TimeAllocation />
       </div>
 
-      {showAddSyllabusPopup && (
-        <>
-          <div className="overlay">
-            <AddSyllabusPopup
-              newSyllabusTitle={newSyllabusTitle}
-              setNewSyllabusTitle={setNewSyllabusTitle}
-              newSyllabusStandard={newSyllabusStandard}
-              setNewSyllabusStandard={setNewSyllabusStandard}
-              newSyllabusStatus={newSyllabusStatus}
-              setNewSyllabusStatus={setNewSyllabusStatus}
-              newSyllabusTime={newSyllabusTime}
-              setNewSyllabusTime={setNewSyllabusTime}
-              newSyllabusType={newSyllabusType}
-              setNewSyllabusType={setNewSyllabusType}
-              handleAddSyllabus={handleAddSyllabus}
-              selectedDayIndex={selectedDayIndex}
-              selectedUnitIndex={selectedUnitIndex}
-              setShowAddSyllabusPopup={setShowAddSyllabusPopup}
-            />
-          </div>
-        </>
-      )}
+      {
+        showAddSyllabusPopup && (
+          <>
+            <div className="overlay">
+              <AddSyllabusPopup
+                newSyllabusTitle={newSyllabusTitle}
+                setNewSyllabusTitle={setNewSyllabusTitle}
+                newSyllabusStandard={newSyllabusStandard}
+                setNewSyllabusStandard={setNewSyllabusStandard}
+                newSyllabusStatus={newSyllabusStatus}
+                setNewSyllabusStatus={setNewSyllabusStatus}
+                newSyllabusTime={newSyllabusTime}
+                setNewSyllabusTime={setNewSyllabusTime}
+                newSyllabusType={newSyllabusType}
+                setNewSyllabusType={setNewSyllabusType}
+                handleAddSyllabus={handleAddSyllabus}
+                selectedDayIndex={selectedDayIndex}
+                selectedUnitIndex={selectedUnitIndex}
+                setShowAddSyllabusPopup={setShowAddSyllabusPopup}
+              />
+            </div>
+          </>
+        )
+      }
 
-      {showAddUnitPopup && (
-        <>
-          <div className="overlay" />
-          <AddUnitPopup
-            newUnitName={newUnitName}
-            setNewUnitName={setNewUnitName}
-            handleCreateUnit={handleCreateUnit}
-            setShowAddUnitPopup={setShowAddUnitPopup}
-          />
-        </>
-      )}
-    </div>
+      {
+        showAddUnitPopup && (
+          <>
+            <div className="overlay" />
+            <AddUnitPopup
+              newUnitName={newUnitName}
+              setNewUnitName={setNewUnitName}
+              handleCreateUnit={handleCreateUnit}
+              setShowAddUnitPopup={setShowAddUnitPopup}
+            />
+          </>
+        )
+      }
+    </div >
   );
 };
 

@@ -63,7 +63,7 @@ function ProgramList({ domChange, domChangeSuccess, reload }) {
               </button>
             </th>
 
-            <th className={cx("th", "id")}>
+            <th className={cx("th", "name")}>
               <button
                 className={cx("title")}
                 onClick={() => sortedColumn("name")}
@@ -71,7 +71,7 @@ function ProgramList({ domChange, domChangeSuccess, reload }) {
                 Program name <SortIcon />
               </button>
             </th>
-            <th className={cx("th", "id")}>
+            <th className={cx("th", "createOn")}>
               <button
                 className={cx("title")}
                 onClick={() => sortedColumn("createOn")}
@@ -79,7 +79,7 @@ function ProgramList({ domChange, domChangeSuccess, reload }) {
                 Create on <SortIcon />
               </button>
             </th>
-            <th className={cx("th", "id")}>
+            <th className={cx("th", "createBy")}>
               <button
                 className={cx("title")}
                 onClick={() => sortedColumn("createBy")}
@@ -87,7 +87,7 @@ function ProgramList({ domChange, domChangeSuccess, reload }) {
                 Create by <SortIcon />
               </button>
             </th>
-            <th className={cx("th", "id")}>
+            <th className={cx("th", "duration")}>
               <button
                 className={cx("title")}
                 onClick={() => sortedColumn("duration")}
@@ -130,6 +130,7 @@ function ProgramList({ domChange, domChangeSuccess, reload }) {
           }}
           current={currentPage}
           total={programList.length}
+          showTotal={(total) => <p className={cx("total")}>Total: {total} program</p>}
         />
       </div>
     </>

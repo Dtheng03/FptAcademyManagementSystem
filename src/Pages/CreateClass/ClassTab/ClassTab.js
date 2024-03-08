@@ -3,6 +3,9 @@ import styles from "./ClassTab.module.scss";
 import classNames from "classnames/bind";
 import Syllabus from "../../../Components/Common/SyllabusTab/syllabus/syllabus";
 import { SearchIcon } from "../../../Components/Common/Icons/DocManageIcons/index";
+import { SyllabusCard } from "../../../Components/Common/SyllabusCard/index";
+import { Avatar} from 'antd';
+import { UserOutlined } from '@ant-design/icons';
 
 const cx = classNames.bind(styles);
 
@@ -14,6 +17,8 @@ const syllabusOptions = [
 ];
 
 function ClassTab() {
+  const [cancelIconVisible, setCancelIconVisible] = React.useState(true);
+
   const [value, setValue] = useState("");
   const syllabusNames = [
     "Training Program",
@@ -23,7 +28,7 @@ function ClassTab() {
   ];
   const [filteredOptions, setFilteredOptions] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
-
+  
   const handleChange = (event) => {
     const inputValue = event.target.value.toLowerCase();
     setValue(inputValue);
@@ -48,7 +53,7 @@ function ClassTab() {
     <div className={cx("create-trainning-program")}>
       <div className={cx("syllabus_tab_button")}>
         {syllabusNames.map((name, index) => (
-          <Syllabus key={index} name={name} />
+            <Syllabus key={index} name={name} />
         ))}
       </div>
       <div className={cx("select-tranning-program")}>
@@ -83,7 +88,50 @@ function ClassTab() {
             </div>
           </div>
         </div>
-        <div></div>
+        <div className={cx("select-tranning-program-body")}>
+          <div className={cx("SyllybusCard")}>
+            <div className={cx("image")}>
+                <Avatar size="large" icon={<UserOutlined />} alt="" src=""/>
+            </div>
+            <SyllabusCard />
+          </div>
+          <div className={cx("SyllybusCard")}>
+            <div className={cx("image")}>
+                <Avatar size="large" icon={<UserOutlined />} alt="" src=""/>
+            </div>
+            <SyllabusCard/>
+          </div>
+          <div className={cx("SyllybusCard")}>
+            <div className={cx("image")}>
+                <Avatar size="large" icon={<UserOutlined />} alt="" src=""/>
+            </div>
+            <SyllabusCard/>
+          </div>
+          <div className={cx("SyllybusCard")}>
+            <div className={cx("image")}>
+                <Avatar size="large" icon={<UserOutlined />} alt="" src=""/>
+            </div>
+            <SyllabusCard/>
+          </div>
+          <div className={cx("SyllybusCard")}>
+            <div className={cx("image")}>
+                <Avatar size="large" icon={<UserOutlined />} alt="" src=""/>
+            </div>
+            <SyllabusCard/>
+          </div>
+          <div className={cx("SyllybusCard")}>
+            <div className={cx("image")}>
+                <Avatar size="large" icon={<UserOutlined />} alt="" src=""/>
+            </div>
+            <SyllabusCard/>
+          </div>
+          <div className={cx("SyllybusCard")}>
+            <div className={cx("image")}>
+                <Avatar size="large" icon={<UserOutlined />} alt="" src=""/>
+            </div>
+            <SyllabusCard/>
+          </div>
+        </div>
         <div className={cx("select-tranning-program-footer")}></div>
       </div>
     </div>

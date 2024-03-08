@@ -25,7 +25,6 @@ import LearningMaterials from "./Pages/LearningMaterials/LearningMaterials";
 import { message } from "antd";
 
 function App() {
-  const [decryptedRoleName, setDecryptedRoleName] = useState("");
 
   const [isLoggedIn, setLoggedIn] = useState(() => {
     const storedStatus = sessionStorage.getItem("isLoggedIn");
@@ -56,8 +55,33 @@ function App() {
         user.role.roleName,
         "react02"
       ).toString();
-      sessionStorage.setItem("roleName", encryptedRoleName);
+
+      const encryptedSyllabus = crypto.AES.encrypt(
+        user.role.syllabus,
+        "react02"
+      ).toString();
+
+      const encryptedTrainingProgram = crypto.AES.encrypt(
+        user.role.trainingProgram,
+        "react02"
+      ).toString();
+
+      const encryptedClass = crypto.AES.encrypt(
+        user.role.class,
+        "react02"
+      ).toString();
+
+      const encryptedLearningMaterial = crypto.AES.encrypt(
+        user.role.learningMaterial,
+        "react02"
+      ).toString();
+
       sessionStorage.setItem("fullName", user.fullName);
+      sessionStorage.setItem("roleName", encryptedRoleName);
+      sessionStorage.setItem("RoleSyllabus", encryptedSyllabus);
+      sessionStorage.setItem("RoleTrainingProgram", encryptedTrainingProgram);
+      sessionStorage.setItem("RoleClass", encryptedClass);
+      sessionStorage.setItem("RoleLearningMaterial", encryptedLearningMaterial);
 
       const token = sessionStorage.getItem("token");
       const decodedToken = jwtDecode(token);
@@ -92,6 +116,10 @@ function App() {
     sessionStorage.removeItem("roleName");
     sessionStorage.removeItem("token");
     sessionStorage.removeItem("fullName");
+    sessionStorage.removeItem("RoleSyllabus");
+    sessionStorage.removeItem("RoleTrainingProgram");
+    sessionStorage.removeItem("RoleClass");
+    sessionStorage.removeItem("RoleLearningMaterial");
 
     navigate("/login");
   };
@@ -99,13 +127,14 @@ function App() {
   useEffect(() => {
     // Decode roleName đã mã hóa
     const encryptedRoleName = sessionStorage.getItem("roleName");
+    const encryptedToken = sessionStorage.getItem("token");
+
     if (encryptedRoleName) {
       const decryptedRoleName = crypto.AES.decrypt(
         encryptedRoleName,
         "react02"
       ).toString(crypto.enc.Utf8);
-      setDecryptedRoleName(decryptedRoleName);
-      console.log(decryptedRoleName);
+      console.log("Role:", decryptedRoleName);
     }
   }, [isLoggedIn]);
 
@@ -130,11 +159,11 @@ function App() {
                 <Route path="/create-program" element={<CreateProgram />} />
                 <Route path="/class-list" element={<ClassListPage />} />
                 <Route path="/view-class-detail/:id" element={<ViewClass />} />
-                <Route path='/create-class' element={<CreateClass />} />
-                <Route path='/training-calendar' element={<TrainingCalendarPage />} />
-                <Route path='/user-list' element={<UserListPage />} />
-                <Route path='/user-permission' element={<UserPermissionPage />} />
-                <Route path='/materials' element={<LearningMaterials />} />
+                <Route path="/create-class" element={<CreateClass />} />
+                <Route path="/training-calendar" element={<TrainingCalendarPage />} />
+                <Route path="/user-list" element={<UserListPage />} />
+                <Route path="/user-permission" element={<UserPermissionPage />} />
+                <Route path="/materials" element={<LearningMaterials />} />
               </>
             ) : (
               <Route path="/login" element={<Login onLogin={handleLogin} />} />

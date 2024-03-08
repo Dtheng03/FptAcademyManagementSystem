@@ -32,7 +32,7 @@ const outlineSlice = createSlice({
       const { dayIndex, unitIndex } = action.payload;
       state[dayIndex].units.splice(unitIndex, 1);
     },
-    
+
   },
 });
 

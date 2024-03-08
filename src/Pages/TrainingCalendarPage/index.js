@@ -6,7 +6,7 @@ import { HomeworkIcon } from "../../Components/Common/Icons/OtherIcons";
 import { LectureIcon } from "../../Components/Common/Icons/DeliveryTypesIcons";
 import { GradeIcon } from "../../Components/Common/Icons/IndicatorIcons";
 import Button from "../../Components/Common/Button";
-import { Tag, DatePicker } from "antd";
+import { Tag, Calendar } from "antd";
 import { useState } from "react";
 import WeekDaysList from "./WeekDaysList";
 
@@ -134,6 +134,10 @@ function TrainingCalendarPage() {
 
     const [showDataWeek, setShowDataWeek] = useState(false);
 
+    const handleSelectDate = (value) => {
+        console.log(value.format("YYYY-MM-DD"));
+    };
+
     return (
         <div className={cx("container")}>
             <h4 className={cx("header")}>Training Calendar</h4>
@@ -186,8 +190,10 @@ function TrainingCalendarPage() {
             {tab === "Day" &&
                 <div className={cx("section-day")}>
                     <div className={cx("date-picker")}>
-                        <DatePicker
+                        <Calendar
                             className={cx("input")}
+                            fullscreen={false}
+                            onSelect={handleSelectDate}
                         />
                     </div>
 

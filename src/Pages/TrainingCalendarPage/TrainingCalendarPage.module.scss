@@ -112,9 +112,9 @@
       text-align: center;
 
       .input {
-        width: 288px;
-        border: 1px solid var(--primary-color);
-        outline: 1px solid var(--primary-color);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
       }
     }
 

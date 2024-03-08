@@ -26,7 +26,13 @@ function SyllabusDetail({ title, standard, status, time, type }) {
     icon = <Icons.LabIcon />;
   } else if (type === "review") {
     icon = <Icons.ReviewIcon />;
-  }
+  } else if (type === "quiz") {
+    icon = <Icons.QuizIcon/>;
+  } else if (type === "exam") {
+    icon = <Icons.ExamIcon />;
+  } else if (type === "workshop") {
+    icon = <Icons.WorkshopIcon />;
+  } 
 
   return (
     <div className={cx("container")}>

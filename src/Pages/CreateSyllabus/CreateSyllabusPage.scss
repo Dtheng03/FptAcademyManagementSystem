@@ -1,3 +1,9 @@
+button{
+    cursor: pointer;
+    border: none;
+    background-color: #FFFFFF;
+}
+
 .container {
     width: 86%;
     background-color: #FFFFFF;
@@ -23,7 +29,7 @@
     background-color: #FFFFFF;
     justify-content: space-between;
     border: 1px solid #e9e9e9;
-    border-radius: 7px;
+    border-radius: 15px;
 }
 
 .syllabusTabContent {
@@ -62,6 +68,17 @@
     padding: 0;
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
+    height: 100%;
+}
+
+.ql-editor {
+    border-radius: 10px;
+}
+
+.ql-container-technical-requirement {
+    padding: 0;
+
+    border-radius: 10px;
 }
 
 .ql-toolbar {
@@ -69,10 +86,17 @@
     border-top-right-radius: 10px;
 }
 
-////CreateGeneral
+////CreateOutline
 .dayLabel {
     background-color: var(--primary-color);
+    cursor: pointer;
+    transition: 0.3s;
 }
+
+.dayLabel:hover {
+    background-color: #3b475d;
+}
+
 
 .dayUnit {
     display: flex;
@@ -88,12 +112,13 @@
     margin-bottom: 20px;
 }
 
-.unitName, .next-InputUnitName {
+.unitName,
+.next-InputUnitName {
     margin-right: 15px;
-    
+
 }
 
-.InputUnitName{
+.InputUnitName {
     width: 174px;
     height: 32px;
     border: 1px solid #9a9a9a;
@@ -101,12 +126,13 @@
     padding: 10px;
 }
 
-.InputUnitName::placeholder{
+.InputUnitName::placeholder {
     font-style: italic;
     color: #9a9a9a;
 }
 
-.unitNumber, .next-unitNumber {
+.unitNumber,
+.next-unitNumber {
     width: 68px;
 }
 
@@ -118,7 +144,56 @@
     margin-left: 34px;
 }
 
-.addUnitBtn, .addDayBtn {
+.addUnitBtn,
+.addDayBtn {
     padding: 20px;
 }
 
+
+.outlineDays {
+    border-bottom: 16px solid var(--primary-color);
+    border-radius: 7px;
+}
+
+.addUnitPopup, .syllabusPopup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    z-index: 1000;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+}
+
+.unitEditBtn button, .addSyllabusBtn button{
+    cursor: pointer;
+    padding-top: 3px;
+    border: none;
+    background-color: #FFFFFF;
+    color: var(--primary-color);
+    font-size: 21px;
+}
+
+.addSyllabusBtn button, .unitDropDownBtn button{
+    cursor: pointer;
+    border: none;
+    background-color: #FFFFFF;
+    color: var(--primary-color);
+    font-size: 24px;
+    font-weight: bolder;
+}
+
+.unitEditBtn button:hover, .addSyllabusBtn button:hover, .unitDropDownBtn button:hover {
+    color: #000000;
+}

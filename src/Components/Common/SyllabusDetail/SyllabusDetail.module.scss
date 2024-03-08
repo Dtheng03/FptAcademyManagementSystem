@@ -8,6 +8,12 @@
   height: 36px;
   background-color: #dfdede;
   border-radius: 10px;
+  transition: 0.3s;
+  &:hover {
+    cursor: pointer;
+    background-color: #c3c3c3;
+
+  }
 
   .info {
     max-height: 100%;

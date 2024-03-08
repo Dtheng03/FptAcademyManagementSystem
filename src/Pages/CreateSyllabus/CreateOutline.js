@@ -1,10 +1,23 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addDay, addUnit, addSyllabus } from "../../Redux/Reducer/outlineSlice";
+import {
+  addDay,
+  addUnit,
+  addSyllabus,
+  removeDay,
+} from "../../Redux/Reducer/outlineSlice";
 import TimeAllocation from "../../Components/Common/TimeAllocation/TimeAllocation";
 import SyllabusDetail from "../../Components/Common/SyllabusDetail";
 import Button from "../../Components/Common/Button";
-import { Switch } from "antd";
+import AddSyllabusPopup from "./AddSyllabusPopup";
+import * as ActionIcons from "../../Components/Common/Icons/ActionIcons";
+import * as DocManageIcons from "../../Components/Common/Icons/DocManageIcons";
+import {
+  DownCircleOutlined,
+  EditOutlined,
+  PlusCircleOutlined,
+} from "@ant-design/icons";
+import AddUnitPopup from "./AddUnitPopup";
 
 const CreateOutline = () => {
   const dispatch = useDispatch();
@@ -18,6 +31,30 @@ const CreateOutline = () => {
   const [newSyllabusStatus, setNewSyllabusStatus] = useState(true);
   const [newSyllabusTime, setNewSyllabusTime] = useState("");
   const [newSyllabusType, setNewSyllabusType] = useState("");
+  const [newUnitName, setNewUnitName] = useState("");
+  const [showAddUnitPopup, setShowAddUnitPopup] = useState(false);
+  const [dayCounter, setDayCounter] = useState(outline.length + 1);
+
+  const [dayContentVisibility, setDayContentVisibility] = useState(
+    outline.map(() => true)
+  );
+
+  const [unitSyllabusVisibility, setUnitSyllabusVisibility] = useState(
+    outline.map(() => true)
+  );
+
+  const toggleDayContent = (dayIndex) => {
+    const newVisibility = [...dayContentVisibility];
+    newVisibility[dayIndex] = !newVisibility[dayIndex];
+
+    setDayContentVisibility(newVisibility);
+  };
+
+  const toggleSyllabusDetails = (dayIndex, unitIndex) => {
+    const newVisibility = [...unitSyllabusVisibility];
+    newVisibility[unitIndex] = !newVisibility[unitIndex];
+    setUnitSyllabusVisibility(newVisibility);
+  }
 
   // const [outlineDays, setOutlineDays] = useState([
   //   {
@@ -47,10 +84,34 @@ const CreateOutline = () => {
   const handleAddDay = () => {
     dispatch(
       addDay({
-        dayNumber: outline.length + 1,
+        dayNumber: dayCounter,
         units: [],
       })
     );
+    setDayCounter((prevCounter) => prevCounter + 1);
+  };
+
+  const handleAddUnit = (dayIndex) => {
+    setSelectedDayIndex(dayIndex);
+    setSelectedUnitIndex(null);
+
+    setShowAddUnitPopup(true);
+  };
+
+  const handleCreateUnit = () => {
+    if (selectedDayIndex !== null) {
+      const newUnitNumber = outline[selectedDayIndex].units.length + 1;
+      const newUnit = {
+        unitNumber: newUnitNumber,
+        unitName: newUnitName,
+        syllabus: [],
+      };
+
+      dispatch(addUnit({ dayIndex: selectedDayIndex, unit: newUnit }));
+
+      setNewUnitName("");
+      setShowAddUnitPopup(false);
+    }
   };
 
   const handleAddUnit = (dayIndex) => {
@@ -84,10 +145,43 @@ const CreateOutline = () => {
     setShowAddSyllabusPopup(false);
   };
 
+  const handleRemoveDay = (dayIndex) => {
+    dispatch(removeDay(dayIndex));
+  };
+
   const openAddSyllabusPopup = (dayIndex, unitIndex) => {
     setShowAddSyllabusPopup(true);
     setSelectedDayIndex(dayIndex);
     setSelectedUnitIndex(unitIndex);
+  };
+
+  const calculateTotalTrainingTime = (dayIndex, unitIndex) => {
+    let totalMinutes = 0;
+
+    const day = outline[dayIndex];
+
+    if (day && day.units[unitIndex] && day.units[unitIndex].syllabus) {
+      day.units[unitIndex].syllabus.forEach((syllabus) => {
+        if (syllabus.time && syllabus.time.trim() !== "") {
+          const minutes = parseInt(syllabus.time, 10) || 0;
+          totalMinutes += minutes;
+        }
+      });
+    }
+
+    return totalMinutes;
+  };
+
+  const renderTotalTrainingTime = (dayIndex, unitIndex) => {
+    const totalMinutes = calculateTotalTrainingTime(dayIndex, unitIndex);
+
+    const hours = Math.floor(totalMinutes / 60);
+    const displayHour = hours === 1 ? `${hours} hr` : `${hours} hrs`;
+    const minutes = totalMinutes % 60;
+    const displayMinute = minutes === 1 ? `${minutes} min` : `${minutes} mins`;
+
+
+    return `${displayHour}  ${displayMinute}`;
   };
 
   return (
@@ -97,12 +191,16 @@ const CreateOutline = () => {
           className="createOutline"
           style={{ width: "100%", height: "100%" }}
         >
-          <div className="outlineDays" style={{ width: "100%", height: "90%" }}>
+          <div
+            className="outlineDays"
+            style={{ width: "100%", maxHeight: "100%", overflowY: "auto" }}
+          >
             {outline.map((day, dayIndex) => (
               <div
                 key={dayIndex}
                 className="outlineDay"
                 style={{
+                  margin: "1px 0",
                   width: "100%",
                   height: "auto",
                 }}
@@ -115,7 +213,7 @@ const CreateOutline = () => {
                     height: "44px",
                     alignItems: "center",
                   }}
-                  onClick={toggleDayContent}
+                  onClick={() => toggleDayContent(dayIndex)}
                 >
                   <div
                     className="dayNumber subtitle1"
@@ -126,15 +224,17 @@ const CreateOutline = () => {
                     </p>
                   </div>
                   <div className="removeDayBtn">
-                    <button>remove</button>
-                  </div>
-                </div>
+                    <button onClick={() => handleRemoveDay(dayIndex)}>
+                      Remove
+                    </button>
+                  </div >
+                </div >
 
                 <div
                   className="dayContent"
                   style={{
                     width: "100%",
-                    height: isDayContentVisible ? "auto" : "0",
+                    height: dayContentVisibility[dayIndex] ? "auto" : "0",
                     overflow: "hidden",
                     transition: "height 0.3s ease",
                     boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px",
@@ -154,7 +254,7 @@ const CreateOutline = () => {
                           width: "100%",
                           height: "auto",
                           padding: "20px",
-                          paddingBottom: "40px",
+                          paddingBottom: "20px",
                           borderBottom: "1px solid #adadad",
                         }}
                       >
@@ -187,21 +287,42 @@ const CreateOutline = () => {
                                       fontWeight: "400",
                                     }}
                                   >
-                                    7 hrs
-                                  </p>
-                                </div>
-                              </div>
+                                    {
+                                      renderTotalTrainingTime(
+                                        dayIndex,
+                                        unitIndex
+                                      )
+                                    }
+                                  </p >
+                                </div >
+                              </div >
 
                               <div className="unitEditBtn">
-                                <button>Edit</button>
-                              </div>
-                            </div>
+                                <button>
+                                  <EditOutlined />
+                                </button>
+                              </div >
+                            </div >
                             <div className="unitDropDownBtn">
-                              <button className="dropDownBtn">v</button>
+                              <button
+                                className="dropDownBtn"
+                                onClick={() =>
+                                  toggleSyllabusDetails(dayIndex, unitIndex)
+                                }
+                              >
+                                <DownCircleOutlined />
+                              </button>
                             </div>
-                          </div>
+                          </div >
 
-                          <div className="syllabusDetails">
+                          <div
+                            className="syllabusDetails"
+                            style={{
+                              display: unitSyllabusVisibility[unitIndex]
+                                ? "block"
+                                : "none",
+                            }}
+                          >
                             {unit.syllabus.map(
                               (syllabusItem, syllabusIndex) => (
                                 <div
@@ -214,16 +335,18 @@ const CreateOutline = () => {
                             )}
                             <div className="addSyllabusBtn">
                               <button
+                                style={{ padding: "0" }}
                                 onClick={() =>
                                   openAddSyllabusPopup(dayIndex, unitIndex)
                                 }
                               >
-                                +
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+                                <PlusCircleOutlined />
+                              </button >
+                            </div >
+                          </div >
+                        </div >
+                      </div >
+
                       <div
                         className="popup-create-dayUnit"
                         style={{
@@ -257,7 +380,7 @@ const CreateOutline = () => {
                           </div>
                         </div>
                       </div>
-                    </div>
+                    </div >
                   ))}
                   <div className="addUnitBtn">
                     <Button
@@ -266,8 +389,8 @@ const CreateOutline = () => {
                       title={"Add Unit"}
                     />
                   </div>
-                </div>
-              </div>
+                </div >
+              </div >
             ))}
             <div className="addDayBtn">
               <Button
@@ -276,58 +399,52 @@ const CreateOutline = () => {
                 onClick={handleAddDay}
               />
             </div>
-          </div>
-        </div>
-      </div>
+          </div >
+        </div >
+      </div >
       <div className="timeAllocation" style={{ width: "18%" }}>
         <TimeAllocation />
       </div>
 
-      {showAddSyllabusPopup && (
-        <div className="syllabusPopup">
-          <h2>Create Syllabus</h2>
-          <input
-            type="text"
-            placeholder="Title"
-            value={newSyllabusTitle}
-            onChange={(e) => setNewSyllabusTitle(e.target.value)}
-          />
-          <input
-            type="text"
-            placeholder="Standard"
-            value={newSyllabusStandard}
-            onChange={(e) => setNewSyllabusStandard(e.target.value)}
-          />
+      {
+        showAddSyllabusPopup && (
+          <>
+            <div className="overlay">
+              <AddSyllabusPopup
+                newSyllabusTitle={newSyllabusTitle}
+                setNewSyllabusTitle={setNewSyllabusTitle}
+                newSyllabusStandard={newSyllabusStandard}
+                setNewSyllabusStandard={setNewSyllabusStandard}
+                newSyllabusStatus={newSyllabusStatus}
+                setNewSyllabusStatus={setNewSyllabusStatus}
+                newSyllabusTime={newSyllabusTime}
+                setNewSyllabusTime={setNewSyllabusTime}
+                newSyllabusType={newSyllabusType}
+                setNewSyllabusType={setNewSyllabusType}
+                handleAddSyllabus={handleAddSyllabus}
+                selectedDayIndex={selectedDayIndex}
+                selectedUnitIndex={selectedUnitIndex}
+                setShowAddSyllabusPopup={setShowAddSyllabusPopup}
+              />
+            </div>
+          </>
+        )
+      }
 
-          <Switch
-            checkedChildren="Online"
-            unCheckedChildren="Offline"
-            checked={newSyllabusStatus}
-            onChange={(checked) => setNewSyllabusStatus(checked)}
-          />
-          <input
-            type="text"
-            placeholder="Time"
-            value={newSyllabusTime}
-            onChange={(e) => setNewSyllabusTime(e.target.value)}
-          />
-          <input
-            type="text"
-            placeholder="Type"
-            value={newSyllabusType}
-            onChange={(e) => setNewSyllabusType(e.target.value)}
-          />
-          <button
-            onClick={() =>
-              handleAddSyllabus(selectedDayIndex, selectedUnitIndex)
-            }
-          >
-            Create
-          </button>
-          <button onClick={() => setShowAddSyllabusPopup(false)}>Cancel</button>
-        </div>
-      )}
-    </div>
+      {
+        showAddUnitPopup && (
+          <>
+            <div className="overlay" />
+            <AddUnitPopup
+              newUnitName={newUnitName}
+              setNewUnitName={setNewUnitName}
+              handleCreateUnit={handleCreateUnit}
+              setShowAddUnitPopup={setShowAddUnitPopup}
+            />
+          </>
+        )
+      }
+    </div >
   );
 };
 

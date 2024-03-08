@@ -1,17 +1,16 @@
 import styles from "./ClassListPage.module.scss";
 import classNames from "classnames/bind";
 import Button from "../../Components/Common/Button";
-import { FilterListIcon, AddIcon, SortIcon, CancleIcon } from "../../Components/Common/Icons/ActionIcons";
+import { FilterListIcon, AddIcon, CancleIcon } from "../../Components/Common/Icons/ActionIcons";
 import { SearchIcon } from "../../Components/Common/Icons/DocManageIcons";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import FilterPopip from "../../Components/Common/FilterPopip/FilterPopip"
 import { Link } from "react-router-dom";
 import Search from "./Search";
 import ClassList from "./ClassList";
 import { Popover, Spin, notification } from "antd";
 import { LoadingOutlined } from '@ant-design/icons';
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setClassList } from "../../Redux/Reducer/ClassSlice";
 import Filter from "./Filter";
 
@@ -19,8 +18,9 @@ const cx = classNames.bind(styles);
 
 function ClassListPage() {
     const dispatch = useDispatch();
+    const classList = useSelector(state => state.class.classList);
 
-    const [data, setData] = useState([]);
+    // const [data, setData] = useState([]);
     const [loading, setLoading] = useState(false)
 
     const [searchValue, setSearchValue] = useState("");
@@ -36,7 +36,7 @@ function ClassListPage() {
         if (value.trim() === "") {
             setSearch([]);
         } else if (value.trim() !== "") {
-            const searchResults = data.filter(
+            const searchResults = classList.filter(
                 result => result.classNames.toLowerCase().includes(value.toLowerCase())
                     || result.classCode.toLowerCase().includes(value.toLowerCase())
             );
@@ -57,6 +57,7 @@ function ClassListPage() {
             // setData(response.data);
             dispatch(setClassList(response.data));
             setLoading(false);
+            console.log(response.data);
         } catch (error) {
             notification.error({
                 message: error.message,
@@ -123,9 +124,7 @@ function ClassListPage() {
                     </Link>
                 </div>
 
-                <div className={cx("filter-result")}>
-                    nguyen
-                </div>
+                {/* <div className={cx("filter-result")}></div> */}
 
                 {searchValue === "" ?
                     <ClassList

@@ -12,6 +12,5 @@ const classSlice = createSlice({
     },
 });
 
-
 export const { setClassList } = classSlice.actions;
 export default classSlice.reducer;

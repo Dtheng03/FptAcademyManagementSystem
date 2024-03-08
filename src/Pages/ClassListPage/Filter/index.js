@@ -10,10 +10,10 @@ function Filter() {
     const [clearFlag, setClearFlag] = useState(false);
 
     const locations = [
-        { label: 'Ho Chi Minh', value: 'Ho Chi Minh' },
-        { label: 'Ha Noi', value: 'Ha Noi' },
         { label: 'Can Tho', value: 'Can Tho' },
-        { label: 'Da Nang', value: 'Da Nang' }
+        { label: 'Da Nang', value: 'Da Nang' },
+        { label: 'Ha Noi', value: 'Ha Noi' },
+        { label: 'Ho Chi Minh', value: 'Ho Chi Minh' }
     ];
 
     const customCheckboxOptions = [
@@ -67,7 +67,7 @@ function Filter() {
                                 direction="vertical"
                             >
                                 <Select
-                                    style={{ width: "100%" }}
+                                    style={{ width: "400px" }}
                                     mode="multiple"
                                     allowClear
                                     placeholder="Please select"
@@ -123,7 +123,10 @@ function Filter() {
                     <div className={cx("possion")}>
                         <p className={cx("select-title")}>FSU</p>
                         <div className={cx("select-option")}>
-                            <Select value={"Select"} className={cx("select")}>
+                            <Select
+                                placeholder={"Select"}
+                                className={cx("select")}
+                            >
                                 <Select.Option value="FSU" />
                                 <Select.Option value="FSS" />
                                 <Select.Option value="FSA" />
@@ -133,7 +136,10 @@ function Filter() {
                     <div className={cx("possion")}>
                         <p className={cx("select-title")}>Trainer</p>
                         <div className={cx("select-option")}>
-                            <Select value={"Select"} className={cx("select")}>
+                            <Select
+                                placeholder={"Select"}
+                                className={cx("select")}
+                            >
                                 <Select.Option value="HUY" />
                                 <Select.Option value="THANG" />
                                 <Select.Option value="AN" />

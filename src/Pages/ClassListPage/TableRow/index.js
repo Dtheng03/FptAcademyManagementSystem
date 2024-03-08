@@ -122,6 +122,21 @@ function TableRow({ item, domChange, domChangeSuccess, reload }) {
         setModalVisible(false);
     };
 
+    const calculateDuration = (start, end) => {
+        const startDate = parseDate(start);
+        const endDate = parseDate(end);
+        const timeDifference = endDate.getTime() - startDate.getTime();
+        const durationInDays = timeDifference / (1000 * 3600 * 24);
+        return durationInDays;
+    }
+
+    const parseDate = (dateString) => {
+        const [day, month, year] = dateString.split('/');
+        return new Date(`${year}-${month}-${day}`);
+    }
+
+    const duration = calculateDuration(item.startDate, item.endDate)
+
     return (
         <tr className={cx("tr")} onDoubleClick={() => handleDoubleClick(item)}>
             {/* <td className={cx("td", "id")}>{item.id}</td> */}
@@ -129,7 +144,7 @@ function TableRow({ item, domChange, domChangeSuccess, reload }) {
             <td className={cx("td", "code")}>{item.classCode}</td>
             <td className={cx("td", "createdon")}>{item.createdOn}</td>
             <td className={cx("td", "createdby")}>{item.createdBy}</td>
-            <td className={cx("td", "duration")}>{item.duration} days</td>
+            <td className={cx("td", "duration")}>{duration} days</td>
             <td className={cx("td", "attendee")}><AttendeeStyle attendee={item.attendee} /></td>
             {/* <td className={cx("td")}><StatusStyle status={item.status} /></td> */}
             <td className={cx("td", "location")}>{item.location}</td>

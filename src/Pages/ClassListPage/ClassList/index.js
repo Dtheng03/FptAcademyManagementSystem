@@ -11,6 +11,8 @@ const cx = classNames.bind(styles);
 function ClassList({ domChange, domChangeSuccess, reload }) {
 
     const classList = useSelector(state => state.class.classList);
+    // console.log('Redux State:', useSelector(state => state)); // Log the entire Redux state
+    // console.log('Class List:', classList);
 
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage, setItemsPerPage] = useState(10);
@@ -85,7 +87,7 @@ function ClassList({ domChange, domChangeSuccess, reload }) {
                     onShowSizeChange={(pageSize) => { setItemsPerPage(pageSize) }}
                     current={currentPage}
                     total={classList.length}
-                    showTotal={(total) => <p className={cx("total")}>Total: {total} classes</p>}
+                    showTotal={(total) => <p className={cx("total")}>Total: {total} Classes</p>}
                 />
             </div>
         </>

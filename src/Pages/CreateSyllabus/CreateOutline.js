@@ -10,8 +10,6 @@ import TimeAllocation from "../../Components/Common/TimeAllocation/TimeAllocatio
 import SyllabusDetail from "../../Components/Common/SyllabusDetail";
 import Button from "../../Components/Common/Button";
 import AddSyllabusPopup from "./AddSyllabusPopup";
-import * as ActionIcons from "../../Components/Common/Icons/ActionIcons";
-import * as DocManageIcons from "../../Components/Common/Icons/DocManageIcons";
 import {
   DownCircleOutlined,
   EditOutlined,
@@ -22,7 +20,6 @@ import AddUnitPopup from "./AddUnitPopup";
 const CreateOutline = () => {
   const dispatch = useDispatch();
   const outline = useSelector((state) => state.outline);
-  const [isDayContentVisible, setIsDayContentVisible] = useState(true);
   const [showAddSyllabusPopup, setShowAddSyllabusPopup] = useState(false);
   const [selectedDayIndex, setSelectedDayIndex] = useState(null);
   const [selectedUnitIndex, setSelectedUnitIndex] = useState(null);
@@ -56,31 +53,6 @@ const CreateOutline = () => {
     setUnitSyllabusVisibility(newVisibility);
   }
 
-  // const [outlineDays, setOutlineDays] = useState([
-  //   {
-  //     dayNumber: 1,
-  //     units: [
-  //       {
-  //         unitNumber: 1,
-  //         unitName: ".NET Introduction",
-  //         syllabus: [
-  //           {
-  //             title: ".NET Introduction",
-  //             standard: "H4SD",
-  //             status: "online",
-  //             time: "30",
-  //             type: "lecture",
-  //           },
-  //         ],
-  //       },
-  //     ],
-  //   },
-  // ]);
-
-  const toggleDayContent = () => {
-    setIsDayContentVisible(!isDayContentVisible);
-  };
-
   const handleAddDay = () => {
     dispatch(
       addDay({
@@ -89,13 +61,6 @@ const CreateOutline = () => {
       })
     );
     setDayCounter((prevCounter) => prevCounter + 1);
-  };
-
-  const handleAddUnit = (dayIndex) => {
-    setSelectedDayIndex(dayIndex);
-    setSelectedUnitIndex(null);
-
-    setShowAddUnitPopup(true);
   };
 
   const handleCreateUnit = () => {

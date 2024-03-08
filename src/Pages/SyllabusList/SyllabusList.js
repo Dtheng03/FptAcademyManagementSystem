@@ -11,12 +11,15 @@ import { useNavigate } from 'react-router-dom';
 
 const SyllabusList = () => {
   const navigate = useNavigate();
-  const [apiData, setApiData] = useState();
+  const [apiData, setApiData] = useState([]);
   const [sortedInfo, setSortedInfo] = useState({});
   const [searchInput, setSearchInput] = useState('');
   const [searchBy, setSearchBy] = useState('');
   const [searchByDateRange, setSearchByDateRange] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  const token = sessionStorage.getItem('token');
+  axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
   const handleSort = (columnKey) => {
     let sortOrder =
@@ -27,10 +30,12 @@ const SyllabusList = () => {
 
   useEffect(() => {
     setLoading(true); // Set loading to true when starting to fetch data
-    axios.get('https://6541299af0b8287df1fdf263.mockapi.io/Syllabus-API').then((response) => {
-      setApiData(response.data);
-      setLoading(false); // Set loading to false when data is received
-    });
+    axios
+      .get('http://fams-group1-net03.ptbiology.com/api/syllabus/view-syllabus-list')
+      .then((response) => {
+        setApiData(response.data.data);
+        setLoading(false); // Set loading to false when data is received
+      });
   }, []);
 
   let params;
@@ -62,20 +67,16 @@ const SyllabusList = () => {
     }
 
     axios
-      .get('https://6541299af0b8287df1fdf263.mockapi.io/Syllabus-API', {
+      .get('http://fams-group1-net03.ptbiology.com/api/syllabus/search', {
         params,
       })
       .then((response) => {
-        setApiData(response.data);
+        setApiData(response.data.data);
       });
   }, [searchBy]);
 
-  useEffect(() => {
-    console.log('hehe');
-  }, [searchByDateRange]);
-
   // data from API
-  if (apiData) {
+  if (apiData != null && apiData.length > 0) {
     data = apiData.map((item) => {
       return {
         key: item.id,
@@ -86,7 +87,7 @@ const SyllabusList = () => {
           </Typography>
         ),
         code: item.code,
-        createdOn: new Date(item.createdOn).toLocaleDateString('en-GB'),
+        createdOn: item.createdOn,
         createdBy: item.createdBy,
         duration: item.duration,
         outputStandard: item.outputStandard.map((o) => <OutputStandard key={o} data={o} />),
@@ -100,9 +101,8 @@ const SyllabusList = () => {
     const columnKey = sortedInfo.columnKey;
     const order = sortedInfo.order === 'ascend' ? 1 : -1;
 
-    // Add custom logic for sorting based on column key
     if (columnKey === 'syllabus') {
-      return a.syllabus.localeCompare(b.syllabus) * order;
+      return a.syllabus.props.children.localeCompare(b.syllabus.props.children) * order;
     } else if (columnKey === 'code') {
       return a.code.localeCompare(b.code) * order;
     } else if (columnKey === 'createdOn') {
@@ -113,7 +113,7 @@ const SyllabusList = () => {
       return a.duration - b.duration * order;
     }
 
-    return 0; // Default case
+    return 0;
   });
 
   const columns = [

@@ -19,7 +19,7 @@ const InputSection = ({
   const [selectedDateRange, setSelectedDateRange] = useState([]);
 
   useEffect(() => {
-    if (apiData) {
+    if (apiData != null && apiData.length > 0) {
       const filteredSuggestions = apiData.filter((item) => {
         const syllabusMatch = item.syllabus.includes(searchInput);
         const codeMatch = item.code.includes(searchInput);

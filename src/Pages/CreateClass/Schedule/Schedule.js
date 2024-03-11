@@ -146,7 +146,6 @@ function Schedule() {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [dateSelected, setDateSelected] = useState(null);
-  const [isButtonClicked, setIsButtonClicked] = useState(false); // Add this line
 
   const dropdownRef = useRef(null);
 
@@ -195,8 +194,11 @@ function Schedule() {
   };
 
   const handleDateDisplayClick = (selectedDate) => {
+    if (selectedDate === "start") {
+      setStartDate(""); // Reset start date
+      setEndDate(""); // Reset end date
+    }
     setDateSelected(selectedDate);
-    setIsButtonClicked(true); // Set button clicked state to true
     setPopupOpen((prevState) => !prevState); // Toggle dropdown open/close
   };
 
@@ -204,23 +206,38 @@ function Schedule() {
     <div className={cx("calender")}>
       <div className={cx("dropdown")} ref={dropdownRef}>
         <button
-          className={cx("dropdown-button", { clicked: isButtonClicked })}
-          onClick={() => {
-            setIsButtonClicked((prevState) => !prevState); // Toggle button clicked state
-            setPopupOpen((prevState) => !prevState); // Toggle dropdown open/close
-          }}
+          className={cx("dropdown-button", { clicked: popupOpen })}
+          onClick={() => setPopupOpen((prevState) => !prevState)} // Toggle dropdown open/close
         >
           <div className={cx("conner-left")}>
             <TrainingCalendarIcon />
             <p>Time frame</p>
-            <p onClick={() => handleDateDisplayClick("start")}>
-              Start date: {startDate}
-            </p>
+            {!startDate ? (
+              <p onClick={() => handleDateDisplayClick("start")} className={cx("input-calender-value")}>
+                --/--/----
+                <TrainingCalendarIcon />
+              </p>
+            ) : (
+              <>
+                <p onClick={() => handleDateDisplayClick("start")}>
+                  Start date: {startDate}
+                </p>
+              </>
+            )}
             {startDate ? (
               <>
-                <p onClick={() => handleDateDisplayClick("end")}>
-                  End date: {endDate}
-                </p>
+                {!endDate ? (
+                  <p onClick={() => handleDateDisplayClick("end")} className={cx("input-calender-value")}>
+                    --/--/----
+                    <TrainingCalendarIcon />
+                  </p>
+                ) : (
+                  <>
+                    <p onClick={() => handleDateDisplayClick("end")}>
+                      End date: {endDate}
+                    </p>
+                  </>
+                )}
               </>
             ) : (
               <div style={{ color: "red" }}>
@@ -228,7 +245,7 @@ function Schedule() {
               </div>
             )}
           </div>
-          <div className={cx("conner-right")}>
+          <div className={cx("conner-right", { spin: !popupOpen })}>
             <DropDownCircleIcon />
           </div>
         </button>

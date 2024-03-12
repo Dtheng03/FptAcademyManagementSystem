@@ -28,23 +28,31 @@ const InputSection = ({
         return syllabusMatch || codeMatch || createdByMatch;
       });
 
-      const mappedSuggestions = filteredSuggestions
-        .map((item, index) => ({
-          value: item.syllabus,
-          key: `syllabus_${item.syllabus}_${index}`,
-        }))
-        .concat(
-          filteredSuggestions.map((item, index) => ({
-            value: item.code,
-            key: `code_${item.code}_${index}`,
-          }))
-        )
-        .concat(
-          filteredSuggestions.map((item, index) => ({
-            value: item.createdBy.fullName,
-            key: `createdby_${item.createdBy.fullName}_${index}`,
-          }))
-        );
+      const uniqueSuggestions = new Set();
+
+      const mappedSuggestions = filteredSuggestions.reduce((acc, item, index) => {
+        const syllabusKey = `syllabus_${item.syllabus}`;
+        const codeKey = `code_${item.code}`;
+        const createdByKey = `createdby_${item.createdBy.fullName}`;
+
+        if (!uniqueSuggestions.has(syllabusKey)) {
+          acc.push({ value: item.syllabus, key: syllabusKey });
+          uniqueSuggestions.add(syllabusKey);
+        }
+
+        if (!uniqueSuggestions.has(codeKey)) {
+          acc.push({ value: item.code, key: codeKey });
+          uniqueSuggestions.add(codeKey);
+        }
+
+        if (!uniqueSuggestions.has(createdByKey)) {
+          acc.push({ value: item.createdBy.fullName, key: createdByKey });
+          uniqueSuggestions.add(createdByKey);
+        }
+
+        return acc;
+      }, []);
+
       setSuggestions(mappedSuggestions);
     }
   }, [apiData, searchInput]);

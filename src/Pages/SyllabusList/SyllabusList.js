@@ -31,7 +31,9 @@ const SyllabusList = () => {
   useEffect(() => {
     setLoading(true); // Set loading to true when starting to fetch data
     axios
-      .get('http://fams-group1-net03.ptbiology.com/api/syllabus/view-syllabus-list')
+      .get(
+        'http://fams-group1-net03.ptbiology.com/api/syllabus/view-syllabus-list?filter-by=Active&filter-by=Inactive&filter-by=Drafting'
+      )
       .then((response) => {
         setApiData(response.data.data);
         setLoading(false); // Set loading to false when data is received
@@ -92,7 +94,9 @@ const SyllabusList = () => {
         duration: `${item.duration.day} days`,
         outputStandard: item.outputStandard.map((o) => <OutputStandard key={o} data={o} />),
         status: <Status data={item.status} />,
-        options: <MenuOption apiData={apiData} item={item} setApiData={setApiData} />,
+        options: (
+          <MenuOption status={item.status} apiData={apiData} item={item} setApiData={setApiData} />
+        ),
       };
     });
   }

@@ -1,7 +1,14 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { Menu, Popover, notification, Modal } from 'antd';
-import { PlusCircleOutlined, EditOutlined, CopyOutlined, DeleteOutlined } from '@ant-design/icons';
+import {
+  PlusCircleOutlined,
+  EditOutlined,
+  CopyOutlined,
+  DeleteOutlined,
+  EyeOutlined,
+  EyeInvisibleOutlined,
+} from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 
 function getItem(label, key, icon, children, type) {
@@ -14,18 +21,22 @@ function getItem(label, key, icon, children, type) {
   };
 }
 
-const items = [
-  getItem('Add training program', 'Add training program', <PlusCircleOutlined />),
-  getItem('Edit syllabus', 'Edit syllabus', <EditOutlined />),
-  getItem('Duplicate syllabus', 'Duplicate syllabus', <CopyOutlined />),
-  getItem('Delete syllabus', 'Delete syllabus', <DeleteOutlined />),
-];
-
-const MenuOption = ({ item, apiData, setApiData }) => {
+const MenuOption = ({ item, apiData, setApiData, status }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [action, setAction] = useState('');
 
   const navigate = useNavigate();
+
+  // Check condition is status is active or inactive or drafting
+  const items = [
+    getItem('Add training program', 'Add training program', <PlusCircleOutlined />),
+    getItem('Edit syllabus', 'Edit syllabus', <EditOutlined />),
+    status === 'Active' && getItem('Duplicate syllabus', 'Duplicate syllabus', <CopyOutlined />),
+    status === 'Active' &&
+      getItem('De-active syllabus', 'Update syllabus', <EyeInvisibleOutlined />),
+    (status === 'Drafting' || status === 'Inactive') &&
+      getItem('Active syllabus', 'Update syllabus', <EyeOutlined />),
+  ];
 
   // Section for Modal
   const [open, setOpen] = useState(false);
@@ -50,10 +61,10 @@ const MenuOption = ({ item, apiData, setApiData }) => {
         // Get the selected syllabus data
         const selectedSyllabus = item;
         handleDuplicate(selectedSyllabus);
-      } else if (action === 'Delete syllabus') {
+      } else if (action === 'Update syllabus') {
         // Get the syllabus item
         const syllabusId = item.id;
-        handleDelete(syllabusId);
+        handleUpdate(syllabusId);
       }
     }, 2000);
   };
@@ -81,47 +92,55 @@ const MenuOption = ({ item, apiData, setApiData }) => {
 
   const handleDuplicate = async (selectedSyllabus) => {
     // Make a POST request to duplicate the syllabus
-    // try {
-    //   const response = await axios.post(
-    //     `http://fams-group1-net03.ptbiology.com/api/syllabus/duplicate-syllabus?syllabusId=${selectedSyllabus.id}`
-    //   );
-    //   if (response.data.code === 200) {
-    //     const fullName = sessionStorage.getItem('fullName');
-    //     // Copy data from the selected syllabus or modify as needed
-    //     const dataDuplicate = {
-    //       id: response.data.data.id,
-    //       syllabus: response.data.data.syllabus,
-    //       code: response.data.data.code,
-    //       createdOn: response.data.data.createdOn,
-    //       createdBy: fullName,
-    //       duration: response.data.data.duration.day,
-    //       outputStandard: response.data.data.outputStandard,
-    //       status: response.data.data.status,
-    //     };
-    //     console.log('dataDuplicate: ' + dataDuplicate);
-    //     // Update Successfully
-    //     setApiData([dataDuplicate, ...apiData]);
-    //     showSuccessNotification();
-    //   }
-    // } catch (error) {
-    //   console.log(error);
-    //   showErrorNotification(error);
-    // }
+    try {
+      const response = await axios.post(
+        `http://fams-group1-net03.ptbiology.com/api/syllabus/duplicate-syllabus?syllabusId=${selectedSyllabus.id}`
+      );
+      if (response.data.code === 200) {
+        var currentDate = new Date();
+        var createOnDate = currentDate.toISOString().split('T')[0];
+        const fullName = sessionStorage.getItem('fullName');
+        // Copy data from the selected syllabus or modify as needed
+        const dataDuplicate = {
+          id: response.data.data.id,
+          syllabus: response.data.data.syllabusName,
+          code: response.data.data.code,
+          createdOn: createOnDate,
+          createdBy: { fullName },
+          duration: response.data.data.duration,
+          outputStandard: response.data.data.outputStandard.map((item) => item.objectiveCode),
+          status: response.data.data.status,
+        };
+        console.table(dataDuplicate);
+        // Update Successfully
+        setApiData([dataDuplicate, ...apiData]);
+        showSuccessNotification();
+      }
+    } catch (error) {
+      console.log(error);
+      showErrorNotification(error);
+    }
   };
 
-  const handleDelete = async (syllabusId) => {
+  const handleUpdate = async (syllabusId) => {
+    console.log('syllabusId', syllabusId);
     // Make a DELETE request to remove the syllabus from the mock API
     try {
-      await axios.delete(`https://6541299af0b8287df1fdf263.mockapi.io/Syllabus-API/${syllabusId}`);
+      await axios.put(
+        `http://fams-group1-net03.ptbiology.com/api/syllabus/active-deactive-syllabus?syllabusId=${syllabusId}`
+      );
 
+      const reponse = await axios.get(
+        'http://fams-group1-net03.ptbiology.com/api/syllabus/view-syllabus-list?filter-by=Active&filter-by=Inactive&filter-by=Drafting'
+      );
       // Update the state by removing the deleted syllabus
-      setApiData(apiData.filter((item) => item.id !== syllabusId));
+      setApiData(reponse.data.data);
       notification.success({
-        message: 'Syllabus deleted successfully!',
+        message: 'Syllabus update successfully!',
       });
     } catch (error) {
       notification.error({
-        message: 'Delete syllabus failed!',
+        message: 'Update syllabus failed!',
         description: 'Please try again',
       });
     }

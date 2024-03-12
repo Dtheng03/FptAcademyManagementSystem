@@ -39,7 +39,7 @@ const Calendar = ({ initialDate, onChangeMonth, onSelectDate }) => {
     <div className={cx("calender")}>
       <div className={cx("button-display")}>
         <button className={cx("small-button")} onClick={prevMonth}><LeftOutlined /></button>
-        <p>{`${initialDate.toLocaleString("default", {
+        <p style={{fontWeight: "600", fontSize:"16", color:"#2D3748"}}>{`${initialDate.toLocaleString("default", {
           month: "long",
         })} ${initialDate.getFullYear()}`}</p>
         <button className={cx("small-button")} onClick={nextMonth}><RightOutlined /></button>
@@ -50,14 +50,14 @@ const Calendar = ({ initialDate, onChangeMonth, onSelectDate }) => {
           <thead className={cx("top-calender")}>
             <tr className={cx("calender-content")}>
               {daysOfWeek.map((day) => (
-                <th key={day}>{day}</th>
+                <th style={{fontWeight: "500", fontSize:"12", color:"#7E818C"}} key={day}>{day}</th>
               ))}
             </tr>
           </thead>
-          <tbody className={cx("body-content")}>
+          <tbody className={cx("body-content")} style={{textAlign: "center"}}>
             {[...Array(Math.ceil((numDays + startingDay) / 7))].map(
               (_, weekIndex) => (
-                <tr key={weekIndex} className="calender-body-content">
+                <tr key={weekIndex} className="calender-body-content" style={{textAlign: "center"}}>
                   {[...Array(7)].map((_, dayIndex) => {
                     const dayNum = weekIndex * 7 + dayIndex - startingDay + 1;
                     const currDay = new Date(
@@ -66,7 +66,7 @@ const Calendar = ({ initialDate, onChangeMonth, onSelectDate }) => {
                       dayNum
                     );
                     return (
-                      <td key={dayIndex} onClick={() => handleDayClick(dayNum)}>
+                      <td style={{fontWeight: "500", fontSize:"14", color:"#2D3748"}} key={dayIndex} onClick={() => handleDayClick(dayNum)}>
                         {dayNum > 0 && dayNum <= numDays ? (
                           <div>
                             {dayNum}

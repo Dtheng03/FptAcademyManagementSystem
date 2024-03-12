@@ -2,12 +2,12 @@ import React from 'react';
 import { PieChart, Pie, Cell, Tooltip } from 'recharts';
 import './PipeChart.scss'; 
 
-const PipeChart = ({ assignment, concept, guide, test, exam }) => {
+const PipeChart = ({ assignment, lecture, review, quiz, exam }) => {
   const data = [
     { name: 'Assignment/Lab', value: assignment, color: '#F4BE37' },
-    { name: 'Concept/Lecture', value: concept, color: '#FF9F40' },
-    { name: 'Guide/Review', value: guide, color: '#0D2535' },
-    { name: 'Test/Quiz', value: test, color: '#5388D8' },
+    { name: 'Concept/Lecture', value: lecture, color: '#FF9F40' },
+    { name: 'Guide/Review', value: review, color: '#0D2535' },
+    { name: 'Test/Quiz', value: quiz, color: '#5388D8' },
     { name: 'Exam', value: exam, color: '#206EE5' },
   ];
 

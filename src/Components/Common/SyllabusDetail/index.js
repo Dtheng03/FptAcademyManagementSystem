@@ -22,7 +22,7 @@ function SyllabusDetail({ title, standard, status, time, type }) {
 
   if (type === "lecture") {
     icon = <Icons.LectureIcon />;
-  } else if (type === "lab") {
+  } else if (type === "assignment") {
     icon = <Icons.LabIcon />;
   } else if (type === "review") {
     icon = <Icons.ReviewIcon />;

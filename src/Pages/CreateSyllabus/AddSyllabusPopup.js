@@ -26,7 +26,7 @@ const AddSyllabusPopup = ({
     !newSyllabusType;
 
   const deliveryTypeOptions = [
-    "lab",
+    "assignment",
     "lecture",
     "review",
     "quiz",
@@ -36,10 +36,12 @@ const AddSyllabusPopup = ({
 
   return (
     <div className="syllabusPopup">
-      <h2>Create Syllabus</h2>
+      <h4 style={{ margin: "0", padding: "20px 0", textAlign: "center" }}>
+        Create Syllabus
+      </h4>
       <div className="syllabusContent"></div>
 
-      <div className="syllabusName">
+      <div className="syllabusName" style={{ width: "340px", marginBottom: "10px" }}>
         <Input
           placeholder="Name"
           value={newSyllabusTitle}
@@ -47,7 +49,7 @@ const AddSyllabusPopup = ({
         />
       </div>
 
-      <div className="syllabusStandard">
+      <div className="syllabusStandard" style={{marginBottom: "10px"}}>
         <Input
           placeholder="Output Standard"
           value={newSyllabusStandard}
@@ -55,7 +57,7 @@ const AddSyllabusPopup = ({
         />
       </div>
 
-      <div className="syllabusTime">
+      <div className="syllabusTime" style={{marginBottom: "10px"}}>
         <Input
           placeholder="Training time"
           value={newSyllabusTime}
@@ -63,8 +65,9 @@ const AddSyllabusPopup = ({
         />
       </div>
 
-      <div className="syllabusType">
+      <div className="syllabusType" style={{ width: "124px", marginBottom: "10px" }}>
         <Select
+          style={{ width: "100%" }}
           placeholder="Delivery type"
           value={newSyllabusType}
           onChange={(value) => setNewSyllabusType(value)}
@@ -77,7 +80,7 @@ const AddSyllabusPopup = ({
         </Select>
       </div>
 
-      <div className="syllabusStatus">
+      <div className="syllabusStatus" style={{marginBottom: "10px"}}>
         <Switch
           checkedChildren="Online"
           unCheckedChildren="Offline"
@@ -86,11 +89,12 @@ const AddSyllabusPopup = ({
         />
       </div>
 
-      <div className="syllabusAction">
+      <div className="syllabusAction" style={{marginBottom: "10px"}}>
         <Button
           type="primary"
           onClick={() => handleAddSyllabus(selectedDayIndex, selectedUnitIndex)}
           disabled={isCreateDisabled}
+          style={{marginRight: "10px"}}
         >
           Create
         </Button>

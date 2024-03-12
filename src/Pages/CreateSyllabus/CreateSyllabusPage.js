@@ -6,6 +6,7 @@ import CreateSyllabusHeader from "./CreateSyllabusHeader";
 import CreateOutline from "./CreateOutline";
 import Syllabus from "../../Components/Common/SyllabusTab/syllabus/syllabus";
 import SyllabusDetail from "../../Components/Common/SyllabusDetail";
+import CreateOther from "./CreateOther";
 
 const steps = [
   {
@@ -18,7 +19,7 @@ const steps = [
   },
   {
     title: "Others",
-    content: "Last-content",
+    content: <CreateOther />,
   },
 ];
 

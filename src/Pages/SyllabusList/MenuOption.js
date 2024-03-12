@@ -151,7 +151,7 @@ const MenuOption = ({ item, apiData, setApiData, status }) => {
 
     if (e.key === 'Add training program') {
       // CHƯA CÓ PAGE CREATE TRAINING PROGRAM
-      navigate('/create-training-program');
+      navigate('/create-program');
     }
 
     if (e.key === 'Edit syllabus') {

@@ -65,9 +65,9 @@ const MenuOption = ({ item, apiData, setApiData }) => {
 
   // Notification Section
   // Define a separate function for showing success notification
-  const showSuccessNotification = () => {
+  const showSuccessNotification = (message = 'duplicated') => {
     notification.success({
-      message: 'Syllabus duplicated successfully!',
+      message: `Syllabus ${message} successfully!`,
     });
   };
 
@@ -75,36 +75,38 @@ const MenuOption = ({ item, apiData, setApiData }) => {
   const showErrorNotification = (error) => {
     notification.error({
       message: 'Syllabus duplication failed!',
-      description: error
-        ? `Server error: ${error.response.data.message}`
-        : 'An unexpected error occurred. Please try again.',
+      description: error ? `Server error` : 'An unexpected error occurred. Please try again.',
     });
   };
 
   const handleDuplicate = async (selectedSyllabus) => {
     // Make a POST request to duplicate the syllabus
-
-    try {
-      const response = await axios.post(
-        'https://6541299af0b8287df1fdf263.mockapi.io/Syllabus-API',
-        {
-          // Copy data from the selected syllabus or modify as needed
-          syllabus: selectedSyllabus.syllabus,
-          code: selectedSyllabus.code,
-          createdOn: new Date().toISOString(),
-          createdBy: selectedSyllabus.createdBy,
-          duration: selectedSyllabus.duration,
-          outputStandard: selectedSyllabus.outputStandard,
-          status: selectedSyllabus.status,
-        }
-      );
-
-      // Update the state with the new data
-      setApiData([response.data, ...apiData]);
-      showSuccessNotification();
-    } catch (error) {
-      showErrorNotification(error);
-    }
+    // try {
+    //   const response = await axios.post(
+    //     `http://fams-group1-net03.ptbiology.com/api/syllabus/duplicate-syllabus?syllabusId=${selectedSyllabus.id}`
+    //   );
+    //   if (response.data.code === 200) {
+    //     const fullName = sessionStorage.getItem('fullName');
+    //     // Copy data from the selected syllabus or modify as needed
+    //     const dataDuplicate = {
+    //       id: response.data.data.id,
+    //       syllabus: response.data.data.syllabus,
+    //       code: response.data.data.code,
+    //       createdOn: response.data.data.createdOn,
+    //       createdBy: fullName,
+    //       duration: response.data.data.duration.day,
+    //       outputStandard: response.data.data.outputStandard,
+    //       status: response.data.data.status,
+    //     };
+    //     console.log('dataDuplicate: ' + dataDuplicate);
+    //     // Update Successfully
+    //     setApiData([dataDuplicate, ...apiData]);
+    //     showSuccessNotification();
+    //   }
+    // } catch (error) {
+    //   console.log(error);
+    //   showErrorNotification(error);
+    // }
   };
 
   const handleDelete = async (syllabusId) => {

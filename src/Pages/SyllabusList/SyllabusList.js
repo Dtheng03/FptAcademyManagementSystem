@@ -88,8 +88,8 @@ const SyllabusList = () => {
         ),
         code: item.code,
         createdOn: item.createdOn,
-        createdBy: item.createdBy,
-        duration: item.duration,
+        createdBy: item.createdBy.fullName,
+        duration: `${item.duration.day} days`,
         outputStandard: item.outputStandard.map((o) => <OutputStandard key={o} data={o} />),
         status: <Status data={item.status} />,
         options: <MenuOption apiData={apiData} item={item} setApiData={setApiData} />,
@@ -102,15 +102,17 @@ const SyllabusList = () => {
     const order = sortedInfo.order === 'ascend' ? 1 : -1;
 
     if (columnKey === 'syllabus') {
-      return a.syllabus.props.children.localeCompare(b.syllabus.props.children) * order;
+      const syllabusA = a.syllabus.props.children || ''; // Add null check
+      const syllabusB = b.syllabus.props.children || ''; // Add null check
+      return syllabusA.localeCompare(syllabusB) * order;
     } else if (columnKey === 'code') {
-      return a.code.localeCompare(b.code) * order;
+      return (a.code || '').localeCompare(b.code || '') * order; // Add null check
     } else if (columnKey === 'createdOn') {
-      return new Date(a.createdOn) - new Date(b.createdOn) * order;
+      return (new Date(a.createdOn) - new Date(b.createdOn)) * order; // Fix the parentheses position
     } else if (columnKey === 'createdBy') {
-      return a.createdBy.localeCompare(b.createdBy) * order;
+      return (a.createdBy.fullName || '').localeCompare(b.createdBy.fullName || '') * order; // Add null check
     } else if (columnKey === 'duration') {
-      return a.duration - b.duration * order;
+      return (a.duration.day - b.duration.day) * order; // Fix the parentheses position
     }
 
     return 0;

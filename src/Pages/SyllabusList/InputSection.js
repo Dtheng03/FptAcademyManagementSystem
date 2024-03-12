@@ -23,7 +23,7 @@ const InputSection = ({
       const filteredSuggestions = apiData.filter((item) => {
         const syllabusMatch = item.syllabus.includes(searchInput);
         const codeMatch = item.code.includes(searchInput);
-        const createdByMatch = item.createdBy.includes(searchInput);
+        const createdByMatch = item.createdBy.fullName.includes(searchInput);
 
         return syllabusMatch || codeMatch || createdByMatch;
       });
@@ -41,8 +41,8 @@ const InputSection = ({
         )
         .concat(
           filteredSuggestions.map((item, index) => ({
-            value: item.createdBy,
-            key: `createdby_${item.createdBy}_${index}`,
+            value: item.createdBy.fullName,
+            key: `createdby_${item.createdBy.fullName}_${index}`,
           }))
         );
       setSuggestions(mappedSuggestions);

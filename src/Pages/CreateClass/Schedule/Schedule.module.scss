@@ -37,11 +37,29 @@
           border: 1px solid #000;
           border-radius: 5px;
         }
+
+        .input-calender-value{
+          width: 103px;
+          height: 27px;
+          background-color: #fff;
+          border-radius: 5px;
+          color: #474747;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          gap: 5px;
+          font-weight: 400px;
+          font-size: 14px;
+        }
       }
 
       .conner-right {
         display: flex;
         align-items: center;
+
+        &.spin {
+          animation: spin linear forwards;
+        }
       }
     }
     .dropdown-content {
@@ -73,5 +91,14 @@
         }
       }
     }
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(90deg);
   }
 }

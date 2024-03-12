@@ -11,12 +11,15 @@ import { useNavigate } from 'react-router-dom';
 
 const SyllabusList = () => {
   const navigate = useNavigate();
-  const [apiData, setApiData] = useState();
+  const [apiData, setApiData] = useState([]);
   const [sortedInfo, setSortedInfo] = useState({});
   const [searchInput, setSearchInput] = useState('');
   const [searchBy, setSearchBy] = useState('');
   const [searchByDateRange, setSearchByDateRange] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  const token = sessionStorage.getItem('token');
+  axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
   const handleSort = (columnKey) => {
     let sortOrder =
@@ -27,10 +30,14 @@ const SyllabusList = () => {
 
   useEffect(() => {
     setLoading(true); // Set loading to true when starting to fetch data
-    axios.get('https://6541299af0b8287df1fdf263.mockapi.io/Syllabus-API').then((response) => {
-      setApiData(response.data);
-      setLoading(false); // Set loading to false when data is received
-    });
+    axios
+      .get(
+        'http://fams-group1-net03.ptbiology.com/api/syllabus/view-syllabus-list?filter-by=Active&filter-by=Inactive&filter-by=Drafting'
+      )
+      .then((response) => {
+        setApiData(response.data.data);
+        setLoading(false); // Set loading to false when data is received
+      });
   }, []);
 
   let params;
@@ -62,20 +69,16 @@ const SyllabusList = () => {
     }
 
     axios
-      .get('https://6541299af0b8287df1fdf263.mockapi.io/Syllabus-API', {
+      .get('http://fams-group1-net03.ptbiology.com/api/syllabus/search', {
         params,
       })
       .then((response) => {
-        setApiData(response.data);
+        setApiData(response.data.data);
       });
   }, [searchBy]);
 
-  useEffect(() => {
-    console.log('hehe');
-  }, [searchByDateRange]);
-
   // data from API
-  if (apiData) {
+  if (apiData != null && apiData.length > 0) {
     data = apiData.map((item) => {
       return {
         key: item.id,
@@ -86,12 +89,14 @@ const SyllabusList = () => {
           </Typography>
         ),
         code: item.code,
-        createdOn: new Date(item.createdOn).toLocaleDateString('en-GB'),
-        createdBy: item.createdBy,
-        duration: item.duration,
+        createdOn: item.createdOn,
+        createdBy: item.createdBy.fullName,
+        duration: `${item.duration.day} days`,
         outputStandard: item.outputStandard.map((o) => <OutputStandard key={o} data={o} />),
         status: <Status data={item.status} />,
-        options: <MenuOption apiData={apiData} item={item} setApiData={setApiData} />,
+        options: (
+          <MenuOption status={item.status} apiData={apiData} item={item} setApiData={setApiData} />
+        ),
       };
     });
   }
@@ -100,20 +105,21 @@ const SyllabusList = () => {
     const columnKey = sortedInfo.columnKey;
     const order = sortedInfo.order === 'ascend' ? 1 : -1;
 
-    // Add custom logic for sorting based on column key
     if (columnKey === 'syllabus') {
-      return a.syllabus.localeCompare(b.syllabus) * order;
+      const syllabusA = a.syllabus.props.children || ''; // Add null check
+      const syllabusB = b.syllabus.props.children || ''; // Add null check
+      return syllabusA.localeCompare(syllabusB) * order;
     } else if (columnKey === 'code') {
-      return a.code.localeCompare(b.code) * order;
+      return (a.code || '').localeCompare(b.code || '') * order; // Add null check
     } else if (columnKey === 'createdOn') {
-      return new Date(a.createdOn) - new Date(b.createdOn) * order;
+      return (new Date(a.createdOn) - new Date(b.createdOn)) * order; // Fix the parentheses position
     } else if (columnKey === 'createdBy') {
-      return a.createdBy.localeCompare(b.createdBy) * order;
+      return (a.createdBy.fullName || '').localeCompare(b.createdBy.fullName || '') * order; // Add null check
     } else if (columnKey === 'duration') {
-      return a.duration - b.duration * order;
+      return (a.duration.day - b.duration.day) * order; // Fix the parentheses position
     }
 
-    return 0; // Default case
+    return 0;
   });
 
   const columns = [

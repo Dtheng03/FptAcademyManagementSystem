@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styles from "./Table.module.scss";
 import classNames from "classnames/bind";
-import {  Popover, notification, Modal } from "antd";
+import { Popover, notification, Modal } from "antd";
 import { LearningMaterialsIcon } from "../../../Components/Common/Icons/NavMenuIcons";
 import {
   CopyIcon,
@@ -15,6 +15,7 @@ import {
 } from "../../../Components/Common/Icons/ActionIcons";
 import axios from "axios";
 import { useNavigate } from "react-router";
+import crypto from "crypto-js";
 
 const cx = classNames.bind(styles);
 
@@ -34,8 +35,21 @@ function StatusStyle({ status }) {
   return <span className={cx("status-style", className)}>{title}</span>;
 }
 
-export default function Table({ item, domChange, domChangeSuccess,reload }) {
+export default function Table({ item, domChange, domChangeSuccess, reload }) {
   const link = useNavigate();
+
+  const token = sessionStorage.getItem("token");
+  axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+
+  var decryptedRoleName;
+  const encryptedRoleName = sessionStorage.getItem("roleName");
+  if (encryptedRoleName) {
+    decryptedRoleName = crypto.AES.decrypt(
+      encryptedRoleName,
+      "react02"
+    ).toString(crypto.enc.Utf8);
+  }
+  const roleName = decryptedRoleName;
 
   const handleViewDetail = (selectedItem) => {
     link(`/view-tranning-program-detail/${selectedItem.id}`);
@@ -88,7 +102,7 @@ export default function Table({ item, domChange, domChangeSuccess,reload }) {
             description: "Please try again",
           });
         });
-        reload();
+      reload();
     } else if (modalAction === "delete") {
       axios
         .delete(
@@ -107,14 +121,14 @@ export default function Table({ item, domChange, domChangeSuccess,reload }) {
             description: "Please try again",
           });
         });
-        reload();
+      reload();
     } else if (modalAction === "changeStatus") {
       let nextStatus = "";
       if (item.status === "Inactive") {
         nextStatus = "Active";
       } else if (item.status === "Active") {
         nextStatus = "Inactive";
-      } 
+      }
       axios
         .put(`https://65411666f0b8287df1fdc4fa.mockapi.io/program/${item.id}`, {
           status: nextStatus,
@@ -132,8 +146,7 @@ export default function Table({ item, domChange, domChangeSuccess,reload }) {
             description: "Try Again!",
           });
         });
-        reload();
-
+      reload();
     }
     setIsModalVisible(false);
   };
@@ -147,121 +160,127 @@ export default function Table({ item, domChange, domChangeSuccess,reload }) {
       <td className={cx("td", "id")}>{item.id}</td>
       <td className={cx("td", "name")}>{item.name}</td>
       <td className={cx("td", "createOn")}>{item.createOn}</td>
-      <td className={cx("td","createBy")}>{item.createBy}</td>
-      <td className={cx("td","duration")}>{item.duration} days</td>
-      <td className={cx("td","style")}>
-        <StatusStyle  status={item.status} />
+      <td className={cx("td", "createBy")}>{item.createBy}</td>
+      <td className={cx("td", "duration")}>{item.duration} days</td>
+      <td className={cx("td", "style")}>
+        <StatusStyle status={item.status} />
       </td>
-      <td className={cx("td")}>
-        <Popover
-          trigger="click"
-          placement="bottom"
-          open={open}
-          onOpenChange={() => {
-            setOpen(!open);
-          }}
-          content={
-            <>
-              <button
-                style={style}
-                onClick={() => {
-                  setOpen(false);
-                }}
-              >
-                <LearningMaterialsIcon />
-                Tranning materials
-              </button>
+      {(roleName === "Super Admin" || roleName === "Admin") && (
+        <td className={cx("td")}>
+          <Popover
+            trigger="click"
+            placement="bottom"
+            open={open}
+            onOpenChange={() => {
+              setOpen(!open);
+            }}
+            content={
+              <>
+                <button
+                  style={style}
+                  onClick={() => {
+                    setOpen(false);
+                  }}
+                >
+                  <LearningMaterialsIcon />
+                  Tranning materials
+                </button>
 
-              <button
-                style={style}
-                onClick={() => {
-                  setOpen(false);
-                }}
-              >
-                <CreateIcon />
-                Edit program
-              </button>
+                <button
+                  style={style}
+                  onClick={() => {
+                    setOpen(false);
+                  }}
+                >
+                  <CreateIcon />
+                  Edit program
+                </button>
 
-              <button
-                style={style}
-                onClick={() => {
-                  handleAction("duplicate");
-                  setOpen(false);
-                  domChange();
-                }}
-              >
-                <CopyIcon />
-                Duplicate program
-              </button>
+                <button
+                  style={style}
+                  onClick={() => {
+                    handleAction("duplicate");
+                    setOpen(false);
+                    domChange();
+                  }}
+                >
+                  <CopyIcon />
+                  Duplicate program
+                </button>
 
-              <button
-                style={style}
-                onClick={() => {
-                  handleAction("changeStatus");
-                  domChange();
-                }}
-              >
-                {item.status === "Inactive" ? (
-                  <>
-                    <VisibilityIcon />
-                    Activate
-                  </>
-                ) : (
-                  <>
-                    <VisibilityOffIcon />
-                    De-activate
-                  </>
-                )}
-              </button>
+                <button
+                  style={{
+                    ...style,
+                    display: item.status !== "Draft" ? "inline-flex" : "none",
+                  }}
+                  onClick={() => {
+                    if (item.status !== "Draft") {
+                      handleAction("changeStatus");
+                      domChange();
+                    }
+                  }}
+                >
+                  {item.status === "Inactive" && item.status !== "Draft" ? (
+                    <>
+                      <VisibilityIcon />
+                      Activate
+                    </>
+                  ) : item.status !== "Draft" ? (
+                    <>
+                      <VisibilityOffIcon />
+                      De-activate
+                    </>
+                  ) : null}
+                </button>
 
-              <button
-                style={{ ...style, color: "red" }}
-                onClick={() => {
-                  handleAction("delete");
-                  setOpen(false);
-                  domChange();
-                }}
-              >
-                <DeleteForeverIcon />
-                Delete program
-              </button>
-            </>
-          }
-        >
-          <button className={cx("more-btn")} onClick={() => setOpen(!open)}>
-            <MoreIcon />
-          </button>
-        </Popover>
+                <button
+                  style={{ ...style, color: "red" }}
+                  onClick={() => {
+                    handleAction("delete");
+                    setOpen(false);
+                    domChange();
+                  }}
+                >
+                  <DeleteForeverIcon />
+                  Delete program
+                </button>
+              </>
+            }
+          >
+            <button className={cx("more-btn")} onClick={() => setOpen(!open)}>
+              <MoreIcon />
+            </button>
+          </Popover>
 
-        <Modal
-          title={
-            modalAction === "delete"
-              ? "Delete Confirm"
+          <Modal
+            title={
+              modalAction === "delete"
+                ? "Delete Confirm"
+                : modalAction === "duplicate"
+                ? "Duplicate Confirm"
+                : "Change Status Confirm"
+            }
+            open={isModalVisible}
+            onOk={performAction}
+            onCancel={() => setIsModalVisible(false)}
+            okText={
+              modalAction === "delete"
+                ? "Delete"
+                : modalAction === "duplicate"
+                ? "Duplicate"
+                : "Change status"
+            }
+            okButtonProps={{ style: { backgroundColor: "#C70039" } }}
+            cancelButtonProps={{ style: { color: "#C70039", border: "none" } }}
+          >
+            {modalAction === "delete"
+              ? `Do you want to delete the "${item.name}" ? This process cannot be restored!!`
               : modalAction === "duplicate"
-              ? "Duplicate Confirm"
-
-              : "Change Status Confirm"
-          }
-          open={isModalVisible}
-          onOk={performAction}
-          onCancel={() => setIsModalVisible(false)}
-          okText={
-            modalAction === "delete"
-              ? "Delete"
-              : modalAction === "duplicate"
-              ? "Duplicate"
-              : "Change status"
-          }
-          okButtonProps={{ style: { backgroundColor: "#C70039" } }}
-          cancelButtonProps={{ style: { color: "#C70039", border: "none" } }}
-        >
-          {modalAction === "delete"
-            ? `Do you want to delete the "${item.name}" ? This process cannot be restored!!`
-            : modalAction === "duplicate"
-            ? `Do you want to duplicate the "${item.name}" ?`
-            : `Do you want to change the status of the "${item.name}" class to "${newStatus}"?`}
-        </Modal>
-      </td>
+              ? `Do you want to duplicate the "${item.name}" ?`
+              : `Do you want to change the status of the "${item.name}" class to "${newStatus}"?`}
+          </Modal>
+        </td>
+      )}
     </tr>
   );
 }

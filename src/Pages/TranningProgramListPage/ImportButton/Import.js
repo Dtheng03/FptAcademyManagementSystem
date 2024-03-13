@@ -31,10 +31,11 @@ const ImportSyllabusModal = () => {
         icon={<UploadOutlined />}
         onClick={() => setIsOpen(!isOpen)}
         style={{
-          borderRadius: '12px',
+          borderRadius: '10px',
           color: 'white',
           backgroundColor: '#D45B13',
           marginRight: '0.5rem',
+          
         }}
         htmlType='submit'
       >
@@ -75,17 +76,19 @@ const ImportSyllabusModal = () => {
                 <span>Import template</span>
               </Flex>
               <Flex gap={18} vertical {...formItemLayout}>
-                <p
+                <button
                   style={{
                     width: '5rem',
                     color: 'white',
                     borderRadius: '6px',
                     textAlign: 'center',
                     backgroundColor: '#2D3748',
+                    padding:'3.5px ',
+                    fontWeight:'bolder'
                   }}
                 >
                   Select
-                </p>
+                </button>
                 <Select placeholder='Auto detect' size='small' />
                 <Select placeholder='Comma' size='small' />
                 <Link
@@ -106,7 +109,7 @@ const ImportSyllabusModal = () => {
               <Flex gap={6} vertical {...formItemLayout}>
                 <p>Scanning</p>
                 <Form.Item name='scanning' valuePropName='checked' noStyle>
-                  <Checkbox.Group options={['Syllabus code', 'Syllabus name']} />
+                  <Checkbox.Group options={['Tranning program code', 'Tranning program  name']} />
                 </Form.Item>
               </Flex>
               <Flex gap={8} vertical>
@@ -123,7 +126,7 @@ const ImportSyllabusModal = () => {
           </Flex>
           <hr style={{ margin: '10px 0' }} />
           <Flex style={{ padding: '0.4rem 0' }} justify='flex-end' align='center'>
-            <span
+            <button
               onClick={() => setIsOpen(!isOpen)}
               style={{
                 borderRadius: '10px',
@@ -131,10 +134,12 @@ const ImportSyllabusModal = () => {
                 padding: '0.5rem 1.5rem',
                 color: '#E74A3B',
                 textDecoration: 'underline',
+                
+
               }}
             >
               Cancel
-            </span>
+            </button>
             <Button
               type='primary'
               htmlType='submit'

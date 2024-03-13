@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import ReactQuill from "react-quill";
 
 const CreateOther = () => {
-  const [courseObjectives, setCourseObjectives] = useState("");
+  const [trainingDeliveryPrinciple, setTrainingDeliveryPrinciple] = useState("");
   const [technicalRequirement, setTechnicalRequirement] = useState("");
 
   return (
@@ -78,8 +78,8 @@ const CreateOther = () => {
               borderRadius: "10px",
             }}
             className="ql-container-course-objectives"
-            value={courseObjectives}
-            onChange={(value) => setCourseObjectives(value)}
+            value={trainingDeliveryPrinciple}
+            onChange={(value) => setTrainingDeliveryPrinciple(value)}
             modules={{
               toolbar: {
                 container: [

@@ -1,7 +1,7 @@
 button {
     cursor: pointer;
     border: none;
-    background-color: #FFFFFF;
+    background-color: transparent;
     transition: 0.3s;
 }
 
@@ -180,7 +180,6 @@ button {
     cursor: pointer;
     padding-top: 3px;
     border: none;
-    background-color: #FFFFFF;
     color: var(--primary-color);
     font-size: 21px;
 }
@@ -189,7 +188,6 @@ button {
 .unitDropDownBtn button {
     cursor: pointer;
     border: none;
-    background-color: #FFFFFF;
     color: var(--primary-color);
     font-size: 24px;
     font-weight: bolder;
@@ -199,6 +197,10 @@ button {
 .addSyllabusBtn button:hover,
 .unitDropDownBtn button:hover {
     color: #000000;
+}
+
+.dropDownBtn {
+    background-color: transparent;
 }
 
 .removeDayBtn {
@@ -213,10 +215,13 @@ button {
 }
 
 .removeDayBtn button:hover {
-    
     color: #e83121;
 }
 
+.dayUnit:hover {
+    cursor: pointer;
+    background-color: #f7faff;
+}
 
 //AddunitPopup
 

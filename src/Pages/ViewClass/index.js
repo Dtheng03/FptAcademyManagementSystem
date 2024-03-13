@@ -13,8 +13,8 @@ import { Link } from 'react-router-dom';
 import { CreateIcon } from '../../Components/Common/Icons/DocManageIcons';
 import TrainingProgram from './ComponentTab/TrainingProgram';
 import Syllabus from '../../Components/Common/SyllabusTab/syllabus/syllabus'
-import DatePickerCalender from './CalenderTimeFrame/DatePickerCalender';
-import Month from './CalenderTimeFrame/Month';
+import Schedule from "../ViewClass/CalenderTimeFrame/Schedule";
+// import Collapse from 'rc-collapse';
 
 
 
@@ -34,6 +34,19 @@ const { RangePicker } = DatePicker;
 
 
 function ViewClass() {
+    //Calendar time frame
+    const [startDate, setStartDate] = useState(null);
+    const [endDate, setEndDate] = useState(null);
+
+    const handleDateChange = (dates) => {
+        if (dates) {
+            setStartDate(dates[0]);
+            setEndDate(dates[1]);
+        } else {
+            setStartDate(null);
+            setEndDate(null);
+        }
+    };
 
     const syllabusNames = [
         "Training Program",
@@ -270,27 +283,27 @@ function ViewClass() {
                                     },
                                 }}
                             >
-                                <Collapse style={{ backgroundColor: '#2D3748', flex: '1', color: '#fff' }} expandIconPosition='end'>
+                                {/* <Collapse style={{ backgroundColor: '#2D3748', flex: '1', color: '#fff' }} expandIconPosition='end'>
                                     <Collapse.Panel header={
                                         <div className={cx("sider-header")}>
-                                            <div onClick={(e) => e.stopPropagation()} className={cx("sider-header")}>
-
-                                                <TrainingCalendarIcon /> Time frame
-                                                <RangePicker placeholder={['dd/mm/yyyy', 'dd/mm/yyyy']} variant="filled" format={['DD/MM/YYYY', 'DD/MM/YYYY']} style={{ backgroundColor: "#fff" }} />
-                                            </div>
-
+                                            <TrainingCalendarIcon /> Time frame
+                                            <RangePicker
+                                                placeholder={['dd/mm/yyyy', 'dd/mm/yyyy']}
+                                                format={['DD/MM/YYYY', 'DD/MM/YYYY']}
+                                                style={{ backgroundColor: "#fff" }}
+                                                value={[startDate, endDate]}
+                                                onChange={handleDateChange}
+                                            />
                                         </div>} key="1">
-                                        {/* Nội dung và icon */}
 
                                         <div className={cx("collapse-content")}>
                                             <div>
-
-                                               {/* <DatePickerCalender /> */}
-                                               <Month />
+                                                <Calendar />
                                             </div>
                                         </div>
                                     </Collapse.Panel>
-                                </Collapse>
+                                </Collapse> */}
+                                <Schedule/>
                             </ConfigProvider>
                         </Content>
 

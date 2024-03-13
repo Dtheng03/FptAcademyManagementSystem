@@ -1,5 +1,6 @@
-import React from "react";
-import { Switch, Input, Button, Select } from "antd";
+import React, { useState } from "react";
+import { Switch, Input, Button, Select, Tag } from "antd";
+import { ClockCircleOutlined } from "@ant-design/icons";
 
 const { Option } = Select;
 
@@ -20,19 +21,39 @@ const AddSyllabusPopup = ({
   setShowAddSyllabusPopup,
 }) => {
   const isCreateDisabled =
-    !newSyllabusTitle ||
-    !newSyllabusStandard ||
-    !newSyllabusTime ||
-    !newSyllabusType;
+    !newSyllabusTitle || !newSyllabusTime || !newSyllabusType;
+
+  const [outputStandards, setOutputStandards] = useState([]);
 
   const deliveryTypeOptions = [
-    "assignment",
-    "lecture",
-    "review",
-    "quiz",
-    "exam",
-    "workshop",
+    "Assignment/Lab",
+    "Concept/Lecture",
+    "Guide/Review",
+    "Test/Quiz",
+    "Exam",
+    "Workshop",
   ];
+
+  const handleStandardChange = (e) => {
+    if (e.key === "Enter") {
+      const newStandard = e.target.value.trim();
+      if (newStandard !== "") {
+        setOutputStandards([...outputStandards, newStandard]);
+        setNewSyllabusStandard(newStandard);
+        setNewSyllabusStandard("");
+      }
+    }
+  };
+
+  const handleRemoveTag = (removedTag) => {
+    const newTags = outputStandards.filter((tag) => tag !== removedTag);
+    setOutputStandards(newTags);
+  };
+
+  const handleTrainingTimeChange = (e) => {
+    const newValue = e.target.value.replace(/\D/, "");
+    setNewSyllabusTime(newValue);
+  };
 
   return (
     <div className="syllabusPopup">
@@ -41,7 +62,10 @@ const AddSyllabusPopup = ({
       </h4>
       <div className="syllabusContent"></div>
 
-      <div className="syllabusName" style={{ width: "340px", marginBottom: "10px" }}>
+      <div
+        className="syllabusName"
+        style={{ width: "340px", marginBottom: "10px" }}
+      >
         <Input
           placeholder="Name"
           value={newSyllabusTitle}
@@ -49,23 +73,35 @@ const AddSyllabusPopup = ({
         />
       </div>
 
-      <div className="syllabusStandard" style={{marginBottom: "10px"}}>
+      <div className="syllabusStandard" style={{ marginBottom: "10px" }}>
         <Input
           placeholder="Output Standard"
           value={newSyllabusStandard}
           onChange={(e) => setNewSyllabusStandard(e.target.value)}
+          onKeyDown={handleStandardChange}
         />
+        <div style={{ marginTop: "5px" }}>
+          {outputStandards.map((tag, index) => (
+            <Tag key={index} closable onClose={() => handleRemoveTag(tag)}>
+              {tag}
+            </Tag>
+          ))}
+        </div>
       </div>
 
-      <div className="syllabusTime" style={{marginBottom: "10px"}}>
+      <div className="syllabusTime" style={{ marginBottom: "10px" }}>
         <Input
+          prefix={<ClockCircleOutlined />}
           placeholder="Training time"
           value={newSyllabusTime}
           onChange={(e) => setNewSyllabusTime(e.target.value)}
         />
       </div>
 
-      <div className="syllabusType" style={{ width: "124px", marginBottom: "10px" }}>
+      <div
+        className="syllabusType"
+        style={{ width: "184px", marginBottom: "10px" }}
+      >
         <Select
           style={{ width: "100%" }}
           placeholder="Delivery type"
@@ -80,7 +116,7 @@ const AddSyllabusPopup = ({
         </Select>
       </div>
 
-      <div className="syllabusStatus" style={{marginBottom: "10px"}}>
+      <div className="syllabusStatus" style={{ marginBottom: "10px" }}>
         <Switch
           checkedChildren="Online"
           unCheckedChildren="Offline"
@@ -89,12 +125,12 @@ const AddSyllabusPopup = ({
         />
       </div>
 
-      <div className="syllabusAction" style={{marginBottom: "10px"}}>
+      <div className="syllabusAction" style={{ marginBottom: "10px" }}>
         <Button
           type="primary"
           onClick={() => handleAddSyllabus(selectedDayIndex, selectedUnitIndex)}
           disabled={isCreateDisabled}
-          style={{marginRight: "10px"}}
+          style={{ marginRight: "10px" }}
         >
           Create
         </Button>

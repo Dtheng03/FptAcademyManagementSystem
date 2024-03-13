@@ -86,7 +86,7 @@ const CreateSyllabusPage = () => {
         >
           {current < steps.length - 1 && (
             <Button type="primary" onClick={() => next()}>
-              Save
+              Next
             </Button>
           )}
           {current === steps.length - 1 && (

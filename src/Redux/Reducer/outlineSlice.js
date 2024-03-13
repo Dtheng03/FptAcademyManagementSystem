@@ -1,4 +1,17 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { message } from "antd";
+
+const calculateTotalTimeOfDay = (day) => {
+  let totalTime = 0;
+
+  day.units.forEach((unit) => {
+    unit.syllabus.forEach((syllabus) => {
+      totalTime += parseInt(syllabus.time) || 0;
+    });
+  });
+
+  return totalTime;
+};
 
 const calculateSyllabusTypePercentage = (state) => {
   const syllabusTypeTimes = {
@@ -51,6 +64,18 @@ const outlineSlice = createSlice({
     },
     addSyllabus: (state, action) => {
       const { dayIndex, unitIndex, syllabus } = action.payload;
+
+      const totalTimeOfDay = calculateTotalTimeOfDay(state[dayIndex]);
+      const totalTimeWithNewSyllabus =
+        totalTimeOfDay + parseInt(syllabus.time) || 0;
+
+      if (totalTimeWithNewSyllabus > 480) {
+        const remainingTime = 480 - totalTimeOfDay;
+        message.error(
+          `The total time of a day cannot exceed 8 hours. Please adjust the time. You can enter up to ${remainingTime} minutes.`
+        );
+        return;
+      }
       state[dayIndex].units[unitIndex].syllabus.push(syllabus);
     },
     removeDay: (state, action) => {

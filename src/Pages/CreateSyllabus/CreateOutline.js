@@ -85,80 +85,119 @@ const CreateOutline = () => {
   };
 
   const handleAddDay = async () => {
-    setLoading(true);
-    await dispatch(
-      addDay({
-        dayNumber: dayCounter,
-        units: [],
-      })
-    );
+    try {
+      setLoading(true);
+      await dispatch(
+        addDay({
+          dayNumber: dayCounter,
+          units: [],
+        })
+      );
 
-    setDayCounter((prevCounter) => prevCounter + 1);
-    setLoading(false);
-    message.success("Day added successfully!");
+      setDayCounter((prevCounter) => prevCounter + 1);
+      setLoading(false);
+      message.success("Day added successfully!");
+    } catch (error) {
+      console.error("Error add new day:", error);
+      message.error(
+        "An error occurred during add new day. Please try again later."
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleAddUnit = (dayIndex) => {
-    setSelectedDayIndex(dayIndex);
-    setSelectedUnitIndex(null);
-
-    setShowAddUnitPopup(true);
+    try {
+      setSelectedDayIndex(dayIndex);
+      setSelectedUnitIndex(null);
+      setShowAddUnitPopup(true);
+    } catch (error) {
+      console.error("Error add new unit:", error);
+      message.error(
+        "An error occurred during add new unit. Please try again later."
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleCreateUnit = async () => {
-    if (selectedDayIndex !== null) {
-      const newUnitNumber = outline[selectedDayIndex].units.length + 1;
-      const newUnit = {
-        unitNumber: newUnitNumber,
-        unitName: newUnitName,
-        syllabus: [],
-      };
+    try {
+      if (selectedDayIndex !== null) {
+        const newUnitNumber = outline[selectedDayIndex].units.length + 1;
+        const newUnit = {
+          unitNumber: newUnitNumber,
+          unitName: newUnitName,
+          syllabus: [],
+        };
 
-      setLoading(true);
-      await dispatch(addUnit({ dayIndex: selectedDayIndex, unit: newUnit }));
-      setNewUnitName("");
-      setShowAddUnitPopup(false);
+        setLoading(true);
+        await dispatch(addUnit({ dayIndex: selectedDayIndex, unit: newUnit }));
+        setNewUnitName("");
+        setShowAddUnitPopup(false);
 
+        setLoading(false);
+
+        message.success("Unit added successfully!");
+      }
+    } catch (error) {
+      console.error("Error create unit:", error);
+      message.error(
+        "An error occurred during create unit. Please try again later."
+      );
+    } finally {
       setLoading(false);
-
-      message.success("Unit added successfully!");
     }
   };
 
   const handleAddSyllabus = (dayIndex, unitIndex) => {
-    const newSyllabus = {
-      title: newSyllabusTitle,
-      standard: newSyllabusStandard,
-      status: newSyllabusStatus,
-      time: newSyllabusTime,
-      type: newSyllabusType,
-    };
+    try {
+      const newSyllabus = {
+        title: newSyllabusTitle,
+        standard: newSyllabusStandard,
+        status: newSyllabusStatus,
+        time: newSyllabusTime,
+        type: newSyllabusType,
+      };
 
-    dispatch(addSyllabus({ dayIndex, unitIndex, syllabus: newSyllabus }));
+      dispatch(addSyllabus({ dayIndex, unitIndex, syllabus: newSyllabus }));
 
-    setNewSyllabusTitle("");
-    setNewSyllabusStandard("");
-    setNewSyllabusStatus(false);
-    setNewSyllabusTime("");
-    setNewSyllabusType("");
+      setNewSyllabusTitle("");
+      setNewSyllabusStandard("");
+      setNewSyllabusStatus(false);
+      setNewSyllabusTime("");
+      setNewSyllabusType("");
 
-    setShowAddSyllabusPopup(false);
+      setShowAddSyllabusPopup(false);
 
-    // Thêm dòng mã để tính và hiển thị phần trăm sau khi tạo syllabus mới
-    dispatch(calculateAndDisplaySyllabusTypePercentage());
+      dispatch(calculateAndDisplaySyllabusTypePercentage());
+    } catch (error) {
+      console.error("Error add syllabus:", error);
+      message.error(
+        "An error occurred during add syllabus. Please try again later."
+      );
+    }
   };
 
   const handleRemoveDay = (dayIndex) => {
-    Modal.confirm({
-      title: "Confirm Delete",
-      content: "Are you sure you want to delete this day?",
-      okText: "Yes",
-      cancelText: "No",
-      onOk: async () => {
-        await dispatch(removeDay(dayIndex));
-        message.success("Day deleted successfully!");
-      },
-    });
+    try {
+      Modal.confirm({
+        title: "Confirm Delete",
+        content: "Are you sure you want to delete this day?",
+        okText: "Yes",
+        cancelText: "No",
+        onOk: async () => {
+          await dispatch(removeDay(dayIndex));
+          message.success("Day deleted successfully!");
+        },
+      });
+    } catch (error) {
+      console.error("Error remove day:", error);
+      message.error(
+        "An error occurred during remove day. Please try again later."
+      );
+    }
   };
 
   const openAddSyllabusPopup = (dayIndex, unitIndex) => {
@@ -268,7 +307,10 @@ const CreateOutline = () => {
                         </p>
                       </div>
                       <div className="removeDayBtn">
-                        <button style={{background: "none"}} onClick={() => handleRemoveDay(dayIndex)}>
+                        <button
+                          style={{ background: "none" }}
+                          onClick={() => handleRemoveDay(dayIndex)}
+                        >
                           <DeleteOutlined />
                         </button>
                       </div>
@@ -397,7 +439,16 @@ const CreateOutline = () => {
                                       toggleSyllabusDetails(dayIndex, unitIndex)
                                     }
                                   >
-                                    <DownCircleOutlined />
+                                    <DownCircleOutlined
+                                      style={{
+                                        transform: unitSyllabusVisibility[
+                                          unitIndex
+                                        ]
+                                          ? "rotate(0deg)"
+                                          : "rotate(90deg)",
+                                        transition: "transform 0.3s ease",
+                                      }}
+                                    />
                                   </button>
                                 </div>
                               </div>

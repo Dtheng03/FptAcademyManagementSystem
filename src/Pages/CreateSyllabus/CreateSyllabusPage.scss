@@ -1,7 +1,8 @@
-button{
+button {
     cursor: pointer;
     border: none;
     background-color: #FFFFFF;
+    transition: 0.3s;
 }
 
 .container {
@@ -151,7 +152,8 @@ button{
     border-radius: 7px;
 }
 
-.addUnitPopup, .syllabusPopup {
+.addUnitPopup,
+.syllabusPopup {
     position: fixed;
     top: 50%;
     left: 50%;
@@ -160,6 +162,7 @@ button{
     z-index: 1000;
     padding: 20px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    border-radius: 7px;
 }
 
 .overlay {
@@ -172,7 +175,8 @@ button{
     z-index: 999;
 }
 
-.unitEditBtn button, .addSyllabusBtn button{
+.unitEditBtn button,
+.addSyllabusBtn button {
     cursor: pointer;
     padding-top: 3px;
     border: none;
@@ -181,7 +185,8 @@ button{
     font-size: 21px;
 }
 
-.addSyllabusBtn button, .unitDropDownBtn button{
+.addSyllabusBtn button,
+.unitDropDownBtn button {
     cursor: pointer;
     border: none;
     background-color: #FFFFFF;
@@ -190,6 +195,67 @@ button{
     font-weight: bolder;
 }
 
-.unitEditBtn button:hover, .addSyllabusBtn button:hover, .unitDropDownBtn button:hover {
+.unitEditBtn button:hover,
+.addSyllabusBtn button:hover,
+.unitDropDownBtn button:hover {
     color: #000000;
+}
+
+.removeDayBtn {
+    display: flex;
+    align-items: center;
+}
+
+.removeDayBtn button {
+    font-size: 18px;
+    font-weight: 700;
+    color: #e74a3b;
+}
+
+.removeDayBtn button:hover {
+    
+    color: #e83121;
+}
+
+
+//AddunitPopup
+
+.addUnitPopup {
+    border-radius: 10px;
+}
+
+.addSyllabusAction {
+    margin: 10px;
+    margin-left: 3px;
+}
+
+.addSyllabusAction button {
+    font-size: 12px;
+    font-weight: 700;
+    padding: 7px 12px;
+    border-radius: 7px;
+    margin-right: 5px;
+
+}
+
+.createUnitBtn {
+    color: #FFFFFF;
+    background-color: var(--primary-color);
+    transition: 0.3s;
+}
+
+.createUnitBtn:hover {
+    background-color: #324059;
+
+}
+
+.cancelUnitBtn {
+    color: #FFFFFF;
+    background-color: #e74a3b;
+    transition: 0.3s;
+}
+
+.cancelUnitBtn:hover {
+    background-color: #e83121;
+
 }

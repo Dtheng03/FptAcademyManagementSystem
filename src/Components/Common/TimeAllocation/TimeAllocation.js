@@ -1,13 +1,43 @@
 import React from "react";
 import "./TimeAllocation.scss";
+import { useSelector } from "react-redux";
 import PipeChart from "../PipeChart/PipeChart";
 
 const TimeAllocation = () => {
-  const assignment = 40;
-  const concept = 20;
-  const guide = 10;
-  const test = 15;
-  const exam = 15;
+  const outline = useSelector((state) => state.outline);
+
+  const totalSyllabusTime = outline.reduce((total, day) => {
+    day.units.forEach((unit) => {
+      unit.syllabus.forEach((syllabus) => {
+        const syllabusTime = parseInt(syllabus.time, 10) || 0;
+        total += syllabusTime;
+      });
+    });
+    return total;
+  }, 0);
+
+  const calculatePercentage = (type) => {
+    let typeTotal = 0;
+    outline.forEach((day) => {
+      day.units.forEach((unit) => {
+        unit.syllabus.forEach((syllabus) => {
+          if (syllabus.type === type) {
+            const syllabusTime = parseInt(syllabus.time, 10) || 0;
+            typeTotal += syllabusTime;
+          }
+        });
+      });
+    });
+
+    return (typeTotal / totalSyllabusTime) * 100;
+  };
+
+  const assignment = calculatePercentage("assignment");
+  const lecture = calculatePercentage("lecture");
+  const review = calculatePercentage("review");
+  const quiz = calculatePercentage("quiz");
+  const exam = calculatePercentage("exam");
+
   return (
     <div
       className="timeAllocationContainer"
@@ -18,9 +48,9 @@ const TimeAllocation = () => {
         <div className="timeAllocationPie">
           <PipeChart
             assignment={assignment}
-            concept={concept}
-            guide={guide}
-            test={test}
+            lecture={lecture}
+            review={review}
+            quiz={quiz}
             exam={exam}
           />
         </div>
@@ -30,4 +60,3 @@ const TimeAllocation = () => {
 };
 
 export default TimeAllocation;
-

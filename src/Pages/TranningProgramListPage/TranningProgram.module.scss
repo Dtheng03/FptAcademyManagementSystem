@@ -2,13 +2,22 @@
   position: relative;
   background-color: white;
   width: 100%;
+.main-header{
+width: 100%;
+background-color: #2D3748;
 
-  .header {
+
+    .header {
       margin-top: 1px;
-      background-color: #2D3748;
+      
       color: #fff;
       padding-left: 2%;
+      padding: 10px;
+      letter-spacing: 5px;
+      margin-left: 25px;
   }
+}
+  
 
   .action {
       margin: 2%;
@@ -66,20 +75,7 @@
         justify-content: space-around;
         
       }
-      .import-btn{
-        display: flex;
-        align-items: center;
-        justify-content: space-evenly;
-        height: 32px;
-        background-color: #D45B13;
-        color: white;
-        border: none;
-        border-radius: 8px;
-        cursor: pointer;
-        font-weight: bold;
-        padding: 0 12px;
-        margin-right: 10px;
-      }
+      
   }
 
   

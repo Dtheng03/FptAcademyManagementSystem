@@ -21,12 +21,29 @@ import { useDispatch } from "react-redux";
 import { setProgramList } from "../../Redux/Reducer/ProgramTranningSlice";
 import ProgramList from "./ProgramList";
 import Research from "./ProgramResearch";
+import ImportSyllabusModal from "./ImportButton/Import";
+import crypto from "crypto-js";
+
 const cx = classNames.bind(styles);
+
 export default function TranningProgramListPage() {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
 
   const dispatch = useDispatch();
+
+  const token = sessionStorage.getItem("token");
+  axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+
+  var decryptedRoleName;
+  const encryptedRoleName = sessionStorage.getItem("roleName");
+  if (encryptedRoleName) {
+    decryptedRoleName = crypto.AES.decrypt(
+      encryptedRoleName,
+      "react02"
+    ).toString(crypto.enc.Utf8);
+  }
+  const roleName = decryptedRoleName;
 
   const [searchValue, setSearchValue] = useState("");
   const [search, setSearch] = useState([]);
@@ -85,7 +102,10 @@ export default function TranningProgramListPage() {
           transform: "translate(-50%,-50%",
         }}
       >
-        <h3 className={cx("header")}>Tranning program</h3>
+        <div className={cx("main-header")}>
+          <h3 className={cx("header")}>Tranning program</h3>
+        </div>
+
         <div className={cx("action")}>
           <div className={cx("search")}>
             <div className={cx("search-input")}>
@@ -96,29 +116,29 @@ export default function TranningProgramListPage() {
                 value={searchValue}
                 onChange={handleInputSearch}
                 placeholder="Search by..."
-
               />
-              {searchValue !== "" &&
-              <button className={cx("clear-search-btn")}
-              onClick={() =>{
-                setSearch([]);
-                setSearchValue("");
-              }
-
-              }>
-              <CancleIcon/>
-              </button>
-              }
+              {searchValue !== "" && (
+                <button
+                  className={cx("clear-search-btn")}
+                  onClick={() => {
+                    setSearch([]);
+                    setSearchValue("");
+                  }}
+                >
+                  <CancleIcon />
+                </button>
+              )}
             </div>
-            <Button title="Filter" firstIcon={<FilterListIcon />} />
           </div>
           <div className={cx("btn-grp")}>
-            <button className={cx("import-btn")}>
-              <UploadIcon style={{ marginRight: "13px" }} />
-              Import
-            </button>
+            {(roleName === "Super Admin" || roleName === "Admin") && (
+              <ImportSyllabusModal />
+            )}
+
             <Link to="/create-program">
-              <Button title="Add New" firstIcon={<AddIcon />} />
+              {(roleName === "Super Admin" || roleName === "Admin") && (
+                <Button title="Add New" firstIcon={<AddIcon />} />
+              )}
             </Link>
           </div>
         </div>

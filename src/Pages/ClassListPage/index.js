@@ -13,12 +13,26 @@ import { LoadingOutlined } from '@ant-design/icons';
 import { useDispatch, useSelector } from "react-redux";
 import { setClassList } from "../../Redux/Reducer/ClassSlice";
 import Filter from "./Filter";
+import crypto from "crypto-js";
 
 const cx = classNames.bind(styles);
 
 function ClassListPage() {
     const dispatch = useDispatch();
     const classList = useSelector(state => state.class.classList);
+
+    const token = sessionStorage.getItem("token");
+    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+
+    var decryptedRoleName;
+    const encryptedRoleName = sessionStorage.getItem("roleName");
+    if (encryptedRoleName) {
+        decryptedRoleName = crypto.AES.decrypt(
+            encryptedRoleName,
+            "react02"
+        ).toString(crypto.enc.Utf8);
+    }
+    const roleName = decryptedRoleName;
 
     // const [data, setData] = useState([]);
     const [loading, setLoading] = useState(false)
@@ -27,6 +41,8 @@ function ClassListPage() {
     const [search, setSearch] = useState([]);
 
     const [isDomChange, setIsDomChange] = useState(false);
+
+    // const handleClearFilters = () => {};
 
     //Xử lý input search
     const handleInputSearch = (e) => {
@@ -53,14 +69,16 @@ function ClassListPage() {
         setLoading(true);
         try {
             const response = await axios.get("https://653d1d13f52310ee6a99e3b7.mockapi.io/class");
+            // const response = await axios.get("https://649e8167245f077f3e9c759b.mockapi.io/class");
             // const response = await axios.get("http://fams-group1-net03.ptbiology.com/api/class/view-class-list");
             // setData(response.data);
             dispatch(setClassList(response.data));
             setLoading(false);
-            console.log(response.data);
+            // console.log(response.data);
         } catch (error) {
             notification.error({
                 message: error.message,
+                duration: '1.5'
             });
             setLoading(false);
         }
@@ -105,7 +123,10 @@ function ClassListPage() {
                         <Popover
                             trigger="click"
                             placement="bottomRight"
-                            content={<Filter />}
+                            content={<Filter
+                            // onSubmit={""}
+                            // onClear={handleClearFilters}
+                            />}
                         >
                             <>
                                 <Button
@@ -117,10 +138,11 @@ function ClassListPage() {
                     </div>
 
                     <Link to="/create-class">
-                        <Button
-                            title={"Add Class"}
-                            firstIcon={<AddIcon />}
-                        />
+                        {(roleName === "Super Admin" || roleName === "Admin") &&
+                            <Button
+                                title={"Add Class"}
+                                firstIcon={<AddIcon />}
+                            />}
                     </Link>
                 </div>
 

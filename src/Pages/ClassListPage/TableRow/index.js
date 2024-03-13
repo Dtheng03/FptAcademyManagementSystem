@@ -7,6 +7,7 @@ import { Popover, notification, Modal, Button } from 'antd';
 import { useNavigate } from "react-router-dom";
 import { AttendeeStyle, StatusStyle } from "../Styles";
 import axios from "axios";
+import crypto from "crypto-js";
 
 const cx = classNames.bind(styles);
 
@@ -27,7 +28,19 @@ function TableRow({ item, domChange, domChangeSuccess, reload }) {
     const [open, setOpen] = useState(false);
     const [isModalVisible, setModalVisible] = useState(false);
     const [modalAction, setModalAction] = useState('');
-    const [newStatus, setNewStatus] = useState('');
+
+    const token = sessionStorage.getItem("token");
+    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+
+    var decryptedRoleName;
+    const encryptedRoleName = sessionStorage.getItem("roleName");
+    if (encryptedRoleName) {
+        decryptedRoleName = crypto.AES.decrypt(
+            encryptedRoleName,
+            "react02"
+        ).toString(crypto.enc.Utf8);
+    }
+    const roleName = decryptedRoleName;
 
     const navigate = useNavigate();
 
@@ -37,7 +50,6 @@ function TableRow({ item, domChange, domChangeSuccess, reload }) {
 
     const handleAction = (action) => {
         setModalAction(action);
-        setNewStatus('');
         setModalVisible(true);
         setOpen(false);
     };
@@ -48,6 +60,7 @@ function TableRow({ item, domChange, domChangeSuccess, reload }) {
             .then(() => {
                 notification.success({
                     message: 'Delete class successfully',
+                    duration: '1.5'
                 });
                 domChangeSuccess();
             })
@@ -56,6 +69,7 @@ function TableRow({ item, domChange, domChangeSuccess, reload }) {
                 notification.error({
                     message: 'Delete class failed',
                     description: 'Please try again!',
+                    duration: '1.5'
                 });
             });
         reload();
@@ -69,6 +83,7 @@ function TableRow({ item, domChange, domChangeSuccess, reload }) {
             .then(() => {
                 notification.success({
                     message: 'Duplicate class successfully',
+                    duration: '1.5'
                 });
                 domChangeSuccess();
             })
@@ -77,6 +92,7 @@ function TableRow({ item, domChange, domChangeSuccess, reload }) {
                 notification.error({
                     message: 'Duplicate class failed',
                     description: 'Please try again!',
+                    duration: '1.5'
                 });
             });
         reload();
@@ -98,6 +114,7 @@ function TableRow({ item, domChange, domChangeSuccess, reload }) {
             .then(() => {
                 notification.success({
                     message: 'Status changed successfully',
+                    duration: '1.5'
                 });
                 domChangeSuccess();
             })
@@ -106,6 +123,7 @@ function TableRow({ item, domChange, domChangeSuccess, reload }) {
                 notification.error({
                     message: 'Status change failed',
                     description: 'Please try again!',
+                    duration: '1.5'
                 });
             });
         reload();
@@ -122,21 +140,6 @@ function TableRow({ item, domChange, domChangeSuccess, reload }) {
         setModalVisible(false);
     };
 
-    const calculateDuration = (start, end) => {
-        const startDate = parseDate(start);
-        const endDate = parseDate(end);
-        const timeDifference = endDate.getTime() - startDate.getTime();
-        const durationInDays = timeDifference / (1000 * 3600 * 24);
-        return durationInDays;
-    }
-
-    const parseDate = (dateString) => {
-        const [day, month, year] = dateString.split('/');
-        return new Date(`${year}-${month}-${day}`);
-    }
-
-    const duration = calculateDuration(item.startDate, item.endDate)
-
     return (
         <tr className={cx("tr")} onDoubleClick={() => handleDoubleClick(item)}>
             {/* <td className={cx("td", "id")}>{item.id}</td> */}
@@ -144,103 +147,104 @@ function TableRow({ item, domChange, domChangeSuccess, reload }) {
             <td className={cx("td", "code")}>{item.classCode}</td>
             <td className={cx("td", "createdon")}>{item.createdOn}</td>
             <td className={cx("td", "createdby")}>{item.createdBy}</td>
-            <td className={cx("td", "duration")}>{duration} days</td>
+            <td className={cx("td", "duration")}>{item.duration} days</td>
             <td className={cx("td", "attendee")}><AttendeeStyle attendee={item.attendee} /></td>
             {/* <td className={cx("td")}><StatusStyle status={item.status} /></td> */}
             <td className={cx("td", "location")}>{item.location}</td>
             <td className={cx("td")}>{item.fsu}</td>
-            <td className={cx("td")}>
-                <Popover
-                    trigger="click"
-                    placement="bottomRight"
-                    open={open}
-                    onOpenChange={() => {
-                        setOpen(!open);
-                    }}
-                    content={
-                        <>
-                            <button
-                                style={style}
-                                onClick={() => {
-                                    setOpen(false);
-                                }}
-                            >
-                                <CreateIcon />
-                                Edit class
-                            </button>
+            {(roleName === "Super Admin" || roleName === "Admin") &&
+                <td className={cx("td")}>
+                    <Popover
+                        trigger="click"
+                        placement="bottomRight"
+                        open={open}
+                        onOpenChange={() => {
+                            setOpen(!open);
+                        }}
+                        content={
+                            <>
+                                <button
+                                    style={style}
+                                    onClick={() => {
+                                        setOpen(false);
+                                    }}
+                                >
+                                    <CreateIcon />
+                                    Edit class
+                                </button>
 
-                            <button
-                                style={style}
-                                onClick={() => { handleAction('duplicate'); domChange() }}
-                            >
-                                <CopyIcon />
-                                Duplicate class
-                            </button>
+                                <button
+                                    style={style}
+                                    onClick={() => { handleAction('duplicate'); domChange() }}
+                                >
+                                    <CopyIcon />
+                                    Duplicate class
+                                </button>
 
-                            <button
-                                style={style}
-                                onClick={() => { handleAction('changeStatus'); domChange(); }}
-                            >
-                                {item.status === 'Planning' || item.status === 'Closed' ? (
-                                    <>
-                                        <VisibilityIcon />
-                                        Activate
-                                    </>
-                                ) : (
-                                    <>
-                                        <VisibilityOffIcon />
-                                        De-activate
-                                    </>
-                                )}
-                            </button>
+                                <button
+                                    style={style}
+                                    onClick={() => { handleAction('changeStatus'); domChange(); }}
+                                >
+                                    {item.status === 'Planning' || item.status === 'Closed' ? (
+                                        <>
+                                            <VisibilityIcon />
+                                            Activate
+                                        </>
+                                    ) : (
+                                        <>
+                                            <VisibilityOffIcon />
+                                            De-activate
+                                        </>
+                                    )}
+                                </button>
 
-                            <button
-                                style={{ ...style, color: 'red' }}
-                                onClick={() => { handleAction('delete'); domChange() }}
-                            >
-                                <DeleteForeverIcon />
-                                Delete class
-                            </button>
-                        </>
-                    }
-                >
-                    <Button className={cx('more-btn')} onClick={() => setOpen(!open)}>
-                        <MoreIcon />
-                    </Button>
-                </Popover>
+                                <button
+                                    style={{ ...style, color: 'red' }}
+                                    onClick={() => { handleAction('delete'); domChange() }}
+                                >
+                                    <DeleteForeverIcon />
+                                    Delete class
+                                </button>
+                            </>
+                        }
+                    >
+                        <Button className={cx('more-btn')} onClick={() => setOpen(!open)}>
+                            <MoreIcon />
+                        </Button>
+                    </Popover>
 
-                <Modal
-                    title={
-                        modalAction === 'delete'
-                            ? 'Delete Class'
+                    <Modal
+                        title={
+                            modalAction === 'delete'
+                                ? 'Delete Class'
+                                : modalAction === 'duplicate'
+                                    ? 'Duplicate Class'
+                                    : 'Change Status Class'
+                        }
+                        open={isModalVisible}
+                        onOk={performAction}
+                        onCancel={() => setModalVisible(false)}
+                        okText={
+                            modalAction === 'delete' ? 'Delete'
+                                : modalAction === 'duplicate'
+                                    ? 'Duplicate'
+                                    : 'Change'
+                        }
+                        okButtonProps={{
+                            style: { backgroundColor: '#2D3748', color: '#fff' },
+                        }}
+                        cancelButtonProps={{
+                            style: { color: '#ff0000', border: 'none' },
+                        }}
+                        centered={true}
+                    >
+                        {modalAction === 'delete'
+                            ? `Do you want to delete the "${item.classNames}" class? This action cannot be undone.`
                             : modalAction === 'duplicate'
-                                ? 'Duplicate Class'
-                                : 'Change Status Class'
-                    }
-                    open={isModalVisible}
-                    onOk={performAction}
-                    onCancel={() => setModalVisible(false)}
-                    okText={
-                        modalAction === 'delete' ? 'Delete'
-                            : modalAction === 'duplicate'
-                                ? 'Duplicate'
-                                : 'Change'
-                    }
-                    okButtonProps={{
-                        style: { backgroundColor: '#2D3748', color: '#fff' },
-                    }}
-                    cancelButtonProps={{
-                        style: { color: '#ff0000', border: 'none' },
-                    }}
-                    centered={true}
-                >
-                    {modalAction === 'delete'
-                        ? `Do you want to delete the "${item.classNames}" class? This action cannot be undone.`
-                        : modalAction === 'duplicate'
-                            ? `Do you want to duplicate the "${item.classNames}" class?`
-                            : `Do you want to change the status of the "${item.classNames}" class?`}
-                </Modal>
-            </td>
+                                ? `Do you want to duplicate the "${item.classNames}" class?`
+                                : `Do you want to change the status of the "${item.classNames}" class?`}
+                    </Modal>
+                </td>}
         </tr >
     );
 }

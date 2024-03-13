@@ -6,7 +6,7 @@ import Button from "../../../Components/Common/Button";
 
 const cx = classNames.bind(styles);
 
-function Filter() {
+function Filter({ onSubmit, onClear }) {
     const [clearFlag, setClearFlag] = useState(false);
 
     const locations = [

@@ -1,0 +1,34 @@
+.calender {
+    width: 100%;
+    display: flex;
+    justify-content: start;
+    flex-direction: column;
+  
+    .button-display {
+      width: 100%;
+      height: 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      button {
+        border: none;
+        outline: none;
+        background: none;
+      }
+    }
+    .strange-line-calender {
+      width: 100%;
+      height: 1px;
+      background-color: #000;
+      margin-top: 7px;
+    }
+    .calender-choose {
+      display: inline;
+      text-align: center;
+      width: 100%;
+      .calender-container {
+        width: 100%;
+      }
+    }
+  }
+  

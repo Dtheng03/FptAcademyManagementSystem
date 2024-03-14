@@ -7,8 +7,8 @@ import { CreateIcon } from "../../../Components/Common/Icons/DocManageIcons"
 import { useDispatch } from "react-redux";
 import { setUpdateUser } from "../../../Redux/Reducer/UsersSlice";
 import { notification, Modal } from 'antd';
-import axios from "axios";
 import crypto from "crypto-js";
+import axiosClient from "../../../Services/axios/config";
 
 const cx = classNames.bind(styles);
 
@@ -47,8 +47,6 @@ function StatusChip({ status }) {
 }
 
 function TableRow({ item, openEdit, loading, fetchUsers, setSearchValue = () => { } }) {
-    const token = sessionStorage.getItem("token");
-    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
     // Decode roleName đã mã hóa
     var decryptedRoleName;
@@ -74,7 +72,7 @@ function TableRow({ item, openEdit, loading, fetchUsers, setSearchValue = () => 
         loading(true);
         async function changeRole() {
             try {
-                const response = await axios.put(`http://fams-group1-net03.ptbiology.com/api/user/grant-permission`, { id: item.id, userType: newRole });
+                const response = await axiosClient.put(`/api/user/grant-permission`, { id: item.id, userType: newRole });
                 // console.log(response);
                 notification.success({
                     message: "Change role successfully",
@@ -100,7 +98,7 @@ function TableRow({ item, openEdit, loading, fetchUsers, setSearchValue = () => 
         loading(true);
         async function changeStatus() {
             try {
-                const response = await axios.put(`http://fams-group1-net03.ptbiology.com/api/user/active-deactive-user?id=${item.id}`);
+                const response = await axiosClient.put(`/api/user/active-deactive-user?id=${item.id}`);
                 // console.log(response);
                 notification.success({
                     message: "Change status successfully",

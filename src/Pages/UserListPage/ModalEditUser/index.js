@@ -5,9 +5,9 @@ import { CancleIcon } from "../../../Components/Common/Icons/ActionIcons";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import axios from "axios";
 import { useSelector } from "react-redux";
 import { notification } from "antd";
+import axiosClient from "../../../Services/axios/config";
 
 const cx = classNames.bind(styles);
 
@@ -21,9 +21,6 @@ const schema = yup
     .required()
 
 function ModalEditUser({ closeModal, loading, fetchUsers }) {
-    const token = sessionStorage.getItem("token");
-    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-
     const updateUser = useSelector(state => state.users.updateUser);
     const [gender, setGender] = useState(updateUser.gender);
     const [status, setStatus] = useState(updateUser.status);
@@ -31,7 +28,7 @@ function ModalEditUser({ closeModal, loading, fetchUsers }) {
     async function editUser(finalData) {
         loading(true);
         try {
-            const response = await axios.put(`http://fams-group1-net03.ptbiology.com/api/user/update-user`, finalData);
+            const response = await axiosClient.put(`/api/user/update-user`, finalData);
             // console.log(response);
             notification.success({
                 message: "Edit user successfully!"

@@ -6,8 +6,8 @@ import { CreateIcon } from "../../Components/Common/Icons/DocManageIcons";
 import { GradeIcon } from "../../Components/Common/Icons/IndicatorIcons";
 import { useEffect, useState } from "react";
 import { notification } from "antd";
-import axios from "axios";
 import crypto from "crypto-js";
+import axiosClient from "../../Services/axios/config";
 
 const cx = classNames.bind(styles);
 
@@ -22,9 +22,6 @@ const Permission = ({ permission }) => {
 }
 
 function UserPermissionPage() {
-    const token = sessionStorage.getItem("token");
-    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-
     // Decode roleName đã mã hóa
     var decryptedRoleName;
     const encryptedRoleName = sessionStorage.getItem("roleName");
@@ -71,9 +68,9 @@ function UserPermissionPage() {
             setIsLoading(true);
             var response1, response2, response3;
             try {
-                response1 = await axios.put(`http://fams-group1-net03.ptbiology.com/api/userpermission/update-user-permission`, { ...newPermission1, userManagement: "Full access" });
-                response2 = await axios.put(`http://fams-group1-net03.ptbiology.com/api/userpermission/update-user-permission`, { ...newPermission2, userManagement: "Create" });
-                response3 = await axios.put(`http://fams-group1-net03.ptbiology.com/api/userpermission/update-user-permission`, { ...newPermission3, userManagement: "View" });
+                response1 = await axiosClient.put(`/api/userpermission/update-user-permission`, { ...newPermission1, userManagement: "Full access" });
+                response2 = await axiosClient.put(`/api/userpermission/update-user-permission`, { ...newPermission2, userManagement: "Create" });
+                response3 = await axiosClient.put(`/api/userpermission/update-user-permission`, { ...newPermission3, userManagement: "View" });
                 if (response1.statusText === "OK" && response2.statusText === "OK" && response3.statusText === "OK") {
                     setIsLoading(false);
                     notification.success({
@@ -100,7 +97,7 @@ function UserPermissionPage() {
     }
 
     useEffect(() => {
-        axios.get("http://fams-group1-net03.ptbiology.com/api/userpermission/view-user-permission")
+        axiosClient.get("/api/userpermission/view-user-permission")
             .then((response) => {
                 setData(response.data.data);
                 setNewPermission1(response.data.data[0]);

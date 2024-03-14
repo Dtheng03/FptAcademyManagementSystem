@@ -2,11 +2,11 @@ import styles from "./ModalAddUser.module.scss";
 import classNames from "classnames/bind";
 import { useState } from "react";
 import { CancleIcon } from "../../../Components/Common/Icons/ActionIcons";
-import axios from "axios";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { notification } from "antd";
+import axiosClient from "../../../Services/axios/config";
 
 const cx = classNames.bind(styles);
 
@@ -21,16 +21,13 @@ const schema = yup
     .required()
 
 function ModalAddUser({ closeModal, loading, fetchUsers }) {
-    const token = sessionStorage.getItem("token");
-    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-
     const [gender, setGender] = useState("Male");
     const [status, setStatus] = useState("Active");
 
     async function addUser(finalData) {
         loading(true);
         try {
-            const response = await axios.post('http://fams-group1-net03.ptbiology.com/api/user/create-user', finalData);
+            const response = await axiosClient.post('/api/user/create-user', finalData);
             // console.log(response);
             notification.success({
                 message: "Add user successfully."

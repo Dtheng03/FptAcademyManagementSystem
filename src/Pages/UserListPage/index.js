@@ -10,18 +10,15 @@ import ModalAddUser from "./ModalAddUser";
 import ModalEditUser from "./ModalEditUser";
 import Table from "./Table";
 import SearchResult from "./SearchResult";
-import axios from "axios";
 import crypto from "crypto-js";
 import { notification } from "antd";
+import axiosClient from "../../Services/axios/config";
 
 const cx = classNames.bind(styles);
 
 function UserListPage() {
     const dispatch = useDispatch();
     const usersList = useSelector(state => state.users.usersList);
-
-    const token = sessionStorage.getItem("token");
-    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
     // Decode roleName đã mã hóa
     var decryptedRoleName;
@@ -63,7 +60,7 @@ function UserListPage() {
     async function fetchUsers() {
         setIsLoading(true);
         try {
-            const response = await axios.get("http://fams-group1-net03.ptbiology.com/api/user/view-user-list");
+            const response = await axiosClient.get("/api/user/view-user-list");
             // console.log(response);
             dispatch(setUsersList(response.data.data));
             setIsLoading(false);

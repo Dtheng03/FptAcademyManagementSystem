@@ -6,7 +6,7 @@
     button {
       height: 40px;
       width: 100%;
-      background-color: #2d3748;
+      background-color: #8B8B8B;
       color: white;
       border-radius: 10px;
       display: flex;
@@ -17,6 +17,7 @@
       &.clicked {
         border-bottom-left-radius: 0;
         border-bottom-right-radius: 0;
+        background-color: #2d3748;
       }
 
       .conner-left {

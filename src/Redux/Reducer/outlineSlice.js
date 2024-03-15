@@ -72,7 +72,7 @@ const outlineSlice = createSlice({
       if (totalTimeWithNewSyllabus > 480) {
         const remainingTime = 480 - totalTimeOfDay;
         message.error(
-          `The total time of a day cannot exceed 8 hours. Please adjust the time. You can enter up to ${remainingTime} minutes.`
+          `The total time of a day cannot exceed 8 hours. You can enter up to ${remainingTime} minutes.`
         );
         return;
       }

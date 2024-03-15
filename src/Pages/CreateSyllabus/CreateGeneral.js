@@ -1,5 +1,5 @@
-import { InputNumber } from "antd";
 import React, { useState } from "react";
+import { InputNumber, Select } from "antd";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import TimeAllocation from "../../Components/Common/TimeAllocation/TimeAllocation";
@@ -7,6 +7,12 @@ import TimeAllocation from "../../Components/Common/TimeAllocation/TimeAllocatio
 const CreateGeneral = () => {
   const [courseObjectives, setCourseObjectives] = useState("");
   const [technicalRequirement, setTechnicalRequirement] = useState("");
+  const [level, setLevel] = useState("Beginner");
+  const levelOptions = [
+    { value: "Beginner", label: "Beginner" },
+    { value: "Intermediate", label: "Intermediate" },
+    { value: "Advanced", label: "Advanced" },
+  ];
 
   // const [demoText, setDemoText] = useState({ __html: "" });
   // const handleSave = async () => {
@@ -24,10 +30,12 @@ const CreateGeneral = () => {
             <p className="subtitle1" style={{ paddingRight: "40px" }}>
               Level
             </p>
-            <select className="optionLevel ">
-              <option className="subtitle2">Auto detect</option>
-              <option className="subtitle2">Auto detect</option>
-            </select>
+            <Select
+              value={level}
+              onChange={setLevel}
+              options={levelOptions}
+              style={{ width: "180px" }}
+            />
           </div>
           <div className="attendeeNumbers" style={{ display: "flex" }}>
             <p className="subtitle1">Attendee numbers</p>
@@ -39,7 +47,7 @@ const CreateGeneral = () => {
           <p className="subtitle1" style={{ paddingBottom: "10px" }}>
             Technical Requirement(s){" "}
           </p>
-          
+
           <ReactQuill
             theme="snow"
             style={{
@@ -90,7 +98,7 @@ const CreateGeneral = () => {
               width: "98%",
               height: "310px",
               borderRadius: "10px",
-              
+
             }}
             className="ql-container-course-objectives"
             value={courseObjectives}
@@ -131,7 +139,7 @@ const CreateGeneral = () => {
         </div>
       </div>
       <div className="timeAllocation" style={{ width: "18%" }}>
-        <TimeAllocation />
+        <TimeAllocation width={220} height={220} outerRadius={80} />
       </div>
       {/* <button onClick={handleSave}>Lưu</button>
       <div className="demoText" dangerouslySetInnerHTML={demoText} /> */}

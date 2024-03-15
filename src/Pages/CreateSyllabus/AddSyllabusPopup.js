@@ -23,7 +23,8 @@ const AddSyllabusPopup = ({
   const isCreateDisabled =
     !newSyllabusTitle || !newSyllabusTime || !newSyllabusType;
 
-  const [outputStandards, setOutputStandards] = useState([]);
+  const [outputStandards, setOutputStandards] = useState({});
+  const [selectedStandardOption, setSelectedStandardOption] = useState(null);
 
   const deliveryTypeOptions = [
     "Assignment/Lab",
@@ -34,26 +35,28 @@ const AddSyllabusPopup = ({
     "Workshop",
   ];
 
-  const handleStandardChange = (e) => {
-    if (e.key === "Enter") {
-      const newStandard = e.target.value.trim();
-      if (newStandard !== "") {
-        setOutputStandards([...outputStandards, newStandard]);
-        setNewSyllabusStandard(newStandard);
-        setNewSyllabusStandard("");
-      }
+  const standardOptions = ["LO001", "LO002", "LO003"];
+
+  const handleStandardChange = (value) => {
+    setNewSyllabusStandard(value);
+    setSelectedStandardOption(value);
+    if (!outputStandards[value]) {
+      setOutputStandards({
+        ...outputStandards,
+        [value]: [value],
+      });
     }
   };
 
-  const handleRemoveTag = (removedTag) => {
-    const newTags = outputStandards.filter((tag) => tag !== removedTag);
-    setOutputStandards(newTags);
-  };
+  // const handleRemoveTag = (tagToRemove) => {
+  //   const updatedTags = { ...outputStandards };
+  //   const currentStandardOptions = updatedTags[selectedStandardOption] || [];
+  //   const filteredOptions = currentStandardOptions.filter((tag) => tag !== tagToRemove);
+  //   updatedTags[selectedStandardOption] = filteredOptions;
+  //   setOutputStandards(updatedTags);
+  // };
 
-  const handleTrainingTimeChange = (e) => {
-    const newValue = e.target.value.replace(/\D/, "");
-    setNewSyllabusTime(newValue);
-  };
+
 
   return (
     <div className="syllabusPopup">
@@ -74,24 +77,31 @@ const AddSyllabusPopup = ({
       </div>
 
       <div className="syllabusStandard" style={{ marginBottom: "10px" }}>
-        <Input
+        <Select
           placeholder="Output Standard"
           value={newSyllabusStandard}
-          onChange={(e) => setNewSyllabusStandard(e.target.value)}
-          onKeyDown={handleStandardChange}
-        />
-        <div style={{ marginTop: "5px" }}>
-          {outputStandards.map((tag, index) => (
+          onChange={handleStandardChange}
+          style={{ width: "100%" }}
+        >
+          {standardOptions.map((option) => (
+            <Option key={option} value={option}>
+              {option}
+            </Option>
+          ))}
+        </Select>
+        {/* <div style={{ marginTop: "5px" }}>
+          {outputStandards[selectedStandardOption]?.map((tag, index) => (
             <Tag key={index} closable onClose={() => handleRemoveTag(tag)}>
               {tag}
             </Tag>
           ))}
-        </div>
+        </div> */}
       </div>
 
       <div className="syllabusTime" style={{ marginBottom: "10px" }}>
         <Input
           prefix={<ClockCircleOutlined />}
+          type="number"
           placeholder="Training time"
           value={newSyllabusTime}
           onChange={(e) => setNewSyllabusTime(e.target.value)}

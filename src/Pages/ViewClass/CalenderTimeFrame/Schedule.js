@@ -4,6 +4,7 @@ import classNames from "classnames/bind";
 import { TrainingCalendarIcon } from "../../../Components/Common/Icons/NavMenuIcons/index";
 import { DownOutlined } from "@ant-design/icons";
 import Calendar from "./Calender"
+import { format } from "date-fns";
 
 const cx = classNames.bind(styles);
 
@@ -13,7 +14,9 @@ function Schedule() {
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
     const [dateSelected, setDateSelected] = useState(null);
-
+    const formatDate = (date) => {
+        return format(date, "EEE dd MMMM yyyy");
+    };
     const dropdownRef = useRef(null);
 
     useEffect(() => {
@@ -79,14 +82,14 @@ function Schedule() {
                     <div className={cx("conner-left")}>
                         <TrainingCalendarIcon />
                         <p className={cx("conner-left-font-header")}>Time frame</p>
-                        
+
                         <p onClick={() => handleDateDisplayClick("start")} className={cx("edit-start-day")}>
-                            Start date: {startDate}
+                            Start date: {startDate ? formatDate(new Date(startDate)) : ""}
                         </p>
 
 
                         <p onClick={() => handleDateDisplayClick("end")} className={cx("edit-end-day")}>
-                            End date: {endDate}
+                            End date: {endDate ? formatDate(new Date(endDate)) : ""}
                         </p>
 
                     </div>

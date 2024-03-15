@@ -3,9 +3,9 @@ import styles from './ViewClassPage.module.scss';
 import React from 'react';
 import { MoreIcon } from '../../Components/Common/Icons/ActionIcons';
 import { LabIcon, LectureIcon, ReviewIcon, ExamIcon, WorkshopIcon } from '../../Components/Common/Icons/DeliveryTypesIcons';
-import { Layout, Collapse, ConfigProvider } from 'antd';
+import { Layout, Collapse, ConfigProvider, Modal, Button } from 'antd';
 import { TrainingCalendarIcon } from '../../Components/Common/Icons/NavMenuIcons';
-import { AlarmIcon, HomeworkIcon } from '../../Components/Common/Icons/OtherIcons';
+import { AlarmIcon, CallIcon, HomeworkIcon, MailIcon } from '../../Components/Common/Icons/OtherIcons';
 import { GradeIcon, SupplierIcon } from '../../Components/Common/Icons/IndicatorIcons';
 import { useState } from 'react';
 import { DatePicker, Dropdown } from 'antd';
@@ -14,6 +14,7 @@ import { CreateIcon } from '../../Components/Common/Icons/DocManageIcons';
 import TrainingProgram from './ComponentTab/TrainingProgram';
 import Syllabus from '../../Components/Common/SyllabusTab/syllabus/syllabus'
 import Schedule from "../ViewClass/CalenderTimeFrame/Schedule";
+
 // import Collapse from 'rc-collapse';
 
 
@@ -37,6 +38,15 @@ function ViewClass() {
     //Calendar time frame
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);
+    const [isModalVisible, setIsModalVisible] = useState(false);
+
+    const handleShowModal = () => {
+        setIsModalVisible(true);
+    };
+
+    const handleCancelModal = () => {
+        setIsModalVisible(false);
+    };
 
     const handleDateChange = (dates) => {
         if (dates) {
@@ -139,8 +149,15 @@ function ViewClass() {
                                         Collapse: {
                                             colorTextHeading: "#fff",
                                             headerPadding: "13px 16px 13px 16px"
-                                        }
+                                        },
+
                                     },
+                                    component: {
+                                        Button: {
+                                            padding: "none",
+
+                                        }
+                                    }
                                 }}
                             >
 
@@ -148,13 +165,13 @@ function ViewClass() {
                                 <Collapse style={{ backgroundColor: '#2D3748', flex: '1', color: '#fff' }} expandIconPosition='end'>
                                     <Collapse.Panel header={<div className={cx("sider-header")}><TrainingCalendarIcon /> General </div>} key="1">
                                         <div className={cx("sider-body-alarm")}>
-                                            <AlarmIcon />
+                                            <AlarmIcon style={{ color: "#285D9A" }} />
                                             <p className={cx("sider-body-items")}>Class time </p>
                                             <p className={cx("sider-body-time")}>09:00 - 12:00</p>
                                         </div>
 
                                         <div className={cx("sider-body-homework")}>
-                                            <HomeworkIcon />
+                                            <HomeworkIcon style={{ color: "#285D9A" }} />
                                             <p className={cx("sider-body-items")}>Location </p>
                                             <div className={cx("sider-body-location")}>
                                                 <span className={cx("sider-body-item-location")}>Ftown1</span>
@@ -163,35 +180,66 @@ function ViewClass() {
                                         </div>
 
                                         <div className={cx("sider-body-homework")}>
-                                            <LectureIcon />
+                                            <LectureIcon style={{ color: "#285D9A" }} />
                                             <p className={cx("sider-body-items")}>Trainer </p>
                                             <div className={cx("sider-body-name")}>
-                                                <span className={cx("sider-body-item-name")}>
-                                                    Dinh Vu Quoc Trung</span>
-                                                <span className={cx("sider-body-item-name")}>
-                                                    Ba Chu Heo</span>
-                                                <span className={cx("sider-body-item-name")}>
-                                                    Heo Cheo Ba</span>
-                                                <span className={cx("sider-body-item-name")}>
-                                                    Tap The Lop</span>
+
+                                                <span className={cx("sider-body-item-name")} onClick={handleShowModal}>
+                                                    Dinh Vu Quoc Trung
+                                                </span>
+                                                <Modal
+                                                    title="This is a information of trainer"
+                                                    open={isModalVisible}
+                                                    onCancel={handleCancelModal}
+                                                    footer={null}
+                                                >
+                                                    <div className={cx("modal-box-icon")}>
+                                                        <CallIcon style={{ width: "20px", color: "#285D9A" }} />
+                                                        097899084</div>
+
+                                                    <div className={cx("modal-box-icon")}>
+                                                        <MailIcon style={{ width: "20px", color: "#285D9A" }} />
+                                                        TrungDVQ@fsoft.com.vn</div>
+
+                                                </Modal>
+
+
+
+                                                {/* <Button type="link" onClick={showModal} style={{ backgroundColor: 'white' }}>
+                                                    <span className={cx("sider-body-item-name")}>
+                                                        Ba Chu Heo</span>
+                                                </Button>
+                                                <Button type="link" onClick={showModal} style={{ backgroundColor: 'white' }}>
+                                                    <span className={cx("sider-body-item-name")}>
+                                                        Heo Cheo Ba</span>
+                                                </Button>
+                                                <Button type="link" onClick={showModal} style={{ backgroundColor: 'white' }}>
+                                                    <span className={cx("sider-body-item-name")}>
+                                                        Tap The Lop</span>
+                                                </Button> */}
+
+
+
+
+
 
                                             </div>
                                         </div>
 
                                         <div className={cx("sider-body-homework")}>
-                                            <GradeIcon />
+                                            <GradeIcon style={{ margin: "0px 0px 0px -2px", color: "#285D9A" }} />
                                             <p className={cx("sider-body-items")}>Admin </p>
                                             <div className={cx("sider-body-name")}>
-                                                <span className={cx("sider-body-item-name")}>
+                                                <span className={cx("sider-body-item-name-admin")}>
                                                     Ly Lien Lien Dung</span>
-                                                <span className={cx("sider-body-item-name")}>
+                                                <span className={cx("sider-body-item-name-admin")}>
                                                     Dung Lien Lien Ly</span>
 
                                             </div>
                                         </div>
 
                                         <div className={cx("sider-body-homework")}>
-                                            <SupplierIcon />
+                                            <SupplierIcon style={{ color: "#285D9A" }} />
                                             <p className={cx("sider-body-items")}>FSU </p>
                                             <div className={cx("sider-body-location")}>
                                                 <span className={cx("sider-body-item-supplierIcon")}>FHM</span>
@@ -303,7 +351,7 @@ function ViewClass() {
                                         </div>
                                     </Collapse.Panel>
                                 </Collapse> */}
-                                <Schedule/>
+                                <Schedule />
                             </ConfigProvider>
                         </Content>
 

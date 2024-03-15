@@ -66,7 +66,7 @@ function ProgramList({ domChange, domChangeSuccess, reload }) {
             <th className={cx("th", "name")}>
               <button
                 className={cx("title")}
-                onClick={() => sortedColumn("name")}
+                onClick={() => sortedColumn("tpName")}
               >
                 Program name <SortIcon />
               </button>
@@ -74,15 +74,15 @@ function ProgramList({ domChange, domChangeSuccess, reload }) {
             <th className={cx("th", "createOn")}>
               <button
                 className={cx("title")}
-                onClick={() => sortedColumn("createOn")}
+                onClick={() => sortedColumn("createdDate")}
               >
                 Create on <SortIcon />
               </button>
             </th>
-            <th className={cx("th", "createBy")}>
+            <th className={cx("th", "createdBy")}>
               <button
                 className={cx("title")}
-                onClick={() => sortedColumn("createBy")}
+                onClick={() => sortedColumn("createdBy")}
               >
                 Create by <SortIcon />
               </button>

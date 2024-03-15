@@ -28,13 +28,14 @@ const ImportSyllabusModal = () => {
   return (
     <>
       <Button
-        icon={<UploadOutlined />}
+        icon={<UploadOutlined style={{fontWeight: 'bolder',fontSize:'1.2  rem'}} />}
         onClick={() => setIsOpen(!isOpen)}
         style={{
           borderRadius: '10px',
           color: 'white',
           backgroundColor: '#D45B13',
           marginRight: '0.5rem',
+          fontWeight: 'bolder'
           
         }}
         htmlType='submit'

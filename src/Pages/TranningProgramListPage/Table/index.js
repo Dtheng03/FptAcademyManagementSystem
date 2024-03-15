@@ -27,9 +27,9 @@ function StatusStyle({ status }) {
   } else if (status === "Inactive") {
     className = "inactive";
     title = "Inactive";
-  } else if (status === "Draft") {
-    className = "draft";
-    title = "Draft";
+  } else if (status === "Drafting") {
+    className = "drafting";
+    title = "Drafting";
   }
 
   return <span className={cx("status-style", className)}>{title}</span>;
@@ -86,7 +86,7 @@ export default function Table({ item, domChange, domChangeSuccess, reload }) {
       delete duplicatedProgram.id;
       axios
         .post(
-          "https://65411666f0b8287df1fdc4fa.mockapi.io/program",
+          `http://fams-group1-net03.ptbiology.com/api/trainingprogram/dupplicate-training-program?id=${item.id}`,
           duplicatedProgram
         )
         .then(() => {
@@ -106,7 +106,7 @@ export default function Table({ item, domChange, domChangeSuccess, reload }) {
     } else if (modalAction === "delete") {
       axios
         .delete(
-          `https://65411666f0b8287df1fdc4fa.mockapi.io/program/${item.id}`
+          `http://fams-group1-net03.ptbiology.com/api/trainingprogram/view-training-program-list?id=${item.id}`
         )
         .then(() => {
           notification.success({
@@ -157,11 +157,11 @@ export default function Table({ item, domChange, domChangeSuccess, reload }) {
 
   return (
     <tr className={cx("tr")} onDoubleClick={() => handleViewDetail(item)}>
-      <td className={cx("td", "id")}>{item.id}</td>
-      <td className={cx("td", "name")}>{item.name}</td>
-      <td className={cx("td", "createOn")}>{item.createOn}</td>
-      <td className={cx("td", "createBy")}>{item.createBy}</td>
-      <td className={cx("td", "duration")}>{item.duration} days</td>
+      <td className={cx("td", "id")}>{item.tpCode}</td>
+      <td className={cx("td", "name")}>{item.tpName}</td>
+      <td className={cx("td", "createOn")}>{item.createdDate}</td>
+      <td className={cx("td", "createBy")}>{item.createdBy.fullName}</td>
+      <td className={cx("td", "duration")}>{item.duration.hour} hour</td>
       <td className={cx("td", "style")}>
         <StatusStyle status={item.status} />
       </td>
@@ -274,10 +274,10 @@ export default function Table({ item, domChange, domChangeSuccess, reload }) {
             cancelButtonProps={{ style: { color: "#C70039", border: "none" } }}
           >
             {modalAction === "delete"
-              ? `Do you want to delete the "${item.name}" ? This process cannot be restored!!`
+              ? `Do you want to delete the "${item.tpName}" ? This process cannot be restored!!`
               : modalAction === "duplicate"
-              ? `Do you want to duplicate the "${item.name}" ?`
-              : `Do you want to change the status of the "${item.name}" class to "${newStatus}"?`}
+              ? `Do you want to duplicate the "${item.tpName}" ?`
+              : `Do you want to change the status of the "${item.tpName}" class to "${newStatus}"?`}
           </Modal>
         </td>
       )}

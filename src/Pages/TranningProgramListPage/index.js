@@ -17,7 +17,7 @@ import {
 import { Pagination, Tag, Spin } from "antd";
 import Table from "./Table";
 import { LoadingOutlined } from "@ant-design/icons";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setProgramList } from "../../Redux/Reducer/ProgramTranningSlice";
 import ProgramList from "./ProgramList";
 import Research from "./ProgramResearch";
@@ -31,6 +31,7 @@ export default function TranningProgramListPage() {
   const [loading, setLoading] = useState(false);
 
   const dispatch = useDispatch();
+  const programList = useSelector(state => state.program.programList)
 
   const token = sessionStorage.getItem("token");
   axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
@@ -54,32 +55,32 @@ export default function TranningProgramListPage() {
     const value = e.target.value;
     setSearchValue(value);
 
-    if (value.trim() === "") {
-      setSearch([]);
-    } else if (value !== "") {
-      const searchResults = data.filter((result) =>
-        result.name.toLowerCase().includes(value.toLowerCase())
-      );
-      if (searchResults.length > 0) {
-        setSearch(searchResults);
-      } else {
+      if (value.trim() === "") {
         setSearch([]);
-      }
-    }
-  };
-
-  useEffect(() => {
-    async function getProgram() {
-      try {
-        setLoading(true);
-        const response = await axios.get(
-          "https://65411666f0b8287df1fdc4fa.mockapi.io/program"
+      } else if (value !== "") {
+        const searchResults = programList.filter((result) =>
+          result.tpName.toLowerCase().includes(value.toLowerCase())
         );
-        // const response = await axios.get(
-        //   "http://fams-group1-net03.ptbiology.com//api/trainingprogram/view-training-program-list"
-        // );
-        setData(response.data);
-        dispatch(setProgramList(response.data));
+        if (searchResults.length > 0) {
+          setSearch(searchResults);
+        } else {
+          setSearch([]);
+        }
+      }
+    };
+
+    useEffect(() => {
+      async function getProgram() {
+        try {
+          setLoading(true);
+          // const response = await axios.get(
+          //   "https://65411666f0b8287df1fdc4fa.mockapi.io/program"
+          // );
+          const response = await axios.post("http://fams-group1-net03.ptbiology.com/api/trainingprogram/view-training-program-list");
+          console.log(response.data.data);
+          
+          setData(response.data);
+        dispatch(setProgramList(response.data.data));
       } catch (error) {
         console.error(error);
       } finally {

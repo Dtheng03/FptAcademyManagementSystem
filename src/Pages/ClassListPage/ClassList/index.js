@@ -5,14 +5,23 @@ import TableRow from "../TableRow";
 import { Pagination } from "antd";
 import { useState } from "react";
 import { useSelector } from "react-redux";
+import crypto from "crypto-js";
 
 const cx = classNames.bind(styles);
 
 function ClassList({ domChange, domChangeSuccess, reload }) {
 
     const classList = useSelector(state => state.class.classList);
-    // console.log('Redux State:', useSelector(state => state)); // Log the entire Redux state
-    // console.log('Class List:', classList);
+
+    var decryptedRoleName;
+    const encryptedRoleName = sessionStorage.getItem("roleName");
+    if (encryptedRoleName) {
+        decryptedRoleName = crypto.AES.decrypt(
+            encryptedRoleName,
+            "react02"
+        ).toString(crypto.enc.Utf8);
+    }
+    const roleName = decryptedRoleName;
 
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage, setItemsPerPage] = useState(10);
@@ -53,16 +62,17 @@ function ClassList({ domChange, domChangeSuccess, reload }) {
             <table className={cx("table")}>
                 <thead className={cx("thead")}>
                     <tr className={cx("tr")}>
-                        <th className={cx("th", "name")}><button className={cx("title")} onClick={() => { sortColumn("classNames") }}>Class <SortIcon /></button></th>
+                        <th className={cx("th", "name")}><button className={cx("title")} onClick={() => { sortColumn("className") }}>Class <SortIcon /></button></th>
                         <th className={cx("th")}><button className={cx("title")} onClick={() => { sortColumn("classCode") }}>Class Code <SortIcon /></button></th>
-                        <th className={cx("th")}><button className={cx("title")} onClick={() => { sortColumn("createdOn") }}>Created On <SortIcon /></button></th>
+                        <th className={cx("th")}><button className={cx("title")} onClick={() => { sortColumn("createdDate") }}>Created On <SortIcon /></button></th>
                         <th className={cx("th")}><button className={cx("title")} onClick={() => { sortColumn("createdBy") }}>Created By<SortIcon /></button></th>
-                        <th className={cx("th")}><button className={cx("title")} onClick={() => { sortColumn("duration") }}>Duration <SortIcon /></button></th>
+                        <th className={cx("th")}><button className={cx("title")} onClick={() => { sortColumn("classDuration") }}>Duration <SortIcon /></button></th>
                         <th className={cx("th", "attendee")}><button className={cx("title")} onClick={() => { sortColumn("attendee") }}>Attendee <SortIcon /></button></th>
-                        {/* <th className={cx("th")}><button className={cx("title")} onClick={() => { sortColumn("status") }}>Status <SortIcon /></button></th> */}
-                        <th className={cx("th", "location")}><button className={cx("title")} onClick={() => { sortColumn("location") }}>Location <SortIcon /></button></th>
+                        {/* <th className={cx("th")}><button className={cx("title")} onClick={() => { sortColumn("classStatus") }}>Status <SortIcon /></button></th> */}
+                        <th className={cx("th", "location")}><button className={cx("title")} onClick={() => { sortColumn("classLocation") }}>Location <SortIcon /></button></th>
                         <th className={cx("th")}><button className={cx("title")} onClick={() => { sortColumn("fsu") }}>FSU <SortIcon /></button></th>
-                        <th className={cx("th")}></th>
+                        {(roleName === "Super Admin" || roleName === "Admin") &&
+                            <th className={cx("th")}></th>}
                     </tr>
                 </thead>
                 <tbody>

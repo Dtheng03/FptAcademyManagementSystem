@@ -35,9 +35,9 @@ export function StatusStyle({ status }) {
     } else if (status === "Opening") {
         className = "opening"
         title = "Opening"
-    } else if (status === "Closed") {
-        className = "closed"
-        title = "Closed"
+    } else if (status === "Inactive") {
+        className = "inactive"
+        title = "Inactive"
     }
 
     return (

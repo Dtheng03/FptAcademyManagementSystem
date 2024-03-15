@@ -101,7 +101,7 @@ export default function General({ id }) {
 
       <div className={cx("body-2")}>
         <div className={cx("content-2")}>
-          <div className={cx("text-head")}>
+          <div className={cx("text-head")}> 
             <FocusIcon />
             Course Objectives
           </div>

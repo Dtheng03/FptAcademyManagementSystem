@@ -1,14 +1,35 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "../SyllabusHeader/SyllabusHeader.module.scss";
 import classNames from "classnames/bind";
 import StatusChip from "../../../Components/Common/Status/StatusChip";
 import { MoreIcon } from "../../../Components/Common/Icons/ActionIcons";
 import { Popover } from "antd";
+import axios from "axios";
 
 
-function SyllabusHeader({ onClick }) {
+function SyllabusHeader({ onClick, id }) {
+  const [data, setData] = useState({});
   const cx = classNames.bind(styles);
   const [open,setOpen] = useState (false); 
+
+  useEffect(() => {
+    if (!id) return;
+
+    axios
+      .get(
+        `http://fams-group1-net03.ptbiology.com/api/syllabus/view-details-syllabus?syllabusId=${id}`
+      )
+      .then((response) => {
+        // Handle successful response
+        console.log("Response from API:", response.data);
+        setData(response.data);
+      })
+      .catch((error) => {
+        // Handle error
+        console.error("Error fetching data:", error);
+      });
+  }, [id]);
+
   return (
     <div className={cx("header-container")}>
       <div className={cx("title-1")}>
@@ -17,10 +38,10 @@ function SyllabusHeader({ onClick }) {
 
       <div className={cx("header-body")}>
         <div className={cx("title-2")}>
-          <h3 className={cx("syllabus-text")}>C# Programming Language</h3>
+          <h3 className={cx("syllabus-text")}>{data.data && data.data.syllabusName}</h3>
 
           <div className={cx("syllabus-status")}>
-            <StatusChip title={"Active"} />
+            <StatusChip title={data.data && data.data.status}/>
           </div>
         </div>
 
@@ -54,7 +75,7 @@ function SyllabusHeader({ onClick }) {
 
       </div>
       <div className={cx("syllabus-version")}>
-        <h4 className={cx("version")}>NPL v4.0</h4>
+        <h4 className={cx("version")}>NPL {data.data && data.data.version}</h4>
       </div>
     </div>
   );

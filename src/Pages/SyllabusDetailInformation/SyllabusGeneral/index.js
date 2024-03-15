@@ -10,10 +10,32 @@ import {
 import StatusChip from "../../../Components/Common/Status/StatusChip";
 import style from "./General.module.scss";
 import classNames from "classnames/bind";
+import axios from "axios";
+import { useEffect, useState } from "react";
 
 const cx = classNames.bind(style);
 
-export default function General() {
+export default function General({ id }) {
+  const [data, setData] = useState({});
+
+  useEffect(() => {
+    if (!id) return;
+
+    axios
+      .get(
+        `http://fams-group1-net03.ptbiology.com/api/syllabus/view-details-syllabus?syllabusId=${id}`
+      )
+      .then((response) => {
+        // Handle successful response
+        console.log("Response from API:", response.data);
+        setData(response.data);
+      })
+      .catch((error) => {
+        // Handle error
+        console.error("Error fetching data:", error);
+      });
+  }, [id]);
+
   return (
     <div className={cx("container")}>
       <div className={cx("body")}>
@@ -23,10 +45,10 @@ export default function General() {
               <div className={cx("icon")}>
                 <GradeIcon />
               </div>
-              <p className={cx("text")}>Lever</p>
+              <p className={cx("text")}>Level</p>
             </div>
 
-            <p className={cx("level")}>All lever</p>
+            <p className={cx("level")}>{data.data && data.data.level}</p>
           </div>
 
           <div className={cx("line-2")}>
@@ -36,7 +58,9 @@ export default function General() {
               </div>
               <p className={cx("text")}>Attendee number</p>
             </div>
-            <p className={cx("number")}>20</p>
+            <p className={cx("number")}>
+              {data.data && data.data.attendeeNumber}
+            </p>
           </div>
 
           <div className={cx("line-3")}>
@@ -59,15 +83,17 @@ export default function General() {
               Technical Requirement(s)
             </div>
             <div className={cx("content")}>
-              Trainees'PCs need to have following software installed & run
-              without any issues:
+              Trainees' PCs need to have the following software installed and
+              running without any issues:
             </div>
             <div>
-              <li className={cx("list")}>Microsoft SQL Server 2005 Express</li>
-              <li className={cx("list")}>Microsoft Visual Studio 2017</li>
-              <li className={cx("list")}>
-                Microsoft Office 2007 (Visio, Word, PowerPoint)
-              </li>
+              <ul className={cx("list")}>
+                <li>
+                  {data.data && data.data.technicalRequirements
+                    ? data.data.technicalRequirements
+                    : "nothing"}
+                </li>
+              </ul>
             </div>
           </div>
         </div>
@@ -77,62 +103,25 @@ export default function General() {
         <div className={cx("content-2")}>
           <div className={cx("text-head")}>
             <FocusIcon />
-             Course objectivies
+            Course Objectives
           </div>
           <div className={cx("text")}>
-            This topic is to introduce about C# programming language knowledge;
-            adapt trainees with skills, lessons and practices which is
-            specifically used in the Fsoft projects.
+            This topic introduces C# programming language knowledge and adapts
+            trainees with skills, lessons, and practices specifically used in
+            Fsoft projects.
           </div>
           <div className={cx("text")}>
-            In details, after completing the topic ,trainees will: trainees
-            topic, the completing after details,In
+            Upon completion of the topic, trainees will:
           </div>
-          <ul>
-            <li className={cx("text")}>
-              Understand basic concepts of high-level programming languages
-              (keyword, statement, operator, control-of-flow)
-            </li>
-            <li className={cx("text")}>
-              Understand and distinguish two concepts: class (Class) and object
-              (Object)
-            </li>
-            <li className={cx("text")}>
-              Understand and apply object-oriented programming knowledge to
-              resolve simple problems (Inheritance, Encapsulation, Abstraction,
-              Polymorphism)
-            </li>
-            <li className={cx("text")}>
-              Working with some of the existing data structures in C# (List,
-              ArrayList, HashTable, Dictionary)
-            </li>
-            <li className={cx("text")}>
-              Know how to control program errors (use try ... catch .. finally,
-              throw, throws)
-            </li>
-            <li className={cx("text")}>
-              Be able to working with concurrency and multi-thread in C#
-            </li>
-            <li className={cx("text")}>
-              Be able to working with common classes in ADO.net: SqlConnection,
-              SqlCommand, SqlParameter, SqlDataAdapter, SqlDataReader
-            </li>
-            <li className={cx("text")}>
-              Be able to manipulate SQL data from Window Form Application via 4
-              basic commands: Add, Update, Delete, Select
-            </li>
-            <li className={cx("text")}>
-              Know how to design UI screen in Window Form Application
-            </li>
-            <li className={cx("text")}>
-              Know how to use appropriate controls for each field/data type:
-              Textbox, Label, Combobox, Radio, DateTimePicker, NumericUpDown,
-              RichTextBox
-            </li>
+          <ul className={cx("list")}>
+          {(data.data && data.data.courseObjectives)
+              ? data.data.courseObjectives.split("\n").map((item, index) => (
+                  <li key={index}>{item}</li>
+                ))
+              : <li>nothing to print</li>}
           </ul>
         </div>
       </div>
     </div>
   );
 }
-

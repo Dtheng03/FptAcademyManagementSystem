@@ -63,7 +63,7 @@ function Research({ search, domChange, domChangeSuccess, reload }) {
                 <th className={cx("th", "name")}>
                   <button
                     className={cx("title")}
-                    onClick={() => sortedColumn("name")}
+                    onClick={() => sortedColumn("tpName")}
                   >
                     Program name <SortIcon />
                   </button>
@@ -71,7 +71,7 @@ function Research({ search, domChange, domChangeSuccess, reload }) {
                 <th className={cx("th", "id")}>
                   <button
                     className={cx("title")}
-                    onClick={() => sortedColumn("createOn")}
+                    onClick={() => sortedColumn("createdDate")}
                   >
                     Create on <SortIcon />
                   </button>
@@ -79,7 +79,7 @@ function Research({ search, domChange, domChangeSuccess, reload }) {
                 <th className={cx("th", "id")}>
                   <button
                     className={cx("title")}
-                    onClick={() => sortedColumn("createBy")}
+                    onClick={() => sortedColumn("createdBy")}
                   >
                     Create by <SortIcon />
                   </button>

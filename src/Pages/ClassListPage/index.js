@@ -14,15 +14,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { setClassList } from "../../Redux/Reducer/ClassSlice";
 import Filter from "./Filter";
 import crypto from "crypto-js";
+import axiosClient from "../../Services/axios/config";
 
 const cx = classNames.bind(styles);
 
 function ClassListPage() {
     const dispatch = useDispatch();
     const classList = useSelector(state => state.class.classList);
-
-    const token = sessionStorage.getItem("token");
-    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
     var decryptedRoleName;
     const encryptedRoleName = sessionStorage.getItem("roleName");
@@ -46,14 +44,13 @@ function ClassListPage() {
 
     //Xử lý input search
     const handleInputSearch = (e) => {
-        const value = e.target.value;
+        const value = e.target.value
         setSearchValue(value);
-
-        if (value.trim() === "") {
+        if (value === "") {
             setSearch([]);
-        } else if (value.trim() !== "") {
+        } else if (value !== "") {
             const searchResults = classList.filter(
-                result => result.classNames.toLowerCase().includes(value.toLowerCase())
+                result => result.className.toLowerCase().includes(value.toLowerCase())
                     || result.classCode.toLowerCase().includes(value.toLowerCase())
             );
             if (searchResults.length > 0) {
@@ -68,13 +65,10 @@ function ClassListPage() {
     async function getClass() {
         setLoading(true);
         try {
-            const response = await axios.get("https://653d1d13f52310ee6a99e3b7.mockapi.io/class");
-            // const response = await axios.get("https://649e8167245f077f3e9c759b.mockapi.io/class");
-            // const response = await axios.get("http://fams-group1-net03.ptbiology.com/api/class/view-class-list");
-            // setData(response.data);
-            dispatch(setClassList(response.data));
+            const response = await axiosClient.get("/api/class/view-class-list");
+            dispatch(setClassList(response.data.data));
             setLoading(false);
-            // console.log(response.data);
+            console.log(response);
         } catch (error) {
             notification.error({
                 message: error.message,

@@ -25,6 +25,7 @@ import LearningMaterials from "./Pages/LearningMaterials/LearningMaterials";
 import { message } from "antd";
 
 function App() {
+  const [token, setToken] = useState("");
 
   const [isLoggedIn, setLoggedIn] = useState(() => {
     const storedStatus = sessionStorage.getItem("isLoggedIn");
@@ -33,6 +34,11 @@ function App() {
 
   const navigate = useNavigate();
   const location = useLocation();
+
+  useEffect(() => {
+    const authToken = sessionStorage.getItem("token");
+    setToken(authToken);
+  }, []);
 
   useEffect(() => {
     if (!isLoggedIn) {
@@ -150,9 +156,9 @@ function App() {
             {isLoggedIn ? (
               <>
                 {/* ROUTE CODE TRONG ĐÂY NHA MẤY NÍ */}
-                <Route path="/home" element={<SyllabusDetailInformation />} />
+                <Route path="/home" element={<HomePage/>} />
                 <Route path="/view-syllabus" element={<SyllabusList />} />
-                <Route path="/view-syllabus-detail" element={<SyllabusDetailInformation />} />
+                <Route path="/view-syllabus-detail/:id" element={<SyllabusDetailInformation />} />
                 <Route path="/create-syllabus" element={<CreateSyllabusPage />} />
                 <Route path="/tranning-program-list" element={<TranningListPage />} />
                 <Route path="/view-tranning-program-detail/:id" element={<TranningProgramDetail />} />

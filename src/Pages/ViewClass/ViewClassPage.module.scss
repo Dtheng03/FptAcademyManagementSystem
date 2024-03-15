@@ -173,7 +173,7 @@
 }
 
 .sider-body-time {
-    margin-left: 20%;
+    margin-left: 20.5%;
     font-weight: 500;
 
 }
@@ -184,14 +184,14 @@
 
 .sider-body-homework {
     display: flex;
-    gap: 7px;
+    gap: 8px;
     padding-bottom: 15px;
 }
 
 .sider-body-location {
     display: flex;
     flex-direction: column;
-    margin-left: 22.5%;
+    margin-left: 22.3%;
 }
 
 .sider-body-item-location {
@@ -201,13 +201,26 @@
 .sider-body-name {
     display: flex;
     flex-direction: column;
-    margin-left: 25%;
+    margin-left: 24.5%;
 }
+.modal-box-icon{
+    display: flex;
+    justify-content: flex-start;
+    gap: 7.5px;
+}
+
 
 .sider-body-item-name {
     font-weight: 500;
     color: #0958d9;
     text-decoration: underline;
+    
+}
+.sider-body-item-name-admin{
+    font-weight: 500;
+    color: #0958d9;
+    text-decoration: underline;
+    margin-left: 5px;
 }
 
 .sider-body-item-supplierIcon {
@@ -218,23 +231,24 @@
 }
 
 .sider-underline {
+    
     margin-top: -50px;
     font-size: 45px;
     font-weight: 300;
 }
 
 .sider-body-item-created {
-    margin-left: 31%;
+    margin-left: 31.7%;
     font-weight: 500;
 }
 
 .sider-body-item-review {
-    margin-left: 32%;
+    margin-left: 32.7%;
     font-weight: 500;
 }
 
 .sider-body-item-approve {
-    margin-left: 30%;
+    margin-left: 30.5%;
     font-weight: 500;
 }
 

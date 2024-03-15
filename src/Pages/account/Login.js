@@ -31,7 +31,7 @@ const Login = ({ onLogin }) => {
           message.error("Your account has been locked");
         }
       }
-       else {
+      else {
         message.error("Incorrect email or password. Please try againnn");
       }
     } catch (error) {
@@ -43,17 +43,19 @@ const Login = ({ onLogin }) => {
   };
 
   return (
-    <Spin spinning={loading} size="large" >
+    <Spin spinning={loading} size="large">
       <div className="login-container">
         <div className="login-tilte">
-          <img
-            src="/fptLogo.png"
-            style={{ width: "50%", height: "auto" }}
-            alt="FPT Logo"
-          />
-          <h2 style={{ margin: "10px 0" }}>
-            FPT Fresh Academy Training Management
-          </h2>
+          <div className="wrapper">
+            <img
+              src="/fptLogo.png"
+              style={{ width: "50%", height: "auto" }}
+              alt="FPT Logo"
+            />
+            <h3>
+              FPT Fresh Academy Training<br></br>Management System
+            </h3>
+          </div>
         </div>
         <div className="login-content">
           <Form
@@ -65,7 +67,6 @@ const Login = ({ onLogin }) => {
             onFinish={onFinish}
           >
             <Form.Item
-              style={{ paddingBottom: "12px" }}
               className="login-label"
               name="email"
               rules={[
@@ -81,6 +82,7 @@ const Login = ({ onLogin }) => {
                 prefix={<UserOutlined />}
                 placeholder="Email"
                 type="email"
+                autoFocus
                 maxLength={40}
               />
             </Form.Item>
@@ -104,7 +106,7 @@ const Login = ({ onLogin }) => {
             </Form.Item>
             <Form.Item className="login-label">
               <Button
-                style={{ marginTop: "36px", height: "48px" }}
+                style={{ marginTop: "28px", height: "48px" }}
                 className="login-input"
                 type="primary"
                 block

@@ -3,13 +3,13 @@ import classNames from "classnames/bind";
 
 
 const cx = classNames.bind(styles);
-function DetailDescription({author, createDate}) {
+function DetailDescription({author, createDate, duration}) {
   return (
     <div className={cx("description-title")}>
       <div className={cx("line-1")}>
-        <h4 className={cx("day-number")}> 31</h4>
+        <h4 className={cx("day-number")}>{duration}</h4>
         <subtitle1 className={cx("description-text")}>
-          days (97 hours)
+          days
         </subtitle1>
       </div>
 

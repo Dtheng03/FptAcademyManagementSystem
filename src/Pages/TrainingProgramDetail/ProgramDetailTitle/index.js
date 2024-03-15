@@ -8,6 +8,7 @@ import {
   VisibilityOffIcon,
 } from "../../../Components/Common/Icons/ActionIcons";
 import axios from "axios";
+import { LoadingOutlined } from "@ant-design/icons";
 import { Popover, notification, Modal, Spin } from "antd";
 import { LearningMaterialsIcon } from "../../../Components/Common/Icons/NavMenuIcons";
 import {
@@ -33,7 +34,7 @@ function DetailTitle({ itemId, domChange, domChangeSuccess }) {
   const [isModalVisible, setModalVisible] = useState(false);
   const [modalAction, setModalAction] = useState("");
 
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   const style = {
     backgroundColor: "transparent",
@@ -110,7 +111,7 @@ function DetailTitle({ itemId, domChange, domChangeSuccess }) {
           message: "Delete program successfully",
         });
         domChangeSuccess();
-        navigate("/tranning-program-list")
+        navigate("/tranning-program-list");
       })
       .catch(function (error) {
         console.log(error);
@@ -127,7 +128,7 @@ function DetailTitle({ itemId, domChange, domChangeSuccess }) {
       createOn: createDate,
       status: programStatus,
       createBy: programAuthor,
-      duration: programDuration
+      duration: programDuration,
     };
     delete duplicatedProgram.itemId;
     axios
@@ -193,7 +194,10 @@ function DetailTitle({ itemId, domChange, domChangeSuccess }) {
   //****************************************************************//
 
   return (
-    <Spin spinning={loading} tip="Loading..." size="large">
+    <Spin
+      spinning={loading}
+      indicator={<LoadingOutlined style={{ color: "#2D3748" }} size="larger" />}
+    >
       <div className={cx("title-container")}>
         <div className={cx("title-1")}>
           <h4 className={cx("program-text")}>Training Program</h4>
@@ -249,23 +253,28 @@ function DetailTitle({ itemId, domChange, domChangeSuccess }) {
                 </button>
 
                 <button
-                  style={style}
+                  style={{
+                    ...style,
+                    display: programStatus !== "Draft" ? "inline-flex" : "none",
+                  }}
                   onClick={() => {
-                    handleAction("changeStatus");
-                    domChange();
+                    if (programStatus !== "Draft") {
+                      handleAction("changeStatus");
+                      domChange();
+                    }
                   }}
                 >
-                  {programStatus === "Active" ? (
+                  {programStatus === "Active" && programStatus !== "Draft" ? (
                     <>
                       <VisibilityOffIcon />
                       De-activate
                     </>
-                  ) : (
+                  ) : programStatus !== "Draft" ? (
                     <>
                       <VisibilityIcon />
                       Activate
                     </>
-                  )}
+                  ) : null}
                 </button>
                 <button
                   style={{ ...style, color: "red" }}
@@ -322,7 +331,11 @@ function DetailTitle({ itemId, domChange, domChangeSuccess }) {
           </Modal>
         </div>
         <div className={cx("description")}>
-          <DetailDescription author={programAuthor} createDate={createDate} />
+          <DetailDescription
+            author={programAuthor}
+            createDate={createDate}
+            duration={programDuration}
+          />
         </div>
       </div>
     </Spin>

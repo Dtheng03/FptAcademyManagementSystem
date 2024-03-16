@@ -6,9 +6,9 @@ import { FemaleIcon, MaleIcon, RoleIcon } from "../../../Components/Common/Icons
 import { CreateIcon } from "../../../Components/Common/Icons/DocManageIcons"
 import { useDispatch } from "react-redux";
 import { setUpdateUser } from "../../../Redux/Reducer/UsersSlice";
-import { notification, Modal } from 'antd';
+import { Modal } from 'antd';
 import crypto from "crypto-js";
-import axiosClient from "../../../Services/axios/config";
+import { changeRole, changeStatus } from "../../../Services/usersApi";
 
 const cx = classNames.bind(styles);
 
@@ -70,25 +70,16 @@ function TableRow({ item, openEdit, loading, fetchUsers, setSearchValue = () => 
         setSearchValue("");
         setShowRoleModal(false);
         loading(true);
-        async function changeRole() {
-            try {
-                const response = await axiosClient.put(`/api/user/grant-permission`, { id: item.id, userType: newRole });
-                // console.log(response);
-                notification.success({
-                    message: "Change role successfully",
-                });
-                loading(false);
+        changeRole({
+            id: item.id,
+            userType: newRole
+        })
+            .then(() => {
                 fetchUsers();
-            } catch (error) {
-                // console.log(error);
-                notification.error({
-                    message: "Change role failed",
-                    description: "Something wrong! Please try again later!"
-                });
+            })
+            .finally(() => {
                 loading(false);
-            }
-        };
-        changeRole();
+            })
     };
 
     // hàm xử lý thay đổi status
@@ -96,25 +87,13 @@ function TableRow({ item, openEdit, loading, fetchUsers, setSearchValue = () => 
         setSearchValue("");
         setShowStatusModal(false);
         loading(true);
-        async function changeStatus() {
-            try {
-                const response = await axiosClient.put(`/api/user/active-deactive-user?id=${item.id}`);
-                // console.log(response);
-                notification.success({
-                    message: "Change status successfully",
-                });
-                loading(false);
+        changeStatus(item.id)
+            .then(() => {
                 fetchUsers();
-            } catch (error) {
-                // console.log(error);
-                notification.error({
-                    message: "Change status failed",
-                    description: "Something wrong! Please try again later!"
-                });
+            })
+            .finally(() => {
                 loading(false);
-            }
-        };
-        changeStatus();
+            })
     }
 
     return (

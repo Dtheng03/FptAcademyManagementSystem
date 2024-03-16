@@ -5,13 +5,11 @@ const axiosClient = axios.create({
     headers: {
         "Content-type": "application/json",
     },
-
 });
 
 // Add a request interceptor
 axiosClient.interceptors.request.use(function (config) {
     const token = sessionStorage.getItem("token");
-    console.log(token);
     if (token) {
         config.headers.Authorization = `Bearer ${token}`;
         config.headers.Accept = "application/json";

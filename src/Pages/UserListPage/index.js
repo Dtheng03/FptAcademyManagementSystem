@@ -11,8 +11,7 @@ import ModalEditUser from "./ModalEditUser";
 import Table from "./Table";
 import SearchResult from "./SearchResult";
 import crypto from "crypto-js";
-import { notification } from "antd";
-import axiosClient from "../../Services/axios/config";
+import { getUserList } from "../../Services/usersApi";
 
 const cx = classNames.bind(styles);
 
@@ -59,18 +58,13 @@ function UserListPage() {
 
     async function fetchUsers() {
         setIsLoading(true);
-        try {
-            const response = await axiosClient.get("/api/user/view-user-list");
-            // console.log(response);
-            dispatch(setUsersList(response.data.data));
-            setIsLoading(false);
-        } catch (error) {
-            // console.log(error);
-            notification.error({
-                message: error.message,
-            });
-            setIsLoading(false);
-        }
+        getUserList()
+            .then(res => {
+                dispatch(setUsersList(res?.data?.data || []));
+            })
+            .finally(() => {
+                setIsLoading(false);
+            })
     }
 
     useEffect(() => {

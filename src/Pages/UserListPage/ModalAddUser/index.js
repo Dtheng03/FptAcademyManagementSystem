@@ -5,8 +5,7 @@ import { CancleIcon } from "../../../Components/Common/Icons/ActionIcons";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { notification } from "antd";
-import axiosClient from "../../../Services/axios/config";
+import { addUser } from "../../../Services/usersApi";
 
 const cx = classNames.bind(styles);
 
@@ -24,27 +23,6 @@ function ModalAddUser({ closeModal, loading, fetchUsers }) {
     const [gender, setGender] = useState("Male");
     const [status, setStatus] = useState("Active");
 
-    async function addUser(finalData) {
-        loading(true);
-        try {
-            const response = await axiosClient.post('/api/user/create-user', finalData);
-            // console.log(response);
-            notification.success({
-                message: "Add user successfully."
-            });
-            loading(false);
-            fetchUsers();
-        }
-        catch (error) {
-            // console.log(error);  
-            notification.error({
-                message: "Add user failed.",
-                description: "Something wrong! Please check all information and try again later."
-            });
-            loading(false);
-        }
-    }
-
     // ham handle form add
     const {
         register,
@@ -57,9 +35,15 @@ function ModalAddUser({ closeModal, loading, fetchUsers }) {
 
     const onSubmit = (data, event) => {
         event.preventDefault();
+        loading(true);
         closeModal();
-        const finalData = { ...data, gender: gender, status: status }
-        addUser(finalData);
+        addUser({ ...data, gender: gender, status: status })
+            .then(() => {
+                fetchUsers();
+            })
+            .finally(() => {
+                loading(false);
+            })
         reset();
     }
 

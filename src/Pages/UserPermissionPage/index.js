@@ -5,9 +5,8 @@ import { AddIcon, VisibilityIcon, VisibilityOffIcon } from "../../Components/Com
 import { CreateIcon } from "../../Components/Common/Icons/DocManageIcons";
 import { GradeIcon } from "../../Components/Common/Icons/IndicatorIcons";
 import { useEffect, useState } from "react";
-import { notification } from "antd";
 import crypto from "crypto-js";
-import axiosClient from "../../Services/axios/config";
+import { getUserPermission, updateUserPermission } from "../../Services/usersApi";
 
 const cx = classNames.bind(styles);
 
@@ -64,47 +63,29 @@ function UserPermissionPage() {
     };
 
     const handleSaveUpdate = () => {
-        async function update() {
-            setIsLoading(true);
-            var response1, response2, response3;
-            try {
-                response1 = await axiosClient.put(`/api/userpermission/update-user-permission`, { ...newPermission1, userManagement: "Full access" });
-                response2 = await axiosClient.put(`/api/userpermission/update-user-permission`, { ...newPermission2, userManagement: "Create" });
-                response3 = await axiosClient.put(`/api/userpermission/update-user-permission`, { ...newPermission3, userManagement: "View" });
-                if (response1.statusText === "OK" && response2.statusText === "OK" && response3.statusText === "OK") {
-                    setIsLoading(false);
-                    notification.success({
-                        message: "Update permission successfully",
-                    })
-                    setTimeout(() => {
-                        setUpdate(false);
-                        setIsDomChange(!isDomChange);
-                    }, 2000)
-                }
-            } catch (error) {
-                notification.error({
-                    message: "Update permission failed",
-                    description: "Something wrong! Please try again later."
-                })
+        setIsLoading(true);
+        updateUserPermission(newPermission1, newPermission2, newPermission3)
+            .then(() => {
+                setUpdate(false);
+                setIsDomChange(!isDomChange);
+            })
+            .finally(() => {
                 setIsLoading(false);
-                setTimeout(() => {
-                    setUpdate(false);
-                    setIsDomChange(!isDomChange);
-                }, 2000)
-            }
-        }
-        update();
+            })
     }
 
     useEffect(() => {
-        axiosClient.get("/api/userpermission/view-user-permission")
+        setIsLoading(true);
+        getUserPermission()
             .then((response) => {
-                setData(response.data.data);
-                setNewPermission1(response.data.data[0]);
-                setNewPermission2(response.data.data[1]);
-                setNewPermission3(response.data.data[2]);
+                setData(response?.data?.data || []);
+                setNewPermission1(response?.data?.data[0]);
+                setNewPermission2(response?.data?.data[1]);
+                setNewPermission3(response?.data?.data[2]);
             })
-            .catch((error) => { console.log(error); })
+            .finally(() => {
+                setIsLoading(false);
+            })
     }, [isDomChange]);
 
     return (

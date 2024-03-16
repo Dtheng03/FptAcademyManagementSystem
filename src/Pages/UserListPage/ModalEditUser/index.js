@@ -6,8 +6,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useSelector } from "react-redux";
-import { notification } from "antd";
-import axiosClient from "../../../Services/axios/config";
+import { editUser } from "../../../Services/usersApi";
 
 const cx = classNames.bind(styles);
 
@@ -25,26 +24,6 @@ function ModalEditUser({ closeModal, loading, fetchUsers }) {
     const [gender, setGender] = useState(updateUser.gender);
     const [status, setStatus] = useState(updateUser.status);
 
-    async function editUser(finalData) {
-        loading(true);
-        try {
-            const response = await axiosClient.put(`/api/user/update-user`, finalData);
-            // console.log(response);
-            notification.success({
-                message: "Edit user successfully!"
-            });
-            loading(false);
-            fetchUsers();
-        } catch (error) {
-            // console.log(error);
-            notification.error({
-                message: "Edit user failed!",
-                description: "Something wrong! Please check all information and try again later."
-            });
-            loading(false);
-        }
-    }
-
     // ham handle form add
     const {
         register,
@@ -57,9 +36,15 @@ function ModalEditUser({ closeModal, loading, fetchUsers }) {
 
     const onSubmit = (data, event) => {
         event.preventDefault();
+        loading(true);
         closeModal();
-        const finalData = { ...data, id: updateUser.id, gender: gender, status: status };
-        editUser(finalData);
+        editUser({ ...data, id: updateUser.id, gender: gender, status: status })
+            .then(() => {
+                fetchUsers();
+            })
+            .finally(() => {
+                loading(false);
+            })
         reset();
     }
 

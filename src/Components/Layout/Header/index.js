@@ -1,11 +1,18 @@
 import styles from "./Header.module.scss";
 import classNames from "classnames/bind";
 import { Avatar } from "antd";
+import { useNavigate } from "react-router-dom";
 
 const cx = classNames.bind(styles);
 
-function Header({ onLogout }) {
+function Header() {
+  const navigate = useNavigate();
   const fullName = sessionStorage.getItem("fullName");
+
+  const handleLogout = () => {
+    sessionStorage.clear();
+    navigate("/login");
+  };
 
   return (
     <header className={cx("header")}>
@@ -21,7 +28,7 @@ function Header({ onLogout }) {
             <p className={cx("fullName")}>{fullName}</p>
             <button
               className={cx("logout-btn")}
-              onClick={onLogout}
+              onClick={handleLogout}
             >
               Log Out
             </button>

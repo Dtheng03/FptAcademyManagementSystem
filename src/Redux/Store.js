@@ -16,23 +16,3 @@ export const store = configureStore({
         file: fileUploadSlice,
     }
 })
-
-
-
-// const persistConfig = {
-//   key: "root",
-//   storage,
-// };
-
-// const persistedReducer = persistReducer(persistConfig, {
-//   role: RoleSlice,
-//   user: UserSlice,
-// });
-
-// const store = configureStore({
-//   reducer: persistedReducer,
-// });
-
-// const persistor = persistStore(store);
-
-// export { store, persistor };

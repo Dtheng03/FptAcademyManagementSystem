@@ -92,11 +92,11 @@ function Sidebar() {
     {
       icon: <Icons.SettingIcon />,
       title: 'Setting',
-
+      to: "",
       children: [
         {
           title: 'Calendar',
-          to: '',
+          to: '/setting-calendar',
         },
       ],
     },

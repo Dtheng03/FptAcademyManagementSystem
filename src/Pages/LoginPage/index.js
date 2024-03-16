@@ -3,36 +3,53 @@ import { Button, Form, Input, Spin, message } from "antd";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import "./Login.scss";
 import { useNavigate } from "react-router-dom";
-import { loginUser } from "./api";
+import { loginUser } from "../../Services/loginApi";
+import crypto from "crypto-js";
 
-const Login = ({ onLogin }) => {
+const Login = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    const isLoggedIn = sessionStorage.getItem("isLoggedIn");
-    if (isLoggedIn && JSON.parse(isLoggedIn)) {
-      navigate("/home");
-    }
-  }, [navigate]);
 
   const onFinish = async (values) => {
     try {
       setLoading(true);
-
       const { user } = await loginUser(values.email, values.password);
-
       if (user) {
         if (user.status === "Active") {
-          onLogin(user);
-          sessionStorage.setItem("isLoggedIn", JSON.stringify(true));
+          // Mã hóa roleName trc khi set vào session
+          const encryptedRoleName = crypto.AES.encrypt(
+            user.role.roleName,
+            "react02"
+          ).toString();
+          const encryptedSyllabus = crypto.AES.encrypt(
+            user.role.syllabus,
+            "react02"
+          ).toString();
+          const encryptedTrainingProgram = crypto.AES.encrypt(
+            user.role.trainingProgram,
+            "react02"
+          ).toString();
+          const encryptedClass = crypto.AES.encrypt(
+            user.role.class,
+            "react02"
+          ).toString();
+          const encryptedLearningMaterial = crypto.AES.encrypt(
+            user.role.learningMaterial,
+            "react02"
+          ).toString();
+          sessionStorage.setItem("fullName", user.fullName);
+          sessionStorage.setItem("roleName", encryptedRoleName);
+          sessionStorage.setItem("RoleSyllabus", encryptedSyllabus);
+          sessionStorage.setItem("RoleTrainingProgram", encryptedTrainingProgram);
+          sessionStorage.setItem("RoleClass", encryptedClass);
+          sessionStorage.setItem("RoleLearningMaterial", encryptedLearningMaterial);
           navigate("/home");
         } else {
           message.error("Your account has been locked");
         }
       }
       else {
-        message.error("Incorrect email or password. Please try againnn");
+        message.error("Incorrect email or password. Please try again.");
       }
     } catch (error) {
       console.error("Error during login:", error);
@@ -41,6 +58,13 @@ const Login = ({ onLogin }) => {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    const token = sessionStorage.getItem("token");
+    if (token) {
+      navigate(-1);
+    }
+  }, []);
 
   return (
     <Spin spinning={loading} size="large">

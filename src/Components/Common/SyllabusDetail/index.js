@@ -20,17 +20,17 @@ function SyllabusDetail({ title, standard, status, time, type }) {
 
   let icon = "";
 
-  if (type === "lecture") {
+  if (type === "Concept/Lecture") {
     icon = <Icons.LectureIcon />;
-  } else if (type === "assignment") {
+  } else if (type === "Assignment/Lab") {
     icon = <Icons.LabIcon />;
-  } else if (type === "review") {
+  } else if (type === "Guide/Review") {
     icon = <Icons.ReviewIcon />;
-  } else if (type === "quiz") {
+  } else if (type === "Test/Quiz") {
     icon = <Icons.QuizIcon/>;
-  } else if (type === "exam") {
+  } else if (type === "Exam") {
     icon = <Icons.ExamIcon />;
-  } else if (type === "workshop") {
+  } else if (type === "Workshop") {
     icon = <Icons.WorkshopIcon />;
   } 
 

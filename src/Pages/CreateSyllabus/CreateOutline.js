@@ -23,6 +23,7 @@ import {
 import AddUnitPopup from "./AddUnitPopup";
 import SyllabusPopup from "./SyllabusPopup";
 import { Modal, Spin, message } from "antd";
+import ChartLabel from "../../Components/Common/PipeChart/ChartLabel";
 
 const CreateOutline = () => {
   const dispatch = useDispatch();
@@ -268,7 +269,7 @@ const CreateOutline = () => {
       {loading ? (
         <Spin size="large" />
       ) : (
-        <div className="syllabusTabContainer" style={{ padding: "0" }}>
+        <div className="syllabusTabContainer" style={{ padding: "0", paddingTop: "20px", paddingRight: "20px" }}>
           <div className="syllabusTabContent">
             <div
               className="createOutline"
@@ -513,7 +514,7 @@ const CreateOutline = () => {
             </div>
           </div>
           <div className="timeAllocation" style={{ width: "18%" }}>
-            <TimeAllocation />
+            <TimeAllocation width={220} height={220} outerRadius={90}/>
           </div>
 
           {showAddSyllabusPopup && (

@@ -9,6 +9,7 @@ import { AttendeeStyle, StatusStyle } from "../Styles";
 import axios from "axios";
 import crypto from "crypto-js";
 import axiosClient from "../../../Services/axios/config";
+import { changeStatus } from "../../../Services/classApi";
 
 const cx = classNames.bind(styles);
 
@@ -97,25 +98,10 @@ function TableRow({ item, domChange, domChangeSuccess, reload }) {
     }
 
     const handleChangeStatus = () => {
-        async function changeStatus() {
-            try {
-                const response = await axiosClient.put(`/api/class/deactive-class?id=${item.classId}`);
-                // console.log(response);
-                notification.success({
-                    message: "Change status successfully",
-                    duration: '1.5'
-                });
+        changeStatus(item.classId)
+            .then(() => {
                 domChangeSuccess();
-            } catch (error) {
-                // console.log(error);
-                notification.error({
-                    message: "Change status failed",
-                    description: "Something wrong! Please try again later!",
-                    duration: '1.5'
-                });
-            }
-        };
-        changeStatus();
+            })
     }
 
     const performAction = () => {

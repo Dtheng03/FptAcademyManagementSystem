@@ -15,6 +15,7 @@ import { setClassList } from "../../Redux/Reducer/ClassSlice";
 import Filter from "./Filter";
 import crypto from "crypto-js";
 import axiosClient from "../../Services/axios/config";
+import { getClassList } from "../../Services/classApi";
 
 const cx = classNames.bind(styles);
 
@@ -64,18 +65,13 @@ function ClassListPage() {
     //Gọi API
     async function getClass() {
         setLoading(true);
-        try {
-            const response = await axiosClient.get("/api/class/view-class-list");
-            dispatch(setClassList(response.data.data));
+        getClassList()
+        .then(res => {
+            dispatch(setClassList(res?.data?.data || []));
+        })
+        .finally(() => {
             setLoading(false);
-            console.log(response);
-        } catch (error) {
-            notification.error({
-                message: error.message,
-                duration: '1.5'
-            });
-            setLoading(false);
-        }
+        })
     }
 
     useEffect(() => {

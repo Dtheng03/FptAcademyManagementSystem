@@ -111,7 +111,6 @@ const MenuOption = ({ item, apiData, setApiData, status }) => {
           outputStandard: response.data.data.outputStandard.map((item) => item.objectiveCode),
           status: response.data.data.status,
         };
-        console.table(dataDuplicate);
         // Update Successfully
         setApiData([dataDuplicate, ...apiData]);
         showSuccessNotification();
@@ -127,7 +126,7 @@ const MenuOption = ({ item, apiData, setApiData, status }) => {
     // Make a DELETE request to remove the syllabus from the mock API
     try {
       await axios.put(
-        `http://fams-group1-net03.ptbiology.com/api/syllabus/active-deactive-syllabus?syllabusId=${syllabusId}`
+        `http://fams-group1-net03.ptbiology.com/api/syllabus/deactive-syllabus?syllabusId=${syllabusId}`
       );
 
       const reponse = await axios.get(

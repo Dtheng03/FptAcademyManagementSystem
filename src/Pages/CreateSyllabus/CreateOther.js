@@ -1,22 +1,118 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ReactQuill from "react-quill";
 import TimeAllocation from "../../Components/Common/TimeAllocation/TimeAllocation";
-import { Input, Select } from "antd";
+import { Input, Select, message } from "antd";
 import { Option } from "antd/es/mentions";
+import { useSelector } from "react-redux";
 
 const CreateOther = () => {
-  const [trainingDeliveryPrinciple, setTrainingDeliveryPrinciple] =
-    useState("");
+  const [trainingDeliveryPrinciple, setTrainingDeliveryPrinciple] = useState("");
+  const [quizWeight, setQuizWeight] = useState("");
+  const [assignmentWeight, setAssignmentWeight] = useState("");
+  const [finalWeight, setFinalWeight] = useState("");
+  const [finalTheoryWeight, setFinalTheoryWeight] = useState("");
+  const [finalPracticeWeight, setFinalPracticeWeight] = useState("");
+  const [gpaWeight, setGpaWeight] = useState("");
+  const [totalWeight, setTotalWeight] = useState(0);
+  const outline = useSelector((state) => state.outline.days);
 
-  const assessmentWeight = [
-    "5%", "10%", "15%", "20%", "25%", "30%", "35%", "40%", "45%", "50%", "55%", "60%", "65%", "70%", "75%", "80%", "85%", "90%", "95%", "100%",];
 
-  const numberOfTaskPassingCriteria = [
-    "50%", "60%", "70%", "80%", "90%", "100%",
-  ];
+  const weights = Array.from({ length: 20 }, (_, i) => (i + 1) * 5);
+
+  const passingCriteria = Array.from({ length: 10 }, (_, i) => (i + 1) * 10);
+
+  const convertPercentToNumber = (percentString) => {
+    return parseInt(percentString.replace("%", ""), 10);
+  };
+
+  const handleSaveWeights = () => {
+    const quizPercent = convertPercentToNumber(quizWeight);
+    const assignmentPercent = convertPercentToNumber(assignmentWeight);
+    const finalPercent = convertPercentToNumber(finalWeight);
+    const totalPercent = quizPercent + assignmentPercent + finalPercent;
+
+    if (totalPercent !== 100) {
+      message.error("Tổng phần trăm phải đúng là 100.");
+      setTotalWeight(0);
+    } else {
+      message.success("Lưu trọng số thành công.");
+      setTotalWeight(totalPercent);
+    }
+  };
+
+  useEffect(() => {
+    if (quizWeight && assignmentWeight && finalWeight) {
+      handleSaveWeights();
+    }
+  }, [quizWeight, assignmentWeight, finalWeight]);
+
+  const handleSaveFinalWeights = () => {
+    const finalTheoryPercent = convertPercentToNumber(finalTheoryWeight);
+    const finalPracticePercent = convertPercentToNumber(finalPracticeWeight);
+    const totalPercent = finalTheoryPercent + finalPracticePercent;
+
+    if (totalPercent !== 100) {
+      message.error("Tổng phần trăm của Final Theory và Final Practice phải đúng là 100.");
+    } else {
+      message.success("Lưu trọng số của Final Theory và Final Practice thành công.");
+    }
+  };
+
+  useEffect(() => {
+    if (finalTheoryWeight && finalPracticeWeight) {
+      handleSaveFinalWeights();
+    }
+  }, [finalTheoryWeight, finalPracticeWeight]);
+
+  const displayWeights = () => {
+
+    let assignmentLabCount = 0;
+    let testQuizCount = 0;
+
+    outline.forEach((day) => {
+      day.units.forEach((unit) => {
+        unit.syllabus.forEach((syllabus) => {
+          if (syllabus.type === "Assignment/Lab") {
+            assignmentLabCount++;
+          } else if (syllabus.type === "Test/Quiz") {
+            testQuizCount++;
+          }
+        });
+      });
+    });
+
+    console.log([
+      { title: "Quiz", weight: parseInt(quizWeight, 10), numberOfTaskPassingCriteria: testQuizCount },
+      { title: "Assignment", weight: parseInt(assignmentWeight, 10), numberOfTaskPassingCriteria: assignmentLabCount },
+      { title: "Final", weight: parseInt(finalWeight, 10), numberOfTaskPassingCriteria: 2 },
+      { title: "Final Theory", weight: parseInt(finalTheoryWeight, 10), numberOfTaskPassingCriteria: 1 },
+      { title: "Final Practice", weight: parseInt(finalPracticeWeight, 10), numberOfTaskPassingCriteria: 1 },
+      { title: "GPA", weight: parseInt(gpaWeight, 10), numberOfTaskPassingCriteria: 1 },
+    ]);
+  };
+
+  useEffect(() => {
+    if (
+      quizWeight &&
+      assignmentWeight &&
+      finalWeight &&
+      finalTheoryWeight &&
+      finalPracticeWeight &&
+      gpaWeight
+    ) {
+      displayWeights();
+    }
+  }, [
+    quizWeight,
+    assignmentWeight,
+    finalWeight,
+    finalTheoryWeight,
+    finalPracticeWeight,
+    gpaWeight
+  ]);
 
   return (
-    <div className="syllabusOtherTabContainer" style={{ width: "98%", }}>
+    <div className="syllabusOtherTabContainer" style={{ width: "98%" }}>
       <div className="syllabusOtherTabContent">
         <div className="allocateTimeAndScheme">
           <div className="otherTimeAllocation">
@@ -31,11 +127,15 @@ const CreateOther = () => {
                 <div className="assessmentTitle">
                   <p className="body2">Quiz *</p>
                 </div>
-                <div className="assessmentInput">
-                  <Select style={{ width: "100%" }}>
-                    {assessmentWeight.map((type, index) => (
-                      <Option key={index} value={type}>
-                        {type}
+                <div className="quizInpt assessmentInput">
+                  <Select
+                    style={{ width: "100%" }}
+                    value={quizWeight}
+                    onChange={(value) => setQuizWeight(value)}
+                  >
+                    {weights.map((weight, index) => (
+                      <Option key={index} value={`${weight}%`}>
+                        {weight}%
                       </Option>
                     ))}
                   </Select>
@@ -46,10 +146,14 @@ const CreateOther = () => {
                   <p className="body2">Assignment *</p>
                 </div>
                 <div className="assessmentInput">
-                  <Select style={{ width: "100%" }}>
-                    {assessmentWeight.map((type, index) => (
-                      <Option key={index} value={type}>
-                        {type}
+                  <Select
+                    style={{ width: "100%" }}
+                    value={assignmentWeight}
+                    onChange={(value) => setAssignmentWeight(value)}
+                  >
+                    {weights.map((weight, index) => (
+                      <Option key={index} value={`${weight}%`}>
+                        {weight}%
                       </Option>
                     ))}
                   </Select>
@@ -60,61 +164,79 @@ const CreateOther = () => {
                   <p className="body2">Final *</p>
                 </div>
                 <div className="assessmentInput">
-                  <Select style={{ width: "100%" }}>
-                    {assessmentWeight.map((type, index) => (
-                      <Option key={index} value={type}>
-                        {type}
+                  <Select
+                    style={{ width: "100%" }}
+                    value={finalWeight}
+                    onChange={(value) => setFinalWeight(value)}
+                  >
+                    {weights.map((weight, index) => (
+                      <Option key={index} value={`${weight}%`}>
+                        {weight}%
                       </Option>
                     ))}
                   </Select>
                 </div>
               </div>
-              <div className="finalIngredient ">
-                <div className="finalTheory assessmentWidth">
-                  <div className="assessmentTitle">
-                    <p className="body2">Final Theory*</p>
+              {totalWeight === 100 && (
+                <div className="finalIngredient ">
+                  <div className="finalTheory assessmentWidth">
+                    <div className="assessmentTitle">
+                      <p className="body2">Final Theory*</p>
+                    </div>
+                    <div className="assessmentInput">
+                      <Select
+                        style={{ width: "100%" }}
+                        value={finalTheoryWeight}
+                        onChange={(value) => setFinalTheoryWeight(value)}
+                      >
+                        {weights.map((weight, index) => (
+                          <Option key={index} value={`${weight}%`}>
+                            {weight}%
+                          </Option>
+                        ))}
+                      </Select>
+                    </div>
                   </div>
-                  <div className="assessmentInput">
-                    <Select style={{ width: "100%" }}>
-                      {assessmentWeight.map((type, index) => (
-                        <Option key={index} value={type}>
-                          {type}
-                        </Option>
-                      ))}
-                    </Select>
+                  <div className="finalPractice assessmentWidth">
+                    <div className="assessmentTitle">
+                      <p className="body2">Final Practice*</p>
+                    </div>
+                    <div className="assessmentInput">
+                      <Select
+                        style={{ width: "100%" }}
+                        value={finalPracticeWeight}
+                        onChange={(value) => setFinalPracticeWeight(value)}
+                      >
+                        {weights.map((weight, index) => (
+                          <Option key={index} value={`${weight}%`}>
+                            {weight}%
+                          </Option>
+                        ))}
+                      </Select>
+                    </div>
                   </div>
                 </div>
-                <div className="finalPractice assessmentWidth">
-                  <div className="assessmentTitle">
-                    <p className="body2">Final Practice*</p>
-                  </div>
-                  <div className="assessmentInput">
-                    <Select style={{ width: "100%" }}>
-                      {assessmentWeight.map((type, index) => (
-                        <Option key={index} value={type}>
-                          {type}
-                        </Option>
-                      ))}
-                    </Select>
-                  </div>
-                </div>
-              </div>
-              <div className="passingCriteria">
+              )}
+              <div className="passingCriteria" style={{ marginTop: "10px" }}>
                 <div
                   className="passingCriteriatitle"
                   style={{ marginBottom: "15px" }}
                 >
-                  <p className="subtitle2">Passing criteria</p>
+                  <p className="subtitle2" style={{ color: "tomato", fontWeight: "700", fontSize: "16px" }}>Passing criteria</p>
                 </div>
                 <div className="assessmentWidth">
                   <div className="assessmentTitle">
                     <p className="body2">GPA *</p>
                   </div>
                   <div className="assessmentInput">
-                    <Select style={{ width: "100%" }}>
-                      {numberOfTaskPassingCriteria.map((type, index) => (
-                        <Option key={index} value={type}>
-                          {type}
+                    <Select
+                      style={{ width: "100%" }}
+                      value={gpaWeight}
+                      onChange={(value) => setGpaWeight(value)}
+                    >
+                      {passingCriteria.map((weight, index) => (
+                        <Option key={index} value={weight}>
+                          {weight}%
                         </Option>
                       ))}
                     </Select>

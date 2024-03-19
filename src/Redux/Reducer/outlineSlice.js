@@ -48,24 +48,28 @@ const calculateSyllabusTypePercentage = (state) => {
 
 const outlineSlice = createSlice({
   name: "outline",
-  initialState: [],
+  initialState: {
+    days: [],
+    assessmentSchemeContent: "",
+    trainingDeliveryPrinciple: "",
+  },
   reducers: {
     addDay: (state, action) => {
       const newDay = action.payload;
-      state.push(newDay);
+      state.days.push(newDay);
 
-      state.forEach((day, index) => {
+      state.days.forEach((day, index) => {
         day.dayNumber = index + 1;
       });
     },
     addUnit: (state, action) => {
       const { dayIndex, unit } = action.payload;
-      state[dayIndex].units.push(unit);
+      state.days[dayIndex].units.push(unit);
     },
     addSyllabus: (state, action) => {
       const { dayIndex, unitIndex, syllabus } = action.payload;
 
-      const totalTimeOfDay = calculateTotalTimeOfDay(state[dayIndex]);
+      const totalTimeOfDay = calculateTotalTimeOfDay(state.days[dayIndex]);
       const totalTimeWithNewSyllabus =
         totalTimeOfDay + parseInt(syllabus.time) || 0;
 
@@ -76,31 +80,37 @@ const outlineSlice = createSlice({
         );
         return;
       }
-      state[dayIndex].units[unitIndex].syllabus.push(syllabus);
+      state.days[dayIndex].units[unitIndex].syllabus.push(syllabus);
     },
     removeDay: (state, action) => {
       const dayIndexToRemove = action.payload;
-      state.splice(dayIndexToRemove, 1);
+      state.days.splice(dayIndexToRemove, 1);
 
-      state.forEach((day, index) => {
+      state.days.forEach((day, index) => {
         day.dayNumber = index + 1;
       });
     },
     updateUnitName: (state, action) => {
       const { dayIndex, unitIndex, newUnitName } = action.payload;
-      state[dayIndex].units[unitIndex].unitName = newUnitName;
+      state.days[dayIndex].units[unitIndex].unitName = newUnitName;
     },
     deleteUnit: (state, action) => {
       const { dayIndex, unitIndex } = action.payload;
-      state[dayIndex].units.splice(unitIndex, 1);
+      state.days[dayIndex].units.splice(unitIndex, 1);
 
-      for (let i = unitIndex; i < state[dayIndex].units.length; i++) {
-        state[dayIndex].units[i].unitNumber = i + 1;
+      for (let i = unitIndex; i < state.days[dayIndex].units.length; i++) {
+        state.days[dayIndex].units[i].unitNumber = i + 1;
       }
     },
     calculateAndDisplaySyllabusTypePercentage: (state) => {
-      const percentageTimes = calculateSyllabusTypePercentage(state);
-      console.log("Syllabus Type Percentage Times:", percentageTimes);
+      const percentageTimes = calculateSyllabusTypePercentage(state.days);
+    },
+    // Thêm reducers mới để cập nhật assessmentSchemeContent và trainingDeliveryPrinciple
+    setAssessmentSchemeContent: (state, action) => {
+      state.assessmentSchemeContent = action.payload;
+    },
+    setTrainingDeliveryPrinciple: (state, action) => {
+      state.trainingDeliveryPrinciple = action.payload;
     },
   },
 });
@@ -114,5 +124,8 @@ export const {
   updateUnitName,
   deleteUnit,
   calculateAndDisplaySyllabusTypePercentage,
+  // Export các reducers mới
+  setAssessmentSchemeContent,
+  setTrainingDeliveryPrinciple,
 } = outlineSlice.actions;
 export default outlineSlice.reducer;

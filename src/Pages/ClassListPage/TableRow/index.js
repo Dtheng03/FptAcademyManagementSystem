@@ -44,7 +44,7 @@ function TableRow({ item, domChange, domChangeSuccess, reload }) {
     const navigate = useNavigate();
 
     const handleDoubleClick = (selectedItem) => {
-        navigate(`/view-class-detail/${selectedItem.classId}`);
+        navigate(`/view-class-detail/${selectedItem.id}`);
     };
 
     const handleAction = (action) => {
@@ -121,12 +121,12 @@ function TableRow({ item, domChange, domChangeSuccess, reload }) {
                 {/* <td className={cx("td", "id")}>{item.id}</td> */}
                 <td className={cx("td", "name")}>{item.className}</td>
                 <td className={cx("td", "code")}>{item.classCode}</td>
-                <td className={cx("td", "createdon")}>{item.createdDate}</td>
+                <td className={cx("td", "createdon")}>{item.createdOn}</td>
                 <td className={cx("td", "createdby")}>{item.createdBy.fullName}</td>
-                <td className={cx("td", "duration")}>{item.classDuration} days</td>
+                <td className={cx("td", "duration")}>{item.duration} days</td>
                 <td className={cx("td", "attendee")}><AttendeeStyle attendee={item.attendee} /></td>
-                {/* <td className={cx("td")}><StatusStyle status={item.classStatus} /></td> */}
-                <td className={cx("td", "location")}>{item.classLocation}</td>
+                <td className={cx("td")}><StatusStyle status={item.status} /></td>
+                {/* <td className={cx("td", "location")}>{item.location}</td> */}
                 <td className={cx("td")}>{item.fsu}</td>
                 {(roleName === "Super Admin" || roleName === "Admin") &&
                     <td className={cx("td")}>

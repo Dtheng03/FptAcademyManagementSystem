@@ -8,6 +8,7 @@ import {
   DeleteOutlined,
   EyeOutlined,
   EyeInvisibleOutlined,
+  FormOutlined,
 } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 
@@ -31,11 +32,13 @@ const MenuOption = ({ item, apiData, setApiData, status }) => {
   const items = [
     getItem('Add training program', 'Add training program', <PlusCircleOutlined />),
     getItem('Edit syllabus', 'Edit syllabus', <EditOutlined />),
-    status === 'Active' && getItem('Duplicate syllabus', 'Duplicate syllabus', <CopyOutlined />),
-    status === 'Active' &&
-      getItem('De-active syllabus', 'Update syllabus', <EyeInvisibleOutlined />),
     (status === 'Drafting' || status === 'Inactive') &&
-      getItem('Active syllabus', 'Update syllabus', <EyeOutlined />),
+      getItem('Active syllabus', 'Update Active', <EyeOutlined />),
+    status === 'Active' && getItem('Duplicate syllabus', 'Duplicate', <CopyOutlined />),
+    (status === 'Active' || status === 'Drafting') &&
+      getItem('De-active syllabus', 'Update Inactive', <EyeInvisibleOutlined />),
+    (status === 'Active' || status === 'Inactive') &&
+      getItem('Turn into Draft', 'Update Drafting', <FormOutlined />),
   ];
 
   // Section for Modal
@@ -57,14 +60,14 @@ const MenuOption = ({ item, apiData, setApiData, status }) => {
       setConfirmLoading(false);
 
       // Move the logic inside the setTimeout callback
-      if (action === 'Duplicate syllabus') {
+      if (action === 'Duplicate') {
         // Get the selected syllabus data
         const selectedSyllabus = item;
         handleDuplicate(selectedSyllabus);
-      } else if (action === 'Update syllabus') {
+      } else if (action.includes('Update')) {
         // Get the syllabus item
         const syllabusId = item.id;
-        handleUpdate(syllabusId);
+        handleUpdate(syllabusId, action.split(' ')[1]);
       }
     }, 2000);
   };
@@ -121,12 +124,12 @@ const MenuOption = ({ item, apiData, setApiData, status }) => {
     }
   };
 
-  const handleUpdate = async (syllabusId) => {
+  const handleUpdate = async (syllabusId, action) => {
     console.log('syllabusId', syllabusId);
     // Make a DELETE request to remove the syllabus from the mock API
     try {
       await axios.put(
-        `http://fams-group1-net03.ptbiology.com/api/syllabus/deactive-syllabus?syllabusId=${syllabusId}`
+        `http://fams-group1-net03.ptbiology.com/api/syllabus/active-deactive-syllabus?syllabusId=${syllabusId}&newStatus=${action}`
       );
 
       const reponse = await axios.get(

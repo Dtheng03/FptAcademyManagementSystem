@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ConfigProvider, Flex, Modal, Spin, Table, Typography } from 'antd';
+import { ConfigProvider, Flex, Modal, Spin, Table, Typography, notification } from 'antd';
 import './SyllabusList.scss';
 import { OutputStandard } from './OutputStandard';
 import { Status } from './Status';
@@ -8,6 +8,7 @@ import axios from 'axios';
 import InputSection from './InputSection';
 import MenuOption from './MenuOption';
 import { useNavigate } from 'react-router-dom';
+import crypto from 'crypto-js';
 
 const SyllabusList = () => {
   const navigate = useNavigate();
@@ -21,6 +22,14 @@ const SyllabusList = () => {
   const token = sessionStorage.getItem('token');
   axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
+  // Decode roleName đã mã hóa
+  var decryptedRoleName;
+  const encryptedRoleName = sessionStorage.getItem('roleName');
+  if (encryptedRoleName) {
+    decryptedRoleName = crypto.AES.decrypt(encryptedRoleName, 'react02').toString(crypto.enc.Utf8);
+  }
+  const roleName = decryptedRoleName;
+
   const handleSort = (columnKey) => {
     let sortOrder =
       sortedInfo.columnKey === columnKey && sortedInfo.order === 'ascend' ? 'descend' : 'ascend';
@@ -29,52 +38,68 @@ const SyllabusList = () => {
   let data = [];
 
   useEffect(() => {
-    setLoading(true); // Set loading to true when starting to fetch data
-    axios
-      .get(
-        'http://fams-group1-net03.ptbiology.com/api/syllabus/view-syllabus-list?filter-by=Active&filter-by=Inactive&filter-by=Drafting'
-      )
-      .then((response) => {
-        setApiData(response.data.data);
-        setLoading(false); // Set loading to false when data is received
-      });
-  }, []);
+    if (roleName !== 'Trainer') {
+      setLoading(true); // Set loading to true when starting to fetch data
+      axios
+        .get(
+          'http://fams-group1-net03.ptbiology.com/api/syllabus/view-syllabus-list?filter-by=Active&filter-by=Inactive&filter-by=Drafting'
+        )
+        .then((response) => {
+          setApiData(response.data.data);
+          setLoading(false); // Set loading to false when data is received
+        })
+        .catch((err) => {
+          notification.error({
+            message: 'Server error ' + err,
+            description: 'An unexpected error occurred. Please try again.',
+          });
+        });
+    }
+  }, [roleName]);
 
   let params;
   // handle Search Input
   useEffect(() => {
-    params = {};
-    if (searchBy.trim() !== '') {
-      if (searchBy.includes('syllabus_')) {
+    if (roleName !== 'Trainer') {
+      params = {};
+      if (searchBy.trim() !== '') {
+        if (searchBy.includes('syllabus_')) {
+          params = {
+            syllabus: searchInput,
+          };
+        }
+        if (searchBy.includes('code_')) {
+          params = {
+            code: searchInput,
+          };
+        }
+        if (searchBy.includes('createdby_')) {
+          params = {
+            createdBy: searchInput,
+          };
+        }
+      } else {
         params = {
-          syllabus: searchInput,
+          syllabus: '',
+          code: '',
+          createdBy: '',
         };
       }
-      if (searchBy.includes('code_')) {
-        params = {
-          code: searchInput,
-        };
-      }
-      if (searchBy.includes('createdby_')) {
-        params = {
-          createdBy: searchInput,
-        };
-      }
-    } else {
-      params = {
-        syllabus: '',
-        code: '',
-        createdBy: '',
-      };
-    }
 
-    axios
-      .get('http://fams-group1-net03.ptbiology.com/api/syllabus/search', {
-        params,
-      })
-      .then((response) => {
-        setApiData(response.data.data);
-      });
+      axios
+        .get('http://fams-group1-net03.ptbiology.com/api/syllabus/search', {
+          params,
+        })
+        .then((response) => {
+          setApiData(response.data.data);
+        })
+        .catch((err) => {
+          notification.error({
+            message: 'Server error ' + err,
+            description: 'An unexpected error occurred. Please try again.',
+          });
+        });
+    }
   }, [searchBy]);
 
   // data from API
@@ -229,28 +254,34 @@ const SyllabusList = () => {
       <Flex gap={'4rem'} style={{ width: '100%', padding: '2rem' }} vertical>
         <Flex gap={'2rem'} vertical>
           <h4 style={{ margin: '0' }}>Syllabus</h4>
-          <InputSection
-            apiData={apiData}
-            searchInput={searchInput}
-            setSearchBy={setSearchBy}
-            setSearchByDateRange={setSearchByDateRange}
-            onSearchInputChange={setSearchInput}
-          />
+          {roleName !== 'Trainer' && (
+            <InputSection
+              apiData={apiData}
+              searchInput={searchInput}
+              setSearchBy={setSearchBy}
+              setSearchByDateRange={setSearchByDateRange}
+              onSearchInputChange={setSearchInput}
+            />
+          )}
         </Flex>
-        <Spin spinning={loading} tip='Loading...'>
-          <Table
-            pagination={{
-              position: ['bottomCenter'],
-              style: {
-                textAlign: 'center',
-              },
-              showSizeChanger: true,
-              pageSizeOptions: ['10', '20', '50', '100'],
-            }}
-            columns={columns}
-            dataSource={data}
-          />
-        </Spin>
+        {roleName !== 'Trainer' ? (
+          <Spin spinning={loading} tip='Loading...'>
+            <Table
+              pagination={{
+                position: ['bottomCenter'],
+                style: {
+                  textAlign: 'center',
+                },
+                showSizeChanger: true,
+                pageSizeOptions: ['10', '20', '50', '100'],
+              }}
+              columns={columns}
+              dataSource={data}
+            />
+          </Spin>
+        ) : (
+          <h2 style={{ textAlign: 'center' }}>Only Admin or Super Admin can be access this</h2>
+        )}
       </Flex>
     </ConfigProvider>
   );

@@ -23,11 +23,10 @@ import {
 import AddUnitPopup from "./AddUnitPopup";
 import SyllabusPopup from "./SyllabusPopup";
 import { Modal, Spin, message } from "antd";
-import ChartLabel from "../../Components/Common/PipeChart/ChartLabel";
 
 const CreateOutline = () => {
   const dispatch = useDispatch();
-  const outline = useSelector((state) => state.outline);
+  const outline = useSelector((state) => state.outline.days);
   const [showAddSyllabusPopup, setShowAddSyllabusPopup] = useState(false);
   const [selectedDayIndex, setSelectedDayIndex] = useState(null);
   const [selectedUnitIndex, setSelectedUnitIndex] = useState(null);
@@ -44,6 +43,7 @@ const CreateOutline = () => {
   const [editingUnitName, setEditingUnitName] = useState(null);
   const [tempUnitName, setTempUnitName] = useState("");
   const [loading, setLoading] = useState(false);
+  
 
   const handleSyllabusDetailClick = (dayIndex, unitIndex) => {
     const selectedDay = outline[dayIndex];

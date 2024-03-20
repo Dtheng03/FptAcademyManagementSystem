@@ -5,7 +5,7 @@ import PipeChart from "../PipeChart/PipeChart";
 import ChartLabel from "../PipeChart/ChartLabel";
 
 const TimeAllocation = ({ width, height, outerRadius }) => {
-  const outline = useSelector((state) => state.outline);
+  const outline = useSelector((state) => state.outline.days); 
 
   const totalSyllabusTime = outline.reduce((total, day) => {
     day.units.forEach((unit) => {

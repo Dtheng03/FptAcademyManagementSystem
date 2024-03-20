@@ -1,31 +1,32 @@
-import { UploadOutlined } from "@ant-design/icons";
-import { Button, Upload, message } from "antd";
-import React from "react";
-
-const props = {
-  name: "file",
-  action: "https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188",
-  headers: {
-    authorization: "authorization-text",
-  },
-  onChange(info) {
-    if (info.file.status !== "uploading") {
-      console.log(info.file, info.fileList);
-    }
-    if (info.file.status === "done") {
-      message.success(`${info.file.name} file uploaded successfully`);
-    } else if (info.file.status === "error") {
-      message.error(`${info.file.name} file upload failed.`);
-    }
-  },
-};
+import React, { useState } from "react";
 
 const SyllabusPopup = ({
   dayNumber,
   unitNumber,
   unitName,
   onClose,
+  uploadedFiles, // Danh sách các file đã được upload
+  onUploadFile, // Hàm xử lý upload file
 }) => {
+  const [selectedFiles, setSelectedFiles] = useState([]);
+
+  const handleFileChange = (e) => {
+    const files = Array.from(e.target.files);
+    const newSelectedFiles = [...selectedFiles, ...files];
+    setSelectedFiles(newSelectedFiles);
+  };
+
+  const handleUpload = () => {
+    selectedFiles.forEach(file => {
+      if (file.size > 10 * 1024 * 1024) {
+        alert("File size should be less than 10MB.");
+        return;
+      }
+      onUploadFile(file);
+    });
+    setSelectedFiles([]);
+  };
+
   return (
     <div className="syllabusPopup">
       <h2>Syllabus Information</h2>
@@ -37,11 +38,21 @@ const SyllabusPopup = ({
         <p>Unit Name: {unitName}</p>
       </div>
       <div className="uploadFile">
-        <Upload {...props}>
-          <Button icon={<UploadOutlined />}>Click to Upload</Button>
-        </Upload>
+        <input type="file" onChange={handleFileChange} multiple />
+        <button onClick={handleUpload}>Upload</button>
+        {selectedFiles.map((file, index) => (
+          <div key={index}>
+            File {index + 1}: {file.name} ({(file.size / 1024).toFixed(2)} KB)
+          </div>
+        ))}
+        {uploadedFiles && uploadedFiles.map((file, index) => (
+          <div key={index}>
+            File {index + 1}: {file.name}
+            <button>Edit</button>
+            <button>Delete</button>
+          </div>
+        ))}
       </div>
-
       <button onClick={onClose}>Close</button>
     </div>
   );

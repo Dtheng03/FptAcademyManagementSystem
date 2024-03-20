@@ -316,7 +316,7 @@ button {
 }
 
 .finalIngredient {
-    display: flex;
+    display: block;
     justify-content: space-between;
     padding: 15px 0;
     border-top: 1px solid #474747;
@@ -345,3 +345,4 @@ button {
     height: auto;
     padding-bottom: 40px;
 }
+

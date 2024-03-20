@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { Menu, Popover, notification, Modal } from 'antd';
+import { Menu, Popover, notification, Modal, Spin } from 'antd';
 import {
   PlusCircleOutlined,
   EditOutlined,
@@ -25,10 +25,10 @@ function getItem(label, key, icon, children, type) {
 const MenuOption = ({ item, apiData, setApiData, status }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [action, setAction] = useState('');
+  const [loading, setLoading] = useState(false); // State for loading overlay
 
   const navigate = useNavigate();
 
-  // Check condition is status is active or inactive or drafting
   const items = [
     getItem('Add training program', 'Add training program', <PlusCircleOutlined />),
     getItem('Edit syllabus', 'Edit syllabus', <EditOutlined />),
@@ -41,60 +41,43 @@ const MenuOption = ({ item, apiData, setApiData, status }) => {
       getItem('Turn into Draft', 'Update Drafting', <FormOutlined />),
   ];
 
-  // Section for Modal
-  const [open, setOpen] = useState(false);
-  const [confirmLoading, setConfirmLoading] = useState(false);
-  const [ok, setOk] = useState(false);
-  const [modalText, setModalText] = useState('Content of the modal');
-
   const showModal = () => {
-    setOpen(true);
+    setIsVisible(true);
   };
-  const handleOk = () => {
-    setOk(true);
-    setModalText('The modal will be closed after two seconds');
-    setConfirmLoading(true);
-    setIsVisible(false);
-    setTimeout(() => {
-      setOpen(false);
-      setConfirmLoading(false);
 
-      // Move the logic inside the setTimeout callback
-      if (action === 'Duplicate') {
-        // Get the selected syllabus data
-        const selectedSyllabus = item;
-        handleDuplicate(selectedSyllabus);
-      } else if (action.includes('Update')) {
-        // Get the syllabus item
-        const syllabusId = item.id;
-        handleUpdate(syllabusId, action.split(' ')[1]);
-      }
-    }, 2000);
+  const handleMenuClick = (e) => {
+    if (e.key === 'Add training program') {
+      navigate('/create-program');
+    }
+
+    if (e.key === 'Edit syllabus') {
+      navigate('/view-syllabus-detail/' + item.id);
+    }
+
+    setAction(e.key);
+    showModal();
   };
+
+  const handleOk = async () => {
+    setIsVisible(false);
+    setLoading(true); // Show loading overlay
+
+    // Perform action based on selected menu item
+    if (action === 'Duplicate') {
+      const selectedSyllabus = item;
+      await handleDuplicate(selectedSyllabus);
+    } else if (action.includes('Update')) {
+      const syllabusId = item.id;
+      await handleUpdate(syllabusId, action.split(' ')[1]);
+    }
+    setLoading(false);
+  };
+
   const handleCancel = () => {
-    setOpen(false);
     setIsVisible(false);
-    setOk(false);
-  };
-
-  // Notification Section
-  // Define a separate function for showing success notification
-  const showSuccessNotification = (message = 'duplicated') => {
-    notification.success({
-      message: `Syllabus ${message} successfully!`,
-    });
-  };
-
-  // Define a separate function for showing error notification
-  const showErrorNotification = (error) => {
-    notification.error({
-      message: 'Syllabus duplication failed!',
-      description: error ? `Server error` : 'An unexpected error occurred. Please try again.',
-    });
   };
 
   const handleDuplicate = async (selectedSyllabus) => {
-    // Make a POST request to duplicate the syllabus
     try {
       const response = await axios.post(
         `http://fams-group1-net03.ptbiology.com/api/syllabus/duplicate-syllabus?syllabusId=${selectedSyllabus.id}`
@@ -103,7 +86,6 @@ const MenuOption = ({ item, apiData, setApiData, status }) => {
         var currentDate = new Date();
         var createOnDate = currentDate.toISOString().split('T')[0];
         const fullName = sessionStorage.getItem('fullName');
-        // Copy data from the selected syllabus or modify as needed
         const dataDuplicate = {
           id: response.data.data.id,
           syllabus: response.data.data.syllabusName,
@@ -114,7 +96,6 @@ const MenuOption = ({ item, apiData, setApiData, status }) => {
           outputStandard: response.data.data.outputStandard.map((item) => item.objectiveCode),
           status: response.data.data.status,
         };
-        // Update Successfully
         setApiData([dataDuplicate, ...apiData]);
         showSuccessNotification();
       }
@@ -125,8 +106,6 @@ const MenuOption = ({ item, apiData, setApiData, status }) => {
   };
 
   const handleUpdate = async (syllabusId, action) => {
-    console.log('syllabusId', syllabusId);
-    // Make a DELETE request to remove the syllabus from the mock API
     try {
       await axios.put(
         `http://fams-group1-net03.ptbiology.com/api/syllabus/active-deactive-syllabus?syllabusId=${syllabusId}&newStatus=${action}`
@@ -135,7 +114,6 @@ const MenuOption = ({ item, apiData, setApiData, status }) => {
       const reponse = await axios.get(
         'http://fams-group1-net03.ptbiology.com/api/syllabus/view-syllabus-list?filter-by=Active&filter-by=Inactive&filter-by=Drafting'
       );
-      // Update the state by removing the deleted syllabus
       setApiData(reponse.data.data);
       notification.success({
         message: 'Syllabus update successfully!',
@@ -148,21 +126,17 @@ const MenuOption = ({ item, apiData, setApiData, status }) => {
     }
   };
 
-  const handleMenuClick = (e) => {
-    // Handle the click on menu items
+  const showSuccessNotification = (message = 'duplicated') => {
+    notification.success({
+      message: `Syllabus ${message} successfully!`,
+    });
+  };
 
-    if (e.key === 'Add training program') {
-      // CHƯA CÓ PAGE CREATE TRAINING PROGRAM
-      navigate('/create-program');
-    }
-
-    if (e.key === 'Edit syllabus') {
-      navigate('/view-syllabus-detail/' + item.id);
-    }
-
-    setAction(e.key);
-    showModal();
-    setModalText(`Are you sure for ${e.key.toLowerCase()} ?`);
+  const showErrorNotification = (error) => {
+    notification.error({
+      message: 'Syllabus duplication failed!',
+      description: error ? `Server error` : 'An unexpected error occurred. Please try again.',
+    });
   };
 
   const menu = (
@@ -178,23 +152,33 @@ const MenuOption = ({ item, apiData, setApiData, status }) => {
 
   return (
     <>
-      <Modal
-        title='Confirm action'
-        open={open}
-        onOk={handleOk}
-        confirmLoading={confirmLoading}
-        onCancel={handleCancel}
+      <Spin
+        style={{
+          position: 'fixed',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          zIndex: '9999',
+          backgroundColor: 'rgba(0, 0, 0, 0.2)',
+        }}
+        spinning={loading}
       >
-        <p>{modalText}</p>
-      </Modal>
-      <Popover
-        open={isVisible}
-        onOpenChange={() => setIsVisible(!isVisible)}
-        trigger={'click'}
-        content={menu}
-      >
-        <p className='button-options'>...</p>
-      </Popover>
+        <Modal
+          title='Confirm action'
+          open={isVisible}
+          onOk={handleOk}
+          onCancel={handleCancel}
+          okButtonProps={{ disabled: loading }} // Disable Ok button while loading
+          cancelButtonProps={{ disabled: loading }} // Disable Cancel button while loading
+        >
+          <p>Are you sure for {action.toLowerCase()}?</p>
+        </Modal>
+        <Popover trigger='click' content={menu}>
+          {' '}
+          {/* Show Spin component while loading */}
+          <p className='button-options'>...</p>
+        </Popover>
+      </Spin>
     </>
   );
 };

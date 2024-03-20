@@ -45,13 +45,26 @@ function ClassList({ domChange, domChangeSuccess, reload }) {
         }
         const { column, order } = sortedInfo;
         return [...classList].sort((a, b) => {
-            if (a[column] < b[column]) {
-                return order === "asc" ? -1 : 1;
+            if (column === "createdBy") {
+                const fullNameA = a.createdBy ? a.createdBy.fullName : "";
+                const fullNameB = b.createdBy ? b.createdBy.fullName : "";
+
+                if (fullNameA < fullNameB) {
+                    return order === "asc" ? -1 : 1;
+                }
+                if (fullNameA > fullNameB) {
+                    return order === "asc" ? 1 : -1;
+                }
+                return 0;
+            } else {
+                if (a[column] < b[column]) {
+                    return order === "asc" ? -1 : 1;
+                }
+                if (a[column] > b[column]) {
+                    return order === "asc" ? 1 : -1;
+                }
+                return 0;
             }
-            if (a[column] > b[column]) {
-                return order === "asc" ? 1 : -1;
-            }
-            return 0;
         });
     };
 
@@ -67,9 +80,9 @@ function ClassList({ domChange, domChangeSuccess, reload }) {
                         <th className={cx("th")}><button className={cx("title")} onClick={() => { sortColumn("createdOn") }}>Created On <SortIcon /></button></th>
                         <th className={cx("th")}><button className={cx("title")} onClick={() => { sortColumn("createdBy") }}>Created By<SortIcon /></button></th>
                         <th className={cx("th")}><button className={cx("title")} onClick={() => { sortColumn("duration") }}>Duration <SortIcon /></button></th>
-                        <th className={cx("th", "attendee")}><button className={cx("title")} onClick={() => { sortColumn("attendee") }}>Attendee <SortIcon /></button></th>
+                        {/* <th className={cx("th", "attendee")}><button className={cx("title")} onClick={() => { sortColumn("attendee") }}>Attendee <SortIcon /></button></th> */}
                         <th className={cx("th")}><button className={cx("title")} onClick={() => { sortColumn("status") }}>Status <SortIcon /></button></th>
-                        {/* <th className={cx("th", "location")}><button className={cx("title")} onClick={() => { sortColumn("location") }}>Location <SortIcon /></button></th> */}
+                        <th className={cx("th", "location")}><button className={cx("title")} onClick={() => { sortColumn("location") }}>Location <SortIcon /></button></th>
                         <th className={cx("th")}><button className={cx("title")} onClick={() => { sortColumn("fsu") }}>FSU <SortIcon /></button></th>
                         {(roleName === "Super Admin" || roleName === "Admin") &&
                             <th className={cx("th")}></th>}

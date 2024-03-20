@@ -33,15 +33,24 @@ function ClassListPage() {
     }
     const roleName = decryptedRoleName;
 
-    // const [data, setData] = useState([]);
     const [loading, setLoading] = useState(false)
+
+    const [filteredData, setFilteredData] = useState([]);
+
+    const handleSubmit = (formData) => {
+        console.log("Submitted:", formData);
+        setFilteredData([...filteredData, formData]);
+    };
+
+    const handleClear = () => {
+        console.log("Filters cleared");
+        setFilteredData([]);
+    };
 
     const [searchValue, setSearchValue] = useState("");
     const [search, setSearch] = useState([]);
 
     const [isDomChange, setIsDomChange] = useState(false);
-
-    // const handleClearFilters = () => {};
 
     //Xử lý input search
     const handleInputSearch = (e) => {
@@ -66,12 +75,12 @@ function ClassListPage() {
     async function getClass() {
         setLoading(true);
         getClassList()
-        .then(res => {
-            dispatch(setClassList(res?.data?.data || []));
-        })
-        .finally(() => {
-            setLoading(false);
-        })
+            .then(res => {
+                dispatch(setClassList(res?.data?.data || []));
+            })
+            .finally(() => {
+                setLoading(false);
+            })
     }
 
     useEffect(() => {
@@ -114,8 +123,8 @@ function ClassListPage() {
                             trigger="click"
                             placement="bottomRight"
                             content={<Filter
-                            // onSubmit={""}
-                            // onClear={handleClearFilters}
+                                onSubmit={handleSubmit}
+                                onClear={handleClear}
                             />}
                         >
                             <>

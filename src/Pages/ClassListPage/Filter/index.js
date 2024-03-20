@@ -7,14 +7,16 @@ import Button from "../../../Components/Common/Button";
 const cx = classNames.bind(styles);
 
 function Filter({ onSubmit, onClear }) {
-    const [clearFlag, setClearFlag] = useState(false);
-
-    const locations = [
-        { label: 'Can Tho', value: 'Can Tho' },
-        { label: 'Da Nang', value: 'Da Nang' },
-        { label: 'Ha Noi', value: 'Ha Noi' },
-        { label: 'Ho Chi Minh', value: 'Ho Chi Minh' }
-    ];
+    const [formData, setFormData] = useState({
+        locations: [],
+        fromDate: null,
+        toDate: null,
+        classTime: [],
+        status: [],
+        attendee: [],
+        fsu: null,
+        trainer: null,
+    });
 
     const customCheckboxOptions = [
         {
@@ -32,6 +34,7 @@ function Filter({ onSubmit, onClear }) {
                 { title: "Planning" },
                 { title: "Opening" },
                 { title: "Closed" },
+                { title: "Scheduled" }
             ],
         },
         {
@@ -45,14 +48,39 @@ function Filter({ onSubmit, onClear }) {
         },
     ];
 
-    const handleSubmit = () => {
+    const locations = [
+        { label: 'Can Tho', value: 'Can Tho' },
+        { label: 'Da Nang', value: 'Da Nang' },
+        { label: 'Ha Noi', value: 'Ha Noi' },
+        { label: 'Ho Chi Minh', value: 'Ho Chi Minh' }
+    ];
 
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        onSubmit(formData);
     }
 
     const handleClear = (e) => {
         e.preventDefault();
-        setClearFlag((prev) => !prev);
+        setFormData({
+            locations: [],
+            fromDate: null,
+            toDate: null,
+            classTime: [],
+            status: [],
+            attendee: [],
+            fsu: null,
+            trainer: null,
+        });
+        onClear();
     }
+
+    const handleInputChange = (name, value) => {
+        setFormData(prevData => ({
+            ...prevData,
+            [name]: value
+        }));
+    };
 
     return (
         <div className={cx("filter-popip")}>
@@ -72,6 +100,8 @@ function Filter({ onSubmit, onClear }) {
                                     allowClear
                                     placeholder="Please select"
                                     options={locations}
+                                    onChange={(value) => handleInputChange('locations', value)}
+                                    value={formData.locations}
                                 />
                             </Space>
                         </div>
@@ -83,15 +113,17 @@ function Filter({ onSubmit, onClear }) {
                             From
                             <Space direction="vertical" size={12}>
                                 <DatePicker
-                                    placeholder="--/--/----"
-                                    format="DD/MM/YYYY"
+                                    format="YYYY-MM-DD"
+                                    onChange={(date) => handleInputChange('fromDate', date)}
+                                    value={formData.fromDate}
                                 />
                             </Space>
                             To
                             <Space direction="vertical" size={12}>
                                 <DatePicker
-                                    placeholder="--/--/----"
-                                    format="DD/MM/YYYY"
+                                    format="YYYY-MM-DD"
+                                    onChange={(date) => handleInputChange('toDate', date)}
+                                    value={formData.toDate}
                                 />
                             </Space>
                         </div>
@@ -109,7 +141,23 @@ function Filter({ onSubmit, onClear }) {
                                             <input
                                                 type="checkbox"
                                                 value={child.title}
+                                                onChange={(e) => {
+                                                    const { checked } = e.target;
+                                                    const groupName = group.title.toLowerCase();
+                                                    let selectedOptions;
+
+                                                    if (Array.isArray(formData[groupName])) {
+                                                        selectedOptions = checked
+                                                            ? [...formData[groupName], child.title]
+                                                            : formData[groupName].filter(option => option !== child.title);
+                                                    } else {
+                                                        selectedOptions = checked ? [child.title] : [];
+                                                    }
+                                                    handleInputChange(groupName, selectedOptions);
+                                                }}
+                                                checked={(formData[group.title.toLowerCase()] ?? []).includes(child.title)}
                                             />
+
                                             {child.title}
                                         </label>
                                     ))}
@@ -126,6 +174,8 @@ function Filter({ onSubmit, onClear }) {
                             <Select
                                 placeholder={"Select"}
                                 className={cx("select")}
+                                onChange={(value) => handleInputChange('fsu', value)}
+                                value={formData.fsu}
                             >
                                 <Select.Option value="FSU" />
                                 <Select.Option value="FSS" />
@@ -139,6 +189,8 @@ function Filter({ onSubmit, onClear }) {
                             <Select
                                 placeholder={"Select"}
                                 className={cx("select")}
+                                onChange={(value) => handleInputChange('trainer', value)}
+                                value={formData.trainer}
                             >
                                 <Select.Option value="HUY" />
                                 <Select.Option value="THANG" />

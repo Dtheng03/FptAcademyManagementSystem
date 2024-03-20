@@ -1,6 +1,7 @@
 .tr {
     border-bottom: 0.5px solid var(--primary-color);
     width: 100%;
+    cursor: pointer;
 
     &:hover {
         background-color: rgba(0, 0, 0, 0.1);
@@ -12,7 +13,7 @@
 
     .td {
         padding: 0.5%;
-        height: 40px;
+        height: 58px;
 
         .more-btn {
             background-color: transparent;

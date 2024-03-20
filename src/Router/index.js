@@ -29,7 +29,11 @@ const router = createBrowserRouter([
                 </RootLayoput>
             </Authentication>
         ),
-        errorElement: <ErrorPage />,
+        errorElement: (
+            <RootLayoput>
+                <ErrorPage />
+            </RootLayoput>
+        ),
         children: [
             {
                 path: "home",

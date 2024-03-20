@@ -9,8 +9,14 @@ const cx = classNames.bind(styles);
 function Header() {
   const navigate = useNavigate();
   const fullName = sessionStorage.getItem("fullName");
-  const color = randomColor();
-
+  const avaColor = sessionStorage.getItem("avaColor");
+  let color
+  if (avaColor) {
+    color = avaColor;
+  } else {
+    color = randomColor();
+    sessionStorage.setItem("avaColor", color);
+  }
   const handleLogout = () => {
     sessionStorage.clear();
     navigate("/login");

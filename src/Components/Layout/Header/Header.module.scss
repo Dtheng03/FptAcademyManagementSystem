@@ -8,10 +8,11 @@
 
   .logo {
     margin-left: 2%;
-    width: 92px;
-    height: 59px;
-    background: url("../../../Assets/images/Logo.png"),
-      var(--primary-color) 50% / cover no-repeat;
+    width: 80px;
+    height: 48px;
+    background: url("../../../Assets/images/Logo.png");
+    background-repeat: no-repeat;
+    background-size: contain;
   }
 
   .body {

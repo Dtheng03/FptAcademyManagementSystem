@@ -17,6 +17,7 @@ import TrainingCalendarPage from "../Pages/TrainingCalendarPage";
 import UserListPage from "../Pages/UserListPage";
 import UserPermissionPage from "../Pages/UserPermissionPage";
 import LearningMaterials from "../Pages/LearningMaterials/LearningMaterials";
+import ChangePasswordPage from "../Pages/ChangePasswordPage";
 
 const router = createBrowserRouter([
     {
@@ -85,6 +86,10 @@ const router = createBrowserRouter([
             {
                 path: "materials",
                 element: <LearningMaterials />,
+            },
+            {
+                path: "password",
+                element: <ChangePasswordPage />,
             },
         ],
     },

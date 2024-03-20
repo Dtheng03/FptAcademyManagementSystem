@@ -95,8 +95,8 @@ function Sidebar() {
       to: "",
       children: [
         {
-          title: 'Calendar',
-          to: '/setting-calendar',
+          title: 'Password',
+          to: '/password',
         },
       ],
     },

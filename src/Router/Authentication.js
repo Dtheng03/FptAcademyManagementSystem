@@ -8,7 +8,7 @@ function Authentication({ children }) {
     const authenticate = () => {
         const token = sessionStorage.getItem("token");
         if (token) {
-            if (location.pathname != "" || location.pathname !="/home") {
+            if (location.pathname !== "" || location.pathname !== "/home") {
                 navigate(location.pathname);
             } else {
                 navigate("/home")

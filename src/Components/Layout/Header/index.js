@@ -2,12 +2,14 @@ import styles from "./Header.module.scss";
 import classNames from "classnames/bind";
 import { Avatar } from "antd";
 import { useNavigate } from "react-router-dom";
+import { randomColor } from "../../../Utils/randColor";
 
 const cx = classNames.bind(styles);
 
 function Header() {
   const navigate = useNavigate();
   const fullName = sessionStorage.getItem("fullName");
+  const color = randomColor();
 
   const handleLogout = () => {
     sessionStorage.clear();
@@ -23,7 +25,15 @@ function Header() {
           <span className="caption2">uniGate</span>
         </div>
         <div className={cx("user")}>
-          <Avatar size={"large"} />
+          <Avatar
+            size={"large"}
+            style={{
+              backgroundColor: color,
+              verticalAlign: 'middle',
+            }}
+          >
+            {fullName[0]}
+          </Avatar>
           <div className={cx("action")}>
             <p className={cx("fullName")}>{fullName}</p>
             <button

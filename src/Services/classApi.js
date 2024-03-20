@@ -4,11 +4,12 @@ import { notification } from "antd";
 export const getClassList = async () => {
     try {
         const response = await axiosClient.get("/api/class/view-class-list");
+        // console.log(response);
         return response;
     }
     catch (error) {
         notification.error({
-            message: error ?.message
+            message: error?.message
         });
     }
 }
@@ -26,5 +27,31 @@ export const changeStatus = async (id) => {
             message: "Change class's status failed",
             description: "Please try again later!"
         });
+    }
+}
+
+export const getLocationList = async () => {
+    try {
+        const response = await axiosClient.get("/api/class/view-location-list");
+        // console.log(response);
+        return response;
+    }
+    catch (error) {
+        notification.error({
+            message: error?.message
+        });
+    }
+}
+
+export const viewClassDetail = async (id) => {
+    try {
+        const response =await axiosClient.get(`/api/class/view-details-class?classId=${id}`);
+        // console.log(response);
+        return response;
+    }
+    catch (error) {
+        notification.error({
+            message: error?.message
+        })
     }
 }

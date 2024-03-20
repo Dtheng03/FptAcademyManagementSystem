@@ -10,6 +10,7 @@ import axios from "axios";
 import crypto from "crypto-js";
 import axiosClient from "../../../Services/axios/config";
 import { changeStatus } from "../../../Services/classApi";
+import { color } from "d3";
 
 const cx = classNames.bind(styles);
 
@@ -98,10 +99,10 @@ function TableRow({ item, domChange, domChangeSuccess, reload }) {
     }
 
     const handleChangeStatus = () => {
-        changeStatus(item.classId)
-            .then(() => {
-                domChangeSuccess();
-            })
+        changeStatus(item.id)
+            // .then(() => {
+            //     domChangeSuccess();
+            // })
     }
 
     const performAction = () => {
@@ -124,15 +125,15 @@ function TableRow({ item, domChange, domChangeSuccess, reload }) {
                 <td className={cx("td", "createdon")}>{item.createdOn}</td>
                 <td className={cx("td", "createdby")}>{item.createdBy.fullName}</td>
                 <td className={cx("td", "duration")}>{item.duration} days</td>
-                <td className={cx("td", "attendee")}><AttendeeStyle attendee={item.attendee} /></td>
+                {/* <td className={cx("td", "attendee")}><AttendeeStyle attendee={item.attendee} /></td> */}
                 <td className={cx("td")}><StatusStyle status={item.status} /></td>
-                {/* <td className={cx("td", "location")}>{item.location}</td> */}
+                <td className={cx("td", "location")}>{item.location}</td>
                 <td className={cx("td")}>{item.fsu}</td>
                 {(roleName === "Super Admin" || roleName === "Admin") &&
                     <td className={cx("td")}>
                         <Popover
                             trigger="click"
-                            placement="bottomRight"
+                            placement="right"
                             open={open}
                             onOpenChange={() => {
                                 setOpen(!open);
@@ -174,13 +175,13 @@ function TableRow({ item, domChange, domChangeSuccess, reload }) {
                                         )}
                                     </button>
 
-                                    <button
+                                    {/* <button
                                         style={{ ...style, color: 'red' }}
                                         onClick={() => { handleAction('delete'); domChange() }}
                                     >
                                         <DeleteForeverIcon />
                                         Delete class
-                                    </button>
+                                    </button> */}
                                 </>
                             }
                         >

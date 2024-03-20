@@ -188,7 +188,7 @@ function ViewClass() {
                                                     Dinh Vu Quoc Trung
                                                 </span>
                                                 <Modal
-                                                    title="This is a information of trainer"
+                                                    title="This is the contact information for the trainer"
                                                     open={isModalVisible}
                                                     onCancel={handleCancelModal}
                                                     footer={null}
@@ -202,26 +202,6 @@ function ViewClass() {
                                                         TrungDVQ@fsoft.com.vn</div>
 
                                                 </Modal>
-
-
-
-                                                {/* <Button type="link" onClick={showModal} style={{ backgroundColor: 'white' }}>
-                                                    <span className={cx("sider-body-item-name")}>
-                                                        Ba Chu Heo</span>
-                                                </Button>
-                                                <Button type="link" onClick={showModal} style={{ backgroundColor: 'white' }}>
-                                                    <span className={cx("sider-body-item-name")}>
-                                                        Heo Cheo Ba</span>
-                                                </Button>
-                                                <Button type="link" onClick={showModal} style={{ backgroundColor: 'white' }}>
-                                                    <span className={cx("sider-body-item-name")}>
-                                                        Tap The Lop</span>
-                                                </Button> */}
-
-
-
-
-
 
                                             </div>
                                         </div>

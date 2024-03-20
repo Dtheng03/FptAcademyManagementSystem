@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styles from "./Table.module.scss";
 import classNames from "classnames/bind";
-import { Popconfirm, Popover, notification, Button } from "antd";
+import { Popover, notification, Modal } from "antd";
 import { LearningMaterialsIcon } from "../../../Components/Common/Icons/NavMenuIcons";
 import {
   CopyIcon,
@@ -15,6 +15,7 @@ import {
 } from "../../../Components/Common/Icons/ActionIcons";
 import axios from "axios";
 import { useNavigate } from "react-router";
+import crypto from "crypto-js";
 
 const cx = classNames.bind(styles);
 
@@ -26,16 +27,29 @@ function StatusStyle({ status }) {
   } else if (status === "Inactive") {
     className = "inactive";
     title = "Inactive";
-  } else if (status === "Draft") {
-    className = "draft";
-    title = "Draft";
+  } else if (status === "Drafting") {
+    className = "drafting";
+    title = "Drafting";
   }
 
   return <span className={cx("status-style", className)}>{title}</span>;
 }
 
-export default function Table({ item, domChange, domChangeSuccess }) {
+export default function Table({ item, domChange, domChangeSuccess, reload }) {
   const link = useNavigate();
+
+  const token = sessionStorage.getItem("token");
+  axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+
+  var decryptedRoleName;
+  const encryptedRoleName = sessionStorage.getItem("roleName");
+  if (encryptedRoleName) {
+    decryptedRoleName = crypto.AES.decrypt(
+      encryptedRoleName,
+      "react02"
+    ).toString(crypto.enc.Utf8);
+  }
+  const roleName = decryptedRoleName;
 
   const handleViewDetail = (selectedItem) => {
     link(`/view-tranning-program-detail/${selectedItem.id}`);
@@ -54,184 +68,219 @@ export default function Table({ item, domChange, domChangeSuccess }) {
     cursor: "pointer",
   };
   const [open, setOpen] = useState(false);
+
+  const [isModalVisible, setIsModalVisible] = useState(false);
   const [newStatus, setNewStatus] = useState(item.status);
+  const [modalAction, setModalAction] = useState("");
 
-  const handleDelete = () => {
-    axios
-      .delete(`https://65411666f0b8287df1fdc4fa.mockapi.io/program/${item.id}`)
-      .then(() => {
-        notification.success({
-          message: "Delete class successfully",
-        });
-        domChangeSuccess();
-      })
-      .catch(function (error) {
-        console.log(error);
-        notification.error({
-          message: "Delete class failed",
-          description: "Please try again",
-        });
-      });
+  const handleAction = (action) => {
+    setModalAction(action);
+    setNewStatus("");
+    setIsModalVisible(true);
+    setOpen(false);
   };
 
-  const handleChangeStatus = () => {
-    const nextStatus = newStatus === "Active" ? "Inactive" : "Active";
-    axios
-      .put(`https://65411666f0b8287df1fdc4fa.mockapi.io/program/${item.id}`, {
-        status: nextStatus,
-      })
-      .then(() => {
-        notification.success({
-          message: "Status updated successfully",
+  const performAction = () => {
+    if (modalAction === "duplicate") {
+      const duplicatedProgram = { ...item };
+      delete duplicatedProgram.id;
+      axios
+        .post(
+          `http://fams-group1-net03.ptbiology.com/api/trainingprogram/dupplicate-training-program?id=${item.id}`,
+          duplicatedProgram
+        )
+        .then(() => {
+          notification.success({
+            message: "Duplicate class successfully",
+          });
+          domChangeSuccess();
+        })
+        .catch(function (error) {
+          console.log(error);
+          notification.error({
+            message: "Duplicate class failed",
+            description: "Please try again",
+          });
         });
-        domChangeSuccess();
-      })
-      .catch(function (error) {
-        console.log(error);
-        notification.error({
-          message: "Status update failed",
-          description: "Try Again!",
+      reload();
+    } else if (modalAction === "delete") {
+      axios
+        .delete(
+          `http://fams-group1-net03.ptbiology.com/api/trainingprogram/view-training-program-list?id=${item.id}`
+        )
+        .then(() => {
+          notification.success({
+            message: "Delete class successfully",
+          });
+          domChangeSuccess();
+        })
+        .catch(function (error) {
+          console.log(error);
+          notification.error({
+            message: "Delete class failed",
+            description: "Please try again",
+          });
         });
-      });
+      reload();
+    } else if (modalAction === "changeStatus") {
+      let nextStatus = "";
+      if (item.status === "Inactive") {
+        nextStatus = "Active";
+      } else if (item.status === "Active") {
+        nextStatus = "Inactive";
+      }
+      axios
+        .put(`https://65411666f0b8287df1fdc4fa.mockapi.io/program/${item.id}`, {
+          status: nextStatus,
+        })
+        .then(() => {
+          notification.success({
+            message: "Status updated successfully",
+          });
+          domChangeSuccess();
+        })
+        .catch(function (error) {
+          console.log(error);
+          notification.error({
+            message: "Status update failed",
+            description: "Try Again!",
+          });
+        });
+      reload();
+    }
+    setIsModalVisible(false);
   };
 
-  const handleDuplicate = () => {
-    const duplicatedProgram = { ...item };
-    delete duplicatedProgram.id;
-    axios
-      .post(
-        "https://65411666f0b8287df1fdc4fa.mockapi.io/program",
-        duplicatedProgram
-      )
-      .then(() => {
-        notification.success({
-          message: "Duplicate class successfully",
-        });
-        domChangeSuccess();
-      })
-      .catch(function (error) {
-        console.log(error);
-        notification.error({
-          message: "Duplicate class failed",
-          description: "Please try again",
-        });
-      });
-  };
+  // const handleDelete = () => {};
+
+  // const handleDuplicate = () => {};
 
   return (
     <tr className={cx("tr")} onDoubleClick={() => handleViewDetail(item)}>
-      <td className={cx("td")}>{item.id}</td>
-      <td className={cx("td")}>{item.name}</td>
-      <td className={cx("td")}>{item.createOn}</td>
-      <td className={cx("td")}>{item.createBy}</td>
-      <td className={cx("td")}>{item.duration}</td>
-      <td className={cx("td")}>
+      <td className={cx("td", "id")}>{item.tpCode}</td>
+      <td className={cx("td", "name")}>{item.tpName}</td>
+      <td className={cx("td", "createOn")}>{item.createdDate}</td>
+      <td className={cx("td", "createBy")}>{item.createdBy.fullName}</td>
+      <td className={cx("td", "duration")}>{item.duration.hour} hour</td>
+      <td className={cx("td", "style")}>
         <StatusStyle status={item.status} />
       </td>
-      <td className={cx("td")}>
-        <Popover
-          trigger="click"
-          placement="bottom"
-          open={open}
-          onOpenChange={() => {
-            setOpen(!open);
-          }}
-          content={
-            <>
-              <button
-                style={style}
-                onClick={() => {
-                  setOpen(false);
-                }}
-              >
-                <LearningMaterialsIcon />
-                Tranning materials
-              </button>
-
-              <button
-                style={style}
-                onClick={() => {
-                  setOpen(false);
-                }}
-              >
-                <CreateIcon />
-                Edit program
-              </button>
-
-              <button
-                
-                style={style}
-                onClick={() => {
-                  handleDuplicate();
-                  setOpen(false);
-                  domChange();
-                }}
-              >
-                <CopyIcon />
-                Duplicate program
-              </button>
-
-              <Popconfirm
-                trigger={"click"}
-                title="Delete program"
-                description={
-                  <div>
-                    {`Do you want to delete the "${item.programName}" `}
-                    <br />
-                    {"This program cannot be restored!"}
-                  </div>
-                }
-                placement="left"
-                onConfirm={handleDelete}
-                okText="Delete"
-                okButtonProps={{
-                  style: { backgroundColor: "#2D3748", color: "#FFF" },
-                }}
-                cancelButtonProps={{
-                  style: { color: "#ff0000", border: "none" },
-                }}
-              >
+      {(roleName === "Super Admin" || roleName === "Admin") && (
+        <td className={cx("td")}>
+          <Popover
+            trigger="click"
+            placement="bottom"
+            open={open}
+            onOpenChange={() => {
+              setOpen(!open);
+            }}
+            content={
+              <>
                 <button
-                  
+                  style={style}
+                  onClick={() => {
+                    setOpen(false);
+                  }}
+                >
+                  <LearningMaterialsIcon />
+                  Tranning materials
+                </button>
+
+                <button
+                  style={style}
+                  onClick={() => {
+                    setOpen(false);
+                  }}
+                >
+                  <CreateIcon />
+                  Edit program
+                </button>
+
+                <button
+                  style={style}
+                  onClick={() => {
+                    handleAction("duplicate");
+                    setOpen(false);
+                    domChange();
+                  }}
+                >
+                  <CopyIcon />
+                  Duplicate program
+                </button>
+
+                <button
+                  style={{
+                    ...style,
+                    display: item.status !== "Draft" ? "inline-flex" : "none",
+                  }}
+                  onClick={() => {
+                    if (item.status !== "Draft") {
+                      handleAction("changeStatus");
+                      domChange();
+                    }
+                  }}
+                >
+                  {item.status === "Inactive" && item.status !== "Draft" ? (
+                    <>
+                      <VisibilityIcon />
+                      Activate
+                    </>
+                  ) : item.status !== "Draft" ? (
+                    <>
+                      <VisibilityOffIcon />
+                      De-activate
+                    </>
+                  ) : null}
+                </button>
+
+                <button
                   style={{ ...style, color: "red" }}
-                  onClick={() => domChange()}
+                  onClick={() => {
+                    handleAction("delete");
+                    setOpen(false);
+                    domChange();
+                  }}
                 >
                   <DeleteForeverIcon />
-                  Delete Program
+                  Delete program
                 </button>
-              </Popconfirm>
+              </>
+            }
+          >
+            <button className={cx("more-btn")} onClick={() => setOpen(!open)}>
+              <MoreIcon />
+            </button>
+          </Popover>
 
-              <Popconfirm
-                trigger="click"
-                title="Change Status"
-                description={`Are you sure you want to change the status to ${
-                  newStatus === "Active" ? "Inactive" : "Active"
-                }?`}
-                placement="left"
-                onConfirm={handleChangeStatus}
-                okText="Yes"
-                cancelText="No"
-              >
-                {newStatus === "Active" ? (
-                  <button style={style} onClick={() => domChange()}>
-                    <VisibilityOffIcon />
-                    Deactivate
-                  </button>
-                ) : (
-                  <button style={style} onClick={() => domChange()} >
-                    <VisibilityIcon />
-                    Activate
-                  </button>
-                )}
-              </Popconfirm>
-            </>
-          }
-        >
-          <button className={cx("more-btn")} onClick={() => setOpen(!open)}>
-            <MoreIcon />
-          </button>
-        </Popover>
-      </td>
+          <Modal
+            title={
+              modalAction === "delete"
+                ? "Delete Confirm"
+                : modalAction === "duplicate"
+                ? "Duplicate Confirm"
+                : "Change Status Confirm"
+            }
+            open={isModalVisible}
+            onOk={performAction}
+            onCancel={() => setIsModalVisible(false)}
+            okText={
+              modalAction === "delete"
+                ? "Delete"
+                : modalAction === "duplicate"
+                ? "Duplicate"
+                : "Change status"
+            }
+            okButtonProps={{ style: { backgroundColor: "#C70039" } }}
+            cancelButtonProps={{ style: { color: "#C70039", border: "none" } }}
+          >
+            {modalAction === "delete"
+              ? `Do you want to delete the "${item.tpName}" ? This process cannot be restored!!`
+              : modalAction === "duplicate"
+              ? `Do you want to duplicate the "${item.tpName}" ?`
+              : `Do you want to change the status of the "${item.tpName}" class to "${newStatus}"?`}
+          </Modal>
+        </td>
+      )}
     </tr>
   );
 }

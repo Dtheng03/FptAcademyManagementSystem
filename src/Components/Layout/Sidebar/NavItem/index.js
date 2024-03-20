@@ -11,23 +11,42 @@ function NavItem(props) {
 
     return (
         <div>
-            <Link
-                className={cx("nav-item")}
-                to={props.to != "" && props.to}
-                onClick={() => setShowSubNav(!showSubNav)}
-            >
-                <div className={props.collapsed ? cx("icon") : ""}>{props.icon}</div>
-                {!props.collapsed &&
-                    (
-                        <>
-                            <div className={cx("title")}>{props.title}</div>
-                            {props.children.length > 0 ?
-                                (<div>{showSubNav ? <Icons.NavLeftIcon /> : <Icons.NavDownIcon />}</div>
+            {props.to !== "" ?
+                <Link
+                    className={cx("nav-item")}
+                    to={props.to}
+                    onClick={() => setShowSubNav(!showSubNav)}
+                >
+                    <div className={props.collapsed ? cx("icon") : ""}>{props.icon}</div>
+                    {!props.collapsed &&
+                        (
+                            <>
+                                <div className={cx("title")}>{props.title}</div>
+                                {props.children.length > 0 ?
+                                    (<div>{showSubNav ? <Icons.NavLeftIcon /> : <Icons.NavDownIcon />}</div>
 
-                                ) : ""}
-                        </>
-                    )}
-            </Link>
+                                    ) : ""}
+                            </>
+                        )}
+                </Link>
+                :
+                <div
+                    className={cx("nav-item")}
+                    onClick={() => setShowSubNav(!showSubNav)}
+                >
+                    <div className={props.collapsed ? cx("icon") : ""}>{props.icon}</div>
+                    {!props.collapsed &&
+                        (
+                            <>
+                                <div className={cx("title")}>{props.title}</div>
+                                {props.children.length > 0 ?
+                                    (<div>{showSubNav ? <Icons.NavLeftIcon /> : <Icons.NavDownIcon />}</div>
+
+                                    ) : ""}
+                            </>
+                        )}
+                </div>
+            }
             {(props.children.length > 0 && showSubNav == true && !props.collapsed) &&
                 (
                     <>

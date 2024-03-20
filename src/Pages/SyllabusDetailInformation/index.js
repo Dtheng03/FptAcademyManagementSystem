@@ -1,58 +1,62 @@
 import Syllabus from "../../Components/Common/SyllabusTab/syllabus/syllabus";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import style from "./SyllabusDetailInformation.module.scss";
 import General from "./SyllabusGeneral";
-import Outline from "./SyllabusOutline"
+import Outline from "./SyllabusOutline";
+import Order from "./SyllabusOrder";
 import classNames from "classnames/bind";
 import SyllabusHeader from "./SyllabusHeader";
 import SyllabusDescription from "./SyllabusDescription";
+import axios from "axios";
+import { useParams } from "react-router-dom";
 
 export default function SyllabusDetailInformation() {
-  const name = "general";
-  const name1 = "outline";
-  const name2 = "order";
   const cx = classNames.bind(style);
-  const [activeComponent, setActiveComponent] = useState(null);
+  const [activeComponent, setActiveComponent] = useState(""); 
+  const token = sessionStorage.getItem('token');
+  axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
-  const handleButtonClick = (component) => {
+  const { id } = useParams();
+
+  const handleTabClick = (component) => {
     setActiveComponent(component);
   };
 
   return (
     <div className={cx("container")}>
-      <SyllabusHeader />
+      <SyllabusHeader id={id}/>
 
       <div className={cx("second-container")}>
-        <SyllabusDescription />
+        <SyllabusDescription id={id}/>
 
         <div className={cx("category")}>
-        <button
+          <div
             className={cx("button", { clicked: activeComponent === "General" })}
-            onClick={() => handleButtonClick("General")}
+            onClick={() => setActiveComponent("General")}
           >
-            <Syllabus name={name} />
-          </button>
+            <Syllabus name="general" />
+          </div>
 
-          <button
+          <div
             className={cx("button", { clicked: activeComponent === "Outline" })}
-            onClick={() => handleButtonClick("Outline")}
+            onClick={() => setActiveComponent("Outline")}
           >
-            <Syllabus name={name1} />
-          </button>
+            <Syllabus name="outline" />
+          </div>
 
-          <button
+          <div
             className={cx("button", { clicked: activeComponent === "Order" })}
-            onClick={() => handleButtonClick("Order")}
+            onClick={() => setActiveComponent("Order")}
           >
-            <Syllabus name={name2} />
-          </button>
+            <Syllabus name="order" />
+          </div>
         </div>
       </div>
 
       <div className={cx("content-container")}>
-        {activeComponent === "General" && <General />}
-        {activeComponent === "Outline" && <Outline />}
-        {activeComponent === "Order" && <General/>}
+        {activeComponent === "General" && <General id={id} />}
+        {activeComponent === "Outline" && <Outline id={id} />}
+        {activeComponent === "Order" && <Order id={id} />}
       </div>
     </div>
   );

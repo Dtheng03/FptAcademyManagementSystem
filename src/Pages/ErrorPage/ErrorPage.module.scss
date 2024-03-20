@@ -1,0 +1,36 @@
+.error-wrapper {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .container {
+    width: auto;
+    text-align: center;
+    padding: 4%;
+    border-radius: 10px;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 12px;
+
+    .code {
+      margin: 0;
+      color: #1677ff;
+    }
+
+    .title {
+      margin: 0;
+    }
+
+    .description {
+      margin: 0 0 4%;
+      color: gray;
+    }
+
+    .btn-group {
+      margin: 4% 0 0;
+      .btn {
+        margin: 0 4%;
+      }
+    }
+  }
+}

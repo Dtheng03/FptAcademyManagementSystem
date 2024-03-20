@@ -1,41 +1,58 @@
 import React, { useState, useEffect } from 'react';
 import { Input, Button, Flex, AutoComplete, Tag } from 'antd';
 import { SearchOutlined, PlusCircleOutlined } from '@ant-design/icons';
+import { useNavigate } from 'react-router-dom';
 import CalendarPopover from './CalendarPopover';
 import ImportSyllabusModal from './ImportModal';
 
-const InputSection = ({ apiData, searchInput, setSearchBy, onSearchInputChange }) => {
+const InputSection = ({
+  apiData,
+  searchInput,
+  setSearchBy,
+  onSearchInputChange,
+  setSearchByDateRange,
+}) => {
+  const navigate = useNavigate();
   const [isModalVisible, setModalVisible] = useState(false);
   const [suggestions, setSuggestions] = useState([]);
   const [selectedTags, setSelectedTags] = useState([]);
+  const [selectedDateRange, setSelectedDateRange] = useState([]);
 
   useEffect(() => {
-    if (apiData) {
+    if (apiData != null && apiData.length > 0) {
       const filteredSuggestions = apiData.filter((item) => {
         const syllabusMatch = item.syllabus.includes(searchInput);
         const codeMatch = item.code.includes(searchInput);
-        const createdByMatch = item.createdBy.includes(searchInput);
+        const createdByMatch = item.createdBy.fullName.includes(searchInput);
 
         return syllabusMatch || codeMatch || createdByMatch;
       });
 
-      const mappedSuggestions = filteredSuggestions
-        .map((item, index) => ({
-          value: item.syllabus,
-          key: `syllabus_${item.syllabus}_${index}`,
-        }))
-        .concat(
-          filteredSuggestions.map((item, index) => ({
-            value: item.code,
-            key: `code_${item.code}_${index}`,
-          }))
-        )
-        .concat(
-          filteredSuggestions.map((item, index) => ({
-            value: item.createdBy,
-            key: `createdby_${item.createdBy}_${index}`,
-          }))
-        );
+      const uniqueSuggestions = new Set();
+
+      const mappedSuggestions = filteredSuggestions.reduce((acc, item, index) => {
+        const syllabusKey = `syllabus_${item.syllabus}`;
+        const codeKey = `code_${item.code}`;
+        const createdByKey = `createdby_${item.createdBy.fullName}`;
+
+        if (!uniqueSuggestions.has(syllabusKey)) {
+          acc.push({ value: item.syllabus, key: syllabusKey });
+          uniqueSuggestions.add(syllabusKey);
+        }
+
+        if (!uniqueSuggestions.has(codeKey)) {
+          acc.push({ value: item.code, key: codeKey });
+          uniqueSuggestions.add(codeKey);
+        }
+
+        if (!uniqueSuggestions.has(createdByKey)) {
+          acc.push({ value: item.createdBy.fullName, key: createdByKey });
+          uniqueSuggestions.add(createdByKey);
+        }
+
+        return acc;
+      }, []);
+
       setSuggestions(mappedSuggestions);
     }
   }, [apiData, searchInput]);
@@ -49,7 +66,7 @@ const InputSection = ({ apiData, searchInput, setSearchBy, onSearchInputChange }
   };
 
   const handleImportClick = () => {
-    showModal();
+    navigate('/create-syllabus');
   };
 
   const onSelect = (value) => {
@@ -65,6 +82,14 @@ const InputSection = ({ apiData, searchInput, setSearchBy, onSearchInputChange }
     setSearchBy('');
     onSearchInputChange('');
     setSelectedTags((prevTags) => prevTags.filter((t) => t !== tag));
+  };
+
+  const handleDateRangeChange = (dates) => {
+    if (dates.length > 0) {
+      setSelectedDateRange(dates);
+      onSearchInputChange([dates[0], dates[1]]);
+    }
+    setSearchByDateRange('date');
   };
 
   return (
@@ -85,7 +110,7 @@ const InputSection = ({ apiData, searchInput, setSearchBy, onSearchInputChange }
               prefix={<SearchOutlined />}
             />
           </AutoComplete>
-          <CalendarPopover />
+          <CalendarPopover onDateRangeChange={handleDateRangeChange} />
         </Flex>
         <Flex style={{ marginTop: '16px' }}>
           {/* Display selected tags */}

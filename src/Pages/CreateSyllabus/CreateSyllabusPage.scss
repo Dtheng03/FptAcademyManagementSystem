@@ -1,3 +1,15 @@
+button {
+    cursor: pointer;
+    border: none;
+    background-color: transparent;
+    transition: 0.3s;
+}
+
+.container {
+    width: 86%;
+    background-color: #FFFFFF;
+}
+
 .headerTitle {
     margin-right: 15px;
 }
@@ -9,6 +21,26 @@
     border-radius: 5px;
 
 }
+
+.syllabusTabContainer {
+    height: auto;
+    display: flex;
+    padding: 20px;
+    margin: 20px;
+    margin-top: 0;
+    background-color: #FFFFFF;
+    justify-content: space-between;
+    // border: 1px solid #e9e9e9;
+    border-radius: 15px;
+    border-top-left-radius: 0;
+}
+
+.syllabusTabContent {
+    width: 81%;
+    height: 650px;
+}
+
+
 
 //CreateGeneral
 .baseGeneralSetup {
@@ -29,22 +61,288 @@
             padding: 5px;
             box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
         }
-
-        .optionLevel option {}
     }
-
 }
 
 .ql-container {
     padding: 0;
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
+    height: 100%;
+}
+
+.ql-editor {
+    border-radius: 10px;
+}
+
+.ql-container-technical-requirement {
+    padding: 0;
+    border-radius: 10px;
 }
 
 .ql-toolbar {
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
 }
-  
- 
-  
+
+////CreateOutline
+.dayLabel {
+    background-color: var(--primary-color);
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.dayLabel:hover {
+    background-color: #3b475d;
+}
+
+.dayUnit {
+    display: flex;
+
+}
+
+.dayUnitInfor {
+    width: 100%;
+    margin-left: 34px;
+}
+
+.unitLable {
+    margin-bottom: 20px;
+}
+
+.unitName,
+.next-InputUnitName {
+    margin-right: 15px;
+
+}
+
+.InputUnitName {
+    width: 174px;
+    height: 32px;
+    border: 1px solid #9a9a9a;
+    border-radius: 7px;
+    padding: 10px;
+}
+
+.InputUnitName::placeholder {
+    font-style: italic;
+    color: #9a9a9a;
+}
+
+.unitNumber,
+.next-unitNumber {
+    width: 68px;
+}
+
+.unitHour {
+    margin: 10px 0;
+}
+
+.next-unitLable {
+    margin-left: 34px;
+}
+
+.addUnitBtn,
+.addDayBtn {
+    padding: 20px;
+}
+
+
+.outlineDays {
+    border-bottom: 16px solid var(--primary-color);
+    border-radius: 7px;
+}
+
+.addUnitPopup,
+.syllabusPopup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    z-index: 1000;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    border-radius: 7px;
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+}
+
+.unitEditBtn button,
+.addSyllabusBtn button {
+    cursor: pointer;
+    padding-top: 3px;
+    border: none;
+    color: var(--primary-color);
+    font-size: 21px;
+}
+
+.addSyllabusBtn button,
+.unitDropDownBtn button {
+    cursor: pointer;
+    border: none;
+    color: var(--primary-color);
+    font-size: 24px;
+    font-weight: bolder;
+}
+
+.unitEditBtn button:hover,
+.addSyllabusBtn button:hover,
+.unitDropDownBtn button:hover {
+    color: #000000;
+}
+
+.dropDownBtn {
+    background-color: transparent;
+}
+
+.removeDayBtn {
+    display: flex;
+    align-items: center;
+}
+
+.removeDayBtn button {
+    font-size: 18px;
+    font-weight: 700;
+    color: #e74a3b;
+}
+
+.removeDayBtn button:hover {
+    color: #e83121;
+}
+
+// .dayUnit:hover {
+//     cursor: pointer;
+//     background-color: #f7faff;
+// }
+
+//AddunitPopup
+
+.addUnitPopup {
+    border-radius: 10px;
+}
+
+.addSyllabusAction {
+    margin: 10px;
+    margin-left: 3px;
+}
+
+.addSyllabusAction button {
+    font-size: 12px;
+    font-weight: 700;
+    padding: 7px 12px;
+    border-radius: 7px;
+    margin-right: 5px;
+
+}
+
+.createUnitBtn {
+    color: #FFFFFF;
+    background-color: var(--primary-color);
+    transition: 0.3s;
+}
+
+.createUnitBtn:hover {
+    background-color: #324059;
+
+}
+
+.cancelUnitBtn {
+    color: #FFFFFF;
+    background-color: #e74a3b;
+    transition: 0.3s;
+}
+
+.cancelUnitBtn:hover {
+    background-color: #e83121;
+
+}
+
+//CreateOther
+.allocateTimeAndScheme {
+    display: flex;
+    width: 100%;
+    height: auto;
+    justify-content: space-between;
+}
+
+.otherTimeAllocation,
+.assessmentScheme {
+    width: 49%;
+    height: 310px;
+}
+
+
+.otherAssessmentSchemeTitle {
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    background-color: #3b3a4a;
+    text-align: center;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+}
+
+.assessmentSchemeContent {
+    display: block;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 384px;
+    border: 0.5px solid #cec4c4;
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+    box-shadow: rgba(0, 0, 0, 0.18) 0px 2px 4px;
+    padding: 10px;
+
+}
+
+.assessmentWidth {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 40%;
+    margin-bottom: 15px;
+}
+
+.finalIngredient {
+    display: block;
+    justify-content: space-between;
+    padding: 15px 0;
+    border-top: 1px solid #474747;
+    border-bottom: 1px solid #474747;
+}
+
+.assessmentInput {
+    width: 50%;
+}
+
+.syllabusOtherTabContainer {
+    height: auto;
+    display: flex;
+    padding: 20px;
+    margin: 20px;
+    margin-top: 0;
+    background-color: #FFFFFF;
+    justify-content: space-between;
+    // border: 1px solid #e9e9e9;
+    border-radius: 15px;
+    border-top-left-radius: 0;
+}
+
+.syllabusOtherTabContent {
+    width: 81%;
+    height: auto;
+    padding-bottom: 40px;
+}
+

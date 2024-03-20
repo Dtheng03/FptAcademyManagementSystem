@@ -1,0 +1,536 @@
+.container {
+    width: 100%;
+}
+
+// Edit header
+.header {
+
+    background-color: #2D3748;
+    padding-top: 6px;
+    padding-bottom: 1%;
+    border-top: 1px solid white;
+    color: white;
+    padding-left: 20px;
+    padding-right: 30px;
+
+
+}
+
+.span {
+    font-size: 30px;
+    font-weight: 380;
+
+}
+
+// Edit Fresher
+.header-fresher {
+    display: flex;
+    justify-content: space-between;
+    margin-right: 3px;
+}
+
+.font-fresher {
+    font-weight: 650;
+    font-size: 45px;
+    letter-spacing: 10px;
+}
+
+.space-fresher-planning {
+    display: flex;
+
+}
+
+// Edit planning
+.planning {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 40px;
+    margin-top: 15px;
+    font-size: 14px;
+}
+
+.planning-status {
+    padding: 4px;
+    padding-bottom: 7px;
+    background-color: rgb(193, 193, 193);
+    border-radius: 13px;
+    border: rgb(245, 242, 242) solid 2px;
+
+}
+
+// Edit ...
+.button-moreIcon {
+    margin-top: 32px;
+}
+
+.menu-icon {
+    color: #0958d9 !important;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+
+}
+
+.button {
+    appearance: none;
+    border: none;
+    /* Loại bỏ border */
+    background: none;
+    /* Loại bỏ background */
+    padding: 0;
+    /* Loại bỏ padding */
+    margin: 0;
+    /* Loại bỏ margin */
+    color: #fff;
+}
+
+// Edit HCM22
+.class-code {
+    margin-top: 8px;
+    font-weight: 600;
+    font-size: 16px;
+
+}
+
+// Edit underline
+.underline {
+    margin-top: -15px;
+    font-size: 20px;
+    font-weight: 100;
+}
+
+// Edit footer of header
+.footer-header-class {
+    display: flex;
+
+}
+
+.day {
+    font-weight: 600;
+    font-size: 30px;
+    margin-right: 7px;
+}
+
+.day-details {
+
+    letter-spacing: 5px;
+    gap: 15px;
+    margin-top: 17px;
+    display: inline-flex;
+    font-weight: lighter;
+
+}
+
+// Body
+.body {
+    padding-top: 26px;
+    width: 98%;
+    margin: auto;
+}
+
+.layout-style {
+    width: 100%;
+    overflow: hidden;
+}
+
+.content-style {
+    // text-align: center;
+    min-height: 120px;
+    line-height: 450px;
+    color: #fff;
+    background-color: white;
+    width: 100%;
+    padding-left: 15px;
+}
+
+.sider-style {
+    // text-align: center;
+    line-height: 450px;
+    color: #f6f1f1;
+    background-color: white ! important;
+    width: 100%;
+}
+
+
+
+.sider-header {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    gap: 7px;
+    color: #fff;
+    margin-top: -1px;
+}
+
+.sider-body-alarm {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 7px;
+    padding-bottom: 15px;
+
+}
+
+.sider-body-time {
+    margin-left: 20.5%;
+    font-weight: 500;
+
+}
+
+.sider-body-items {
+    font-weight: bold;
+}
+
+.sider-body-homework {
+    display: flex;
+    gap: 8px;
+    padding-bottom: 15px;
+}
+
+.sider-body-location {
+    display: flex;
+    flex-direction: column;
+    margin-left: 22.3%;
+}
+
+.sider-body-item-location {
+    font-weight: 500;
+}
+
+.sider-body-name {
+    display: flex;
+    flex-direction: column;
+    margin-left: 24.5%;
+}
+.modal-box-icon{
+    display: flex;
+    justify-content: flex-start;
+    gap: 7.5px;
+}
+
+
+.sider-body-item-name {
+    font-weight: 500;
+    color: #0958d9;
+    text-decoration: underline;
+    
+}
+.sider-body-item-name-admin{
+    font-weight: 500;
+    color: #0958d9;
+    text-decoration: underline;
+    margin-left: 5px;
+}
+
+.sider-body-item-supplierIcon {
+    display: flex;
+    flex-direction: column;
+    margin-left: 23.5%;
+    font-weight: 500;
+}
+
+.sider-underline {
+    
+    margin-top: -50px;
+    font-size: 45px;
+    font-weight: 300;
+}
+
+.sider-body-item-created {
+    margin-left: 31.7%;
+    font-weight: 500;
+}
+
+.sider-body-item-review {
+    margin-left: 32.7%;
+    font-weight: 500;
+}
+
+.sider-body-item-approve {
+    margin-left: 30.5%;
+    font-weight: 500;
+}
+
+.attendee-name {
+    margin-left: 21.5%;
+    font-weight: 300;
+}
+
+.attendee-position {
+    padding-top: 6%;
+}
+
+.attendee-content {
+    display: flex;
+    justify-items: stretch;
+    justify-content: space-evenly;
+    gap: 5%;
+
+    border: 0px solid white;
+    /* Thiết lập viền là trắng */
+    box-sizing: border-box;
+    /* Đảm bảo viền tính vào kích thước */
+}
+
+.attendee-background-color {
+    width: 25%;
+    background-color: #2D3748;
+    margin: auto;
+    padding: 10% 15% 10% 15%;
+    border-radius: 10%;
+}
+
+// Planned
+.attendee-items-planned {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    margin-top: -30px;
+    font-size: large;
+    font-weight: 500;
+}
+
+.attendee-items-number-planned {
+    margin-top: 10px;
+    margin-bottom: -30px;
+    color: #fff;
+    font-weight: 500;
+    font-size: x-large;
+    margin-left: -10px;
+}
+
+//Accepted
+.attendee-items-number-accepted {
+    margin-top: 10px;
+    margin-bottom: -30px;
+    color: #fff;
+    font-weight: 500;
+    font-size: x-large;
+    margin-left: -8px;
+}
+
+.attendee-background-color-accepted {
+    width: 25%;
+    background-color: #0958d9;
+    margin: auto;
+    padding: 10% 15% 10% 15%;
+    border-radius: 10%;
+}
+
+.attendee-items-accepted {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    margin-top: -30px;
+    font-size: large;
+    font-weight: 500;
+}
+
+//Actual
+.attendee-background-color-actual {
+    width: 25%;
+    background-color: #fff;
+    margin: auto;
+    padding: 10% 15% 10% 15%;
+    border-radius: 10%;
+    border: 2px solid black;
+}
+
+.attendee-items-actual {
+    color: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: -30px;
+    font-size: large;
+    font-weight: 500;
+}
+
+.attendee-items-number-actual {
+    margin-top: 10px;
+    margin-bottom: -30px;
+    color: black;
+    font-weight: 500;
+    font-size: x-large;
+    margin-left: -8px;
+}
+
+// Footer 
+.footer-style {
+    color: black;
+    width: 100%;
+    padding-top: 24px;
+    background-color: #fff;
+
+}
+
+.syllabus_tab_button {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    gap: 1px;
+}
+
+.button-training-program {
+    padding: 5px 60px 5px 60px;
+    // border-start-start-radius: 100px 100px;
+    // border-start-end-radius: 100px 100px;
+    // border-end-start-radius: 80px 80px;
+    // border-end-end-radius: 80px 80px;
+    border-radius: 20px 20px 0px 0px;
+    background-color: #858b96;
+    transition: background-color 1s;
+    color: #fff;
+
+
+}
+
+.button-attendee-list {
+    padding: 5px 70px 5px 70px;
+    // border-start-start-radius: 100px 100px;
+    // border-start-end-radius: 100px 100px;
+    // border-end-start-radius: 80px 80px;
+    // border-end-end-radius: 80px 80px;
+    border-radius: 20px 20px 0px 0px;
+
+}
+
+.button-budget {
+    padding: 5px 80px 5px 80px;
+    // border-start-start-radius: 100px 100px;
+    // border-start-end-radius: 100px 100px;
+    // border-end-start-radius: 80px 80px;
+    // border-end-end-radius: 80px 80px;
+    border-radius: 20px 20px 0px 0px;
+}
+
+.button-others {
+    padding: 5px 90px 5px 90px;
+    // border-start-start-radius: 100px 100px;
+    // border-start-end-radius: 100px 100px;
+    // border-end-start-radius: 80px 80px;
+    // border-end-end-radius: 80px 80px;
+    border-radius: 20px 20px 0px 0px;
+}
+
+.header-footer-1 {
+    width: 100%;
+    background-color: #2D3748;
+    padding: 10px 0px 10px 0px;
+    border-top-right-radius: 15px;
+    margin-bottom: 17px;
+
+}
+
+.header-footer-training-program {
+    font-weight: 400;
+    font-size: 27px;
+    letter-spacing: 10px;
+    color: #fff;
+    margin-left: 20px;
+    padding-bottom: 8px;
+
+}
+
+.header-footer-day {
+    color: #fff;
+    margin-left: 20px;
+    letter-spacing: 2.5px;
+    font-weight: 100;
+    font-size: 13.4px;
+}
+
+.header-footer-name {
+    font-weight: 600;
+}
+
+.header-footer-sider {
+    color: #fff;
+    padding: 10px 0px 8px 0px;
+    border-top-left-radius: 15px;
+}
+
+.header-footer-content {
+    padding: 10px 0px 8px 0px;
+    border-top-right-radius: 15px;
+    box-shadow: 0.6px 0px 0px 0px rgb(199, 198, 198);
+    top: 0;
+    right: 0;
+    width: 1px;
+    /* Độ dài của đường kẻ đen */
+    height: 100%;
+    /* Chiều cao của đường kẻ đen */
+
+}
+
+.avata {
+    width: 100px;
+    /* Điều chỉnh kích thước hình ảnh */
+    height: 100px;
+    /* Điều chỉnh kích thước hình ảnh */
+    border-radius: 50%;
+    /* Tạo hình tròn */
+    object-fit: cover;
+    /* Đảm bảo hình ảnh không bị méo khi điều chỉnh kích thước */
+    margin: 0px 4px 0px 7.5px;
+}
+
+.header-footer-content-linux {
+    font-weight: 700;
+    font-size: 30px;
+    margin-top: 5px;
+    margin-left: 17px;
+
+}
+
+.header-footer-edit {
+    display: flex;
+    justify-content: start;
+    align-self: center;
+    gap: 60px;
+
+}
+
+.header-footer-edit-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.header-footer-active {
+    padding: 5px 20px 7px 20px;
+
+    color: #fff;
+    background-color: #2D3748;
+    border-radius: 20px;
+    border: rgb(245, 242, 242) solid 2px;
+}
+
+.header-footer-edit-infomation {
+    display: flex;
+    margin: 20px 0px 0px 17px;
+    letter-spacing: 1px;
+}
+
+.header-footer-information {
+    margin-left: 3px;
+}
+
+.layout-box-shadow {
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.35);
+
+}
+
+.header-footer-2 {
+    margin-bottom: 17px;
+
+}
+
+.header-footer-3 {
+    margin-bottom: 17px;
+
+}

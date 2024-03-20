@@ -3,21 +3,21 @@ import classNames from "classnames/bind";
 
 
 const cx = classNames.bind(styles);
-function DetailDescription(props) {
+function DetailDescription({author, createDate, duration}) {
   return (
     <div className={cx("description-title")}>
       <div className={cx("line-1")}>
-        <h4 className={cx("day-number")}> 31</h4>
+        <h4 className={cx("day-number")}>{duration}</h4>
         <subtitle1 className={cx("description-text")}>
-          days (97 hours)
+          days
         </subtitle1>
       </div>
 
       <div className={cx("line-2")}>
         <subtitle2 className={cx("description-text")}>
-          Modified on 23/07/2022 by
+          Modified on {createDate} by
         </subtitle2>
-        <subtitle2 className={cx("author")}>Warrior Tran</subtitle2>
+        <subtitle2 className={cx("author")}>{author}</subtitle2>
       </div>
     </div>
   );

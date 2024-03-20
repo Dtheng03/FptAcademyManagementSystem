@@ -1,227 +1,165 @@
 import styles from "./ClassListPage.module.scss";
 import classNames from "classnames/bind";
 import Button from "../../Components/Common/Button";
-import { FilterListIcon, AddIcon, SortIcon } from "../../Components/Common/Icons/ActionIcons";
+import { FilterListIcon, AddIcon, CancleIcon } from "../../Components/Common/Icons/ActionIcons";
 import { SearchIcon } from "../../Components/Common/Icons/DocManageIcons";
-import { Pagination, Popover } from "antd";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import TableRow from "./TableRow";
-import FilterPopip from "../../Components/Common/FilterPopip/FilterPopip"
 import { Link } from "react-router-dom";
+import Search from "./Search";
+import ClassList from "./ClassList";
+import { Popover, Spin, notification } from "antd";
+import { LoadingOutlined } from '@ant-design/icons';
+import { useDispatch, useSelector } from "react-redux";
+import { setClassList } from "../../Redux/Reducer/ClassSlice";
+import Filter from "./Filter";
+import crypto from "crypto-js";
+import axiosClient from "../../Services/axios/config";
+import { getClassList } from "../../Services/classApi";
 
 const cx = classNames.bind(styles);
 
 function ClassListPage() {
-    const [data, setData] = useState([]);
+    const dispatch = useDispatch();
+    const classList = useSelector(state => state.class.classList);
 
-    const [currentPage, setCurrentPage] = useState(1);
-    const [itemsPerPage, setItemsPerPage] = useState(10);
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
-    const currentPageData = data.slice(startIndex, endIndex);
+    var decryptedRoleName;
+    const encryptedRoleName = sessionStorage.getItem("roleName");
+    if (encryptedRoleName) {
+        decryptedRoleName = crypto.AES.decrypt(
+            encryptedRoleName,
+            "react02"
+        ).toString(crypto.enc.Utf8);
+    }
+    const roleName = decryptedRoleName;
+
+    // const [data, setData] = useState([]);
+    const [loading, setLoading] = useState(false)
 
     const [searchValue, setSearchValue] = useState("");
-    const [filterLs, setFilterLs] = useState([]);
     const [search, setSearch] = useState([]);
 
     const [isDomChange, setIsDomChange] = useState(false);
 
-    const [sortedInfo, setSortedInfo] = useState([]);
-
-    //sắp xếp tăng giảm theo từng cột
-    const handleSort = (columnKey) => {
-        let sortOrder =
-            sortedInfo.columnKey === columnKey && sortedInfo.order === 'ascend' ? 'descend' : 'ascend';
-        setSortedInfo({ columnKey, order: sortOrder });
-    };
-
-    const sortedData = data.sort((a, b) => {
-        const columnKey = sortedInfo.columnKey;
-        const order = sortedInfo.order === 'ascend' ? 1 : -1;
-
-        if (columnKey === 'classNames') {
-            return a.classNames.localeCompare(b.classNames) * order;
-        }
-        else if (columnKey === 'classCode') {
-            return a.classCode.localeCompare(b.classCode) * order;
-        }
-        else if (columnKey === 'createdOn') {
-            return a.createdOn.localeCompare(b.createdOn) * order;
-        }
-        else if (columnKey === 'createdBy') {
-            return a.createdBy.localeCompare(b.createdBy) * order;
-        }
-        else if (columnKey === 'duration') {
-            return (a.duration - b.duration) * order;;
-        }
-        else if (columnKey === 'attendee') {
-            return a.attendee.localeCompare(b.attendee) * order;
-        }
-        else if (columnKey === 'location') {
-            return a.location.localeCompare(b.location) * order;
-        }
-
-        return 0;
-    });
+    // const handleClearFilters = () => {};
 
     //Xử lý input search
     const handleInputSearch = (e) => {
-        const value = e.target.value;
+        const value = e.target.value
         setSearchValue(value);
-
-        if (value.trim() === "") {
+        if (value === "") {
             setSearch([]);
-        } else {
-            const searchResults = data.filter(
-                result => result.classNames.toLowerCase().includes(value.toLowerCase())
+        } else if (value !== "") {
+            const searchResults = classList.filter(
+                result => result.className.toLowerCase().includes(value.toLowerCase())
                     || result.classCode.toLowerCase().includes(value.toLowerCase())
             );
-            setSearch(searchResults);
+            if (searchResults.length > 0) {
+                setSearch(searchResults);
+            } else {
+                setSearch([]);
+            }
         }
     };
 
     //Gọi API
+    async function getClass() {
+        setLoading(true);
+        getClassList()
+        .then(res => {
+            dispatch(setClassList(res?.data?.data || []));
+        })
+        .finally(() => {
+            setLoading(false);
+        })
+    }
+
     useEffect(() => {
-        async function getClass() {
-            try {
-                const response = await axios.get("https://653d1d13f52310ee6a99e3b7.mockapi.io/class");
-                setData(response.data)
-            } catch (error) {
-                console.error(error);
-            }
-        }
         getClass();
     }, [isDomChange])
 
     return (
         <div className={cx("container")}>
-            <h3 className={cx("header")}>Training Class</h3>
-            <div className={cx("action")}>
-                <div className={cx("search")}>
-                    <div className={cx('search-input')}>
-                        <SearchIcon />
-                        <input
-                            className={cx('input-contain')}
-                            type="text"
-                            disabled={filterLs.length >= 4 ? true : false}
-                            value={searchValue}
-                            onChange={handleInputSearch}
-                            placeholder="Search by..."
-                        />
+            <Spin
+                indicator={<LoadingOutlined style={{ color: "#2D3748" }} />}
+                spinning={loading}
+                size="large"
+                style={{ position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}
+            >
+                <h3 className={cx("header")}>Training Class</h3>
+                <div className={cx("action")}>
+                    <div className={cx("search")}>
+                        <div className={cx('search-input')}>
+                            <SearchIcon />
+                            <input
+                                className={cx('input-contain')}
+                                type="text"
+                                value={searchValue}
+                                onChange={handleInputSearch}
+                                placeholder="Search..."
+                            />
+                            {searchValue !== "" &&
+                                <button
+                                    className={cx("clear-search-btn")}
+                                    onClick={() => {
+                                        setSearch([]);
+                                        setSearchValue("");
+                                    }}
+                                >
+                                    <CancleIcon />
+                                </button>
+                            }
+                        </div>
+                        <Popover
+                            trigger="click"
+                            placement="bottomRight"
+                            content={<Filter
+                            // onSubmit={""}
+                            // onClear={handleClearFilters}
+                            />}
+                        >
+                            <>
+                                <Button
+                                    title="Filter"
+                                    firstIcon={<FilterListIcon />}
+                                />
+                            </>
+                        </Popover>
                     </div>
-                    <Popover
-                        trigger="click"
-                        placement="bottomRight"
-                        content={<FilterPopip />}
-                    >
-                        <>
+
+                    <Link to="/create-class">
+                        {(roleName === "Super Admin" || roleName === "Admin") &&
                             <Button
-                                title="Filter"
-                                firstIcon={<FilterListIcon />}
-                            />
-                        </>
-                    </Popover>
+                                title={"Add Class"}
+                                firstIcon={<AddIcon />}
+                            />}
+                    </Link>
                 </div>
-                <Link to="create-class">
-                    <Button
-                        title={"Add Class"}
-                        firstIcon={<AddIcon />}
-                    />
-                </Link>
 
-            </div>
+                {/* <div className={cx("filter-result")}></div> */}
 
-            <div className={cx("filter-result")}>
-
-            </div>
-
-            <table className={cx("table")}>
-                <thead className={cx("thead")}>
-                    <tr className={cx("tr")}>
-                        {/* <th className={cx("th")}><button className={cx("title")}>ID <SortIcon /></button></th> */}
-                        <th className={cx('th', 'name')}>
-                            <button className={cx('title')} onClick={() => handleSort('classNames')}>
-                                Class <SortIcon />
-                            </button>
-                        </th>
-                        <th className={cx('th')}>
-                            <button className={cx('title')} onClick={() => handleSort('classCode')}>
-                                Class Code <SortIcon />
-                            </button>
-                        </th>
-                        <th className={cx('th')}>
-                            <button className={cx('title')} onClick={() => handleSort('createdOn')}>
-                                Created On <SortIcon />
-                            </button>
-                        </th>
-                        <th className={cx('th')}>
-                            <button className={cx('title')} onClick={() => handleSort('createdBy')}>
-                                Created By <SortIcon />
-                            </button>
-                        </th>
-                        <th className={cx('th')}>
-                            <button className={cx('title')} onClick={() => handleSort('duration')}>
-                                Duration <SortIcon />
-                            </button>
-                        </th>
-                        <th className={cx('th')}>
-                            <button className={cx('title')} onClick={() => handleSort('attendee')}>
-                                Attendee <SortIcon />
-                            </button>
-                        </th>
-                        <th className={cx('th')}>
-                            <button className={cx('title')} onClick={() => handleSort('location')}>
-                                Location <SortIcon />
-                            </button>
-                        </th>
-                        <th className={cx('th')}>
-                            <button className={cx('title')} onClick={() => handleSort('fsu')}>
-                                FSU <SortIcon />
-                            </button>
-                        </th>
-                        <th className={cx('th')}></th>
-                    </tr>
-                </thead>
-                {search.length > 0 ?
-                    <tbody className={cx("tbody")}>
-                        {search.map((item, index) => (
-                            <TableRow
-                                key={index}
-                                item={item}
-                                domChange={() => setIsDomChange(true)}
-                                domChangeSuccess={() => setIsDomChange(false)}
-                            />
-                        ))}
-                    </tbody>
-                    :
-                    <tbody className={cx("tbody")}>
-                        {currentPageData.map(item => (
-                            <TableRow
-                                key={item.id}
-                                item={item}
-                                domChange={() => setIsDomChange(true)}
-                                domChangeSuccess={() => setIsDomChange(false)}
-                            />
-                        ))}
-                    </tbody>}
-            </table>
-
-            {
-                (search.length > 0 || data.length > 0) && <div className={cx("pagination")}>
-                    <Pagination
-                        onChange={(page, pageSize) => {
-                            setItemsPerPage(pageSize)
-                            setCurrentPage(page);
+                {searchValue === "" ?
+                    <ClassList
+                        domChange={() => { setIsDomChange(true) }}
+                        domChangeSuccess={() => setIsDomChange(false)}
+                        reload={() => {
+                            setSearch([]);
+                            setSearchValue("");
                         }}
-                        showSizeChanger
-                        onShowSizeChange={(pageSize) => { setItemsPerPage(pageSize) }}
-                        current={currentPage}
-                        total={data.length}
                     />
-                </div>
-            }
-        </div >
+                    :
+                    <Search
+                        search={search}
+                        domChange={() => { setIsDomChange(true) }}
+                        domChangeSuccess={() => setIsDomChange(false)}
+                        reload={() => {
+                            setSearch([]);
+                            setSearchValue("");
+                        }}
+                    />
+                }
+            </Spin>
+        </div>
     );
 }
 

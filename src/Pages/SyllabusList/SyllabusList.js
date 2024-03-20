@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ConfigProvider, Flex, Table } from 'antd';
+import { ConfigProvider, Flex, Modal, Spin, Table, Typography } from 'antd';
 import './SyllabusList.scss';
 import { OutputStandard } from './OutputStandard';
 import { Status } from './Status';
@@ -7,38 +7,43 @@ import { FilterOutlined } from '@ant-design/icons';
 import axios from 'axios';
 import InputSection from './InputSection';
 import MenuOption from './MenuOption';
+import { useNavigate } from 'react-router-dom';
 
 const SyllabusList = () => {
-  const [apiData, setApiData] = useState();
+  const navigate = useNavigate();
+  const [apiData, setApiData] = useState([]);
   const [sortedInfo, setSortedInfo] = useState({});
   const [searchInput, setSearchInput] = useState('');
   const [searchBy, setSearchBy] = useState('');
+  const [searchByDateRange, setSearchByDateRange] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const token = sessionStorage.getItem('token');
+  axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
   const handleSort = (columnKey) => {
     let sortOrder =
       sortedInfo.columnKey === columnKey && sortedInfo.order === 'ascend' ? 'descend' : 'ascend';
     setSortedInfo({ columnKey, order: sortOrder });
   };
+  let data = [];
 
-  const data = [];
   useEffect(() => {
-    axios.get('https://6541299af0b8287df1fdf263.mockapi.io/Syllabus-API').then((response) => {
-      setApiData(response.data);
-    });
+    setLoading(true); // Set loading to true when starting to fetch data
+    axios
+      .get(
+        'http://fams-group1-net03.ptbiology.com/api/syllabus/view-syllabus-list?filter-by=Active&filter-by=Inactive&filter-by=Drafting'
+      )
+      .then((response) => {
+        setApiData(response.data.data);
+        setLoading(false); // Set loading to false when data is received
+      });
   }, []);
 
   let params;
   // handle Search Input
   useEffect(() => {
     params = {};
-
-    // Check if searchInput is not empty before adding it to params
-    // if (searchInput.trim() !== '') {
-    //   params = {
-    //     syllabus: searchInput,
-    //   };
-    //   console.log('searchby ' + searchBy.includes('code_'));
-    // }
     if (searchBy.trim() !== '') {
       if (searchBy.includes('syllabus_')) {
         params = {
@@ -64,28 +69,35 @@ const SyllabusList = () => {
     }
 
     axios
-      .get('https://6541299af0b8287df1fdf263.mockapi.io/Syllabus-API', {
+      .get('http://fams-group1-net03.ptbiology.com/api/syllabus/search', {
         params,
       })
       .then((response) => {
-        setApiData(response.data);
+        setApiData(response.data.data);
       });
   }, [searchBy]);
 
-  if (apiData) {
-    apiData.map((item) => {
-      data.push({
+  // data from API
+  if (apiData != null && apiData.length > 0) {
+    data = apiData.map((item) => {
+      return {
         key: item.id,
         id: item.id,
-        syllabus: item.syllabus,
+        syllabus: (
+          <Typography onClick={() => navigate('/view-syllabus-detail/' + item.id)}>
+            {item.syllabus}
+          </Typography>
+        ),
         code: item.code,
-        createdOn: new Date(item.createdOn).toLocaleDateString('en-GB'),
-        createdBy: item.createdBy,
-        duration: item.duration,
+        createdOn: item.createdOn,
+        createdBy: item.createdBy.fullName,
+        duration: `${item.duration.day} days`,
         outputStandard: item.outputStandard.map((o) => <OutputStandard key={o} data={o} />),
         status: <Status data={item.status} />,
-        options: <MenuOption apiData={apiData} item={item} setApiData={setApiData} />,
-      });
+        options: (
+          <MenuOption status={item.status} apiData={apiData} item={item} setApiData={setApiData} />
+        ),
+      };
     });
   }
 
@@ -93,20 +105,21 @@ const SyllabusList = () => {
     const columnKey = sortedInfo.columnKey;
     const order = sortedInfo.order === 'ascend' ? 1 : -1;
 
-    // Add custom logic for sorting based on column key
     if (columnKey === 'syllabus') {
-      return a.syllabus.localeCompare(b.syllabus) * order;
+      const syllabusA = a.syllabus.props.children || ''; // Add null check
+      const syllabusB = b.syllabus.props.children || ''; // Add null check
+      return syllabusA.localeCompare(syllabusB) * order;
     } else if (columnKey === 'code') {
-      return a.code.localeCompare(b.code) * order;
+      return (a.code || '').localeCompare(b.code || '') * order; // Add null check
     } else if (columnKey === 'createdOn') {
-      return new Date(a.createdOn) - new Date(b.createdOn) * order;
+      return (new Date(a.createdOn) - new Date(b.createdOn)) * order; // Fix the parentheses position
     } else if (columnKey === 'createdBy') {
-      return a.createdBy.localeCompare(b.createdBy) * order;
+      return (a.createdBy.fullName || '').localeCompare(b.createdBy.fullName || '') * order; // Add null check
     } else if (columnKey === 'duration') {
-      return a.duration - b.duration * order;
+      return (a.duration.day - b.duration.day) * order; // Fix the parentheses position
     }
 
-    return 0; // Default case
+    return 0;
   });
 
   const columns = [
@@ -220,21 +233,24 @@ const SyllabusList = () => {
             apiData={apiData}
             searchInput={searchInput}
             setSearchBy={setSearchBy}
+            setSearchByDateRange={setSearchByDateRange}
             onSearchInputChange={setSearchInput}
           />
         </Flex>
-        <Table
-          pagination={{
-            position: ['bottomCenter'],
-            style: {
-              textAlign: 'center',
-            },
-            showSizeChanger: true,
-            pageSizeOptions: ['10', '20', '50', '100'],
-          }}
-          columns={columns}
-          dataSource={data}
-        />
+        <Spin spinning={loading} tip='Loading...'>
+          <Table
+            pagination={{
+              position: ['bottomCenter'],
+              style: {
+                textAlign: 'center',
+              },
+              showSizeChanger: true,
+              pageSizeOptions: ['10', '20', '50', '100'],
+            }}
+            columns={columns}
+            dataSource={data}
+          />
+        </Spin>
       </Flex>
     </ConfigProvider>
   );

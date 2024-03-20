@@ -21,11 +21,12 @@
     
     .category {
         display: inline-flex;
-
+        gap: 1px;
 
         .button{
             display: flex;
             border: none;
+            padding: 0;
 
             .button-cursor{
                 cursor: pointer;

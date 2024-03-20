@@ -2,13 +2,22 @@
   position: relative;
   background-color: white;
   width: 100%;
+.main-header{
+width: 100%;
+background-color: #2D3748;
 
-  .header {
+
+    .header {
       margin-top: 1px;
-      background-color: #2D3748;
+      
       color: #fff;
       padding-left: 2%;
+      padding: 10px;
+      letter-spacing: 5px;
+      margin-left: 25px;
   }
+}
+  
 
   .action {
       margin: 2%;
@@ -66,48 +75,10 @@
         justify-content: space-around;
         
       }
-      .import-btn{
-        display: flex;
-        align-items: center;
-        justify-content: space-evenly;
-        height: 32px;
-        background-color: #D45B13;
-        color: white;
-        border: none;
-        border-radius: 8px;
-        cursor: pointer;
-        font-weight: bold;
-        padding: 0 12px;
-        margin-right: 10px;
-      }
+      
   }
 
-  .suggestion {
-      position: absolute;
-      width: 300px;
-      max-height: 50vh;
-      z-index: 10;
-      margin-top: -1.5%;
-      margin-left: 2%;
-      overflow: auto;
-      border-radius: 8px;
-      border: 1px solid var(--secondary-color);
-      background-color: var(--white-color);
-
-      .item {
-          display: flex;
-          align-items: center;
-          padding: 2% 4%;
-          width: 100%;
-          height: 40px;
-          background-color: var(--white-color);
-          color: black;
-          font-weight: bold;
-          font-style: italic;
-          list-style-type: none;
-          cursor: pointer;
-      }
-  }
+  
 
   .search-result {
       margin: 2%;
@@ -119,59 +90,17 @@
           font-style: italic;
           font-weight: 600;
       }
+      
   }
+  .clear-search-btn{
+    display: flex;
+    align-items: center;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+  }
+  
+  
 
-  .table {
-      border-top-left-radius: 10px;
-      border-top-right-radius: 10px;
-      margin: 0 0.5%;
-      width: 99%;
-      box-shadow: 0 0 2px gray;
-      border-collapse: collapse;
-      font-weight: 500;
-
-      .thead {
-          border-top-left-radius: 10px;
-          border-top-right-radius: 10px;
-          background-color: var(--primary-color);
-
-          .tr {
-              border-top-left-radius: 10px;
-              border-top-right-radius: 10px;
-                text-align: left;
-
-                :first-child {
-                    border-top-left-radius: 10px;
-                }
-
-                :last-child {
-                    border-top-right-radius: 10px;
-                }
-
-                .th {
-                    height: 40px;
-
-                    .title {
-                        border: none;
-                        outline: none;
-                        gap: 4px;
-                        display: flex;
-                        align-items: center;
-                        background-color: transparent;
-                        color: var(--white-color);
-                        font-weight: bold;
-                    }
-                }
-
-                .name {
-                    padding-left: 2.5%;
-                }
-            }
-        }
-    }
-
-    .pagination {
-        margin: 2%;
-        text-align: center;
-    }
+  
 }

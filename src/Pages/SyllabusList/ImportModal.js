@@ -15,6 +15,7 @@ import {
 import { UploadOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import axios from 'axios';
 
 const { Option } = Select;
 
@@ -23,8 +24,11 @@ const ImportSyllabusModal = () => {
   const [form] = Form.useForm();
   const [selectedFile, setSelectedFile] = useState(null);
   const fileInputRef = useRef(null); // Create a ref for the file input
+  const fileInputRef = useRef(null); // Create a ref for the file input
 
   const handleFileChange = (event) => {
+    const file = event.target.files[0]; // Directly access the selected file
+    setSelectedFile(file);
     const file = event.target.files[0]; // Directly access the selected file
     setSelectedFile(file);
   };
@@ -134,6 +138,7 @@ const ImportSyllabusModal = () => {
       <Button
         icon={<UploadOutlined />}
         onClick={() => setIsOpen(true)}
+        onClick={() => setIsOpen(true)}
         style={{
           borderRadius: '12px',
           color: 'white',
@@ -153,13 +158,16 @@ const ImportSyllabusModal = () => {
             Import Syllabus
           </Typography>
         }
-        open={isOpen}
+        visible={isOpen}
         onCancel={() => {
+          setIsOpen(false);
           setIsOpen(false);
         }}
         footer={null}
         destroyOnClose
       >
+        <Form onFinish={handleFormSubmit} layout='horizontal' form={form}>
+          {/* Import settings */}
         <Form onFinish={handleFormSubmit} layout='horizontal' form={form}>
           {/* Import settings */}
           <Flex gap={18} justify='space-between' style={{ width: '100%' }}>
@@ -183,8 +191,10 @@ const ImportSyllabusModal = () => {
                     textAlign: 'center',
                     backgroundColor: '#2D3748',
                     cursor: 'pointer', // Add cursor pointer to indicate it's clickable
+                    cursor: 'pointer', // Add cursor pointer to indicate it's clickable
                   }}
                 >
+                  {selectedFile ? truncateFileName(selectedFile.name, 10) : 'Select'}
                   {selectedFile ? truncateFileName(selectedFile.name, 10) : 'Select'}
                 </p>
                 <input

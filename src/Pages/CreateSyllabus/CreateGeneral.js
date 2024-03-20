@@ -1,32 +1,41 @@
-//
-
-import { InputNumber } from "antd";
 import React, { useState } from "react";
+import { InputNumber, Select } from "antd";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import TimeAllocation from "../../Components/Common/TimeAllocation/TimeAllocation";
 
 const CreateGeneral = () => {
   const [courseObjectives, setCourseObjectives] = useState("");
+  const [technicalRequirement, setTechnicalRequirement] = useState("");
+  const [level, setLevel] = useState("Beginner");
+  const levelOptions = [
+    { value: "Beginner", label: "Beginner" },
+    { value: "Intermediate", label: "Intermediate" },
+    { value: "Advanced", label: "Advanced" },
+  ];
+
+  // const [demoText, setDemoText] = useState({ __html: "" });
+  // const handleSave = async () => {
+  //   const htmlContent = document.querySelector(".ql-editor").innerHTML;
+
+  //   setDemoText({ __html: htmlContent });
+  //   console.log("HTML: ", htmlContent);
+  // };
 
   return (
-    <div
-      className="generalContainer"
-      style={{ display: "flex", padding: "20px", margin: "20px", backgroundColor: "#FFFFFF", justifyContent: "space-between" }}
-    >
-      <div
-        className="generalContent"
-        style={{ width: "81%", height: "636px" }}
-      >
+    <div className="syllabusTabContainer">
+      <div className="syllabusTabContent">
         <div className="baseGeneralSetup">
           <div className="selectLevel" style={{ display: "flex" }}>
             <p className="subtitle1" style={{ paddingRight: "40px" }}>
               Level
             </p>
-            <select className="optionLevel ">
-              <option className="subtitle2">Auto detect</option>
-              <option className="subtitle2">Auto detect</option>
-            </select>
+            <Select
+              value={level}
+              onChange={setLevel}
+              options={levelOptions}
+              style={{ width: "180px" }}
+            />
           </div>
           <div className="attendeeNumbers" style={{ display: "flex" }}>
             <p className="subtitle1">Attendee numbers</p>
@@ -38,16 +47,43 @@ const CreateGeneral = () => {
           <p className="subtitle1" style={{ paddingBottom: "10px" }}>
             Technical Requirement(s){" "}
           </p>
-          <textarea
+
+          <ReactQuill
+            theme="snow"
             style={{
-              padding: "10px",
+              marginBottom: "10px",
               width: "98%",
               height: "138px",
-              border: "0.5px solid #b3a9a9",
-              borderRadius: "10px",
               resize: "none",
               overflowY: "auto",
+              border: "0.5px solid #b3a9a9",
+              borderRadius: "10px"
             }}
+            className="ql-container-technical-requirement"
+            value={technicalRequirement}
+            onChange={(value) => setTechnicalRequirement(value)}
+            modules={{
+              toolbar: false,
+            }}
+            formats={[
+              "header",
+              "font",
+              "size",
+              "bold",
+              "italic",
+              "underline",
+              "strike",
+              "blockquote",
+              "list",
+              "bullet",
+              "link",
+              "image",
+              "video",
+              "code-block",
+              "color",
+              "background",
+              "align",
+            ]}
           />
         </div>
 
@@ -61,15 +97,15 @@ const CreateGeneral = () => {
             style={{
               width: "98%",
               height: "310px",
-              borderRadius: "10px", 
+              borderRadius: "10px",
+
             }}
-            className="ql-container"
+            className="ql-container-course-objectives"
             value={courseObjectives}
             onChange={(value) => setCourseObjectives(value)}
             modules={{
               toolbar: {
                 container: [
-                  ["undo", "redo"],
                   [{ header: [1, 2, 3, 4, 5, 6, false] }],
                   [{ align: [] }],
                   [{ color: [] }, { background: [] }],
@@ -102,9 +138,11 @@ const CreateGeneral = () => {
           />
         </div>
       </div>
-      <div className="timeAllocation" style={{width: "18%"}}>
-        <TimeAllocation />
+      <div className="timeAllocation" style={{ width: "18%" }}>
+        <TimeAllocation width={220} height={220} outerRadius={80} />
       </div>
+      {/* <button onClick={handleSave}>Lưu</button>
+      <div className="demoText" dangerouslySetInnerHTML={demoText} /> */}
     </div>
   );
 };

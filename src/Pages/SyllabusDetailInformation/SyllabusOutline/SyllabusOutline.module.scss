@@ -1,0 +1,203 @@
+.outline {
+  width: 100%;
+  padding: 0 10px 20px 10px;
+  display: flex;
+  flex-direction: row;
+
+  .time-allocation {
+    width: 20%;
+    padding: 0 0 20px 5px;
+
+    .dropdown3 {
+      .dropdown-button3 {
+        height: 40px;
+        width: 100%;
+        background-color: #2d3748;
+        color: white;
+        border-radius: 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px;
+
+        &.clicked {
+          border-bottom-left-radius: 0;
+          border-bottom-right-radius: 0;
+        }
+      }
+    }
+    .dropdown-content3 {
+      height: 0;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      border: 1px solid #8b8b8b;
+      border-bottom-left-radius: 10px;
+      border-bottom-right-radius: 10px;
+      padding: 10px;
+      transition: height 0.3s ease;
+
+      &.opened {
+        height: auto;
+      }
+
+      .dropdown-option1 {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+
+        .dropdown-content1 {
+          display: flex;
+          flex-direction: column;
+          gap: 10px;
+
+          .form-view-mini {
+            display: flex;
+            flex-direction: row;
+            gap: 10px;
+            p {
+              font-size: 12px;
+              font-weight: 500;
+            }
+          }
+        }
+      }
+    }
+  }
+  .outline-style {
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+
+    .dropdown {
+      width: 100%;
+
+      &.clicked {
+        margin-bottom: 20px; // Add margin bottom when clicked
+      }
+
+      .dropdown-button {
+        height: 40px;
+        width: 100%;
+        background-color: #2d3748;
+        color: white;
+        border-radius: 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px;
+
+        &.clicked {
+          border-bottom-left-radius: 0;
+          border-bottom-right-radius: 0;
+        }
+      }
+
+      .dropdown-content {
+        height: 0;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        border: 1px solid #8b8b8b;
+        border-bottom-left-radius: 10px;
+        border-bottom-right-radius: 10px;
+        padding: 10px;
+        transition: height 0.3s ease;
+        background-color: #fff;
+
+        &.opened {
+          height: auto;
+        }
+
+        .dropdown-content-button {
+          display: flex;
+          width: 100%;
+          flex-direction: column;
+          background-color: #fff;
+          border: none;
+          outline: none;
+          color: #000;
+
+          .content-dropdown-fa {
+            display: flex;
+            flex-direction: row;
+            width: 100%;
+
+            .content-dropdown-name {
+              display: flex;
+              justify-content: center;
+              width: 10%;
+
+              p {
+                font-size: 16px;
+                font-weight: 600;
+                font-family: Arial, Helvetica, sans-serif;
+                width: 100%;
+                text-align: center;
+              }
+            }
+
+            .content-dropdown-view {
+              display: flex;
+              flex-direction: column;
+              width: 100%;
+
+              .dropdown-button2 {
+                border: none;
+                outline: none;
+                background-color: #fff;
+                width: 100%;
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+                text-align: left;
+                padding: 0;
+
+                .conner-left {
+                  display: flex;
+                  flex-direction: column;
+                  gap: 10px;
+
+                  p {
+                    font-size: 16px;
+                    font-weight: 600;
+                    font-family: Arial, Helvetica, sans-serif;
+                  }
+
+                  .form-p {
+                    font-size: 12px;
+                    font-weight: normal;
+                    font-style: italic; /* Make text italic */
+                  }
+                }
+
+                .conner-right {
+                  display: flex;
+                  align-items: center;
+                }
+              }
+            }
+          }
+
+          .details-dropdown-content {
+            height: 0;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            background-color: #fff;
+            padding: 10px;
+
+            &.opened {
+              height: auto;
+            }
+          }
+        }
+      }
+    }
+  }
+}

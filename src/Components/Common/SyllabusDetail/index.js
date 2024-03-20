@@ -10,23 +10,29 @@ const cx = classNames.bind(styles);
 function SyllabusDetail({ title, standard, status, time, type }) {
   const numericTime = parseInt(time, 10);
 
-  if (isNaN(numericTime)) {
-    console.error("Time must be the number");
-    return null; 
-  }
+  // if (isNaN(numericTime)) {
+  //   console.error("Time must be the number");
+  //   return null; 
+  // }
 
   const displayTime =
     numericTime === 1 ? `${numericTime}min` : `${numericTime}mins`;
 
   let icon = "";
 
-  if (type === "lecture") {
+  if (type === "Concept/Lecture") {
     icon = <Icons.LectureIcon />;
-  } else if (type === "lab") {
+  } else if (type === "Assignment/Lab") {
     icon = <Icons.LabIcon />;
-  } else if (type === "review") {
+  } else if (type === "Guide/Review") {
     icon = <Icons.ReviewIcon />;
-  }
+  } else if (type === "Test/Quiz") {
+    icon = <Icons.QuizIcon/>;
+  } else if (type === "Exam") {
+    icon = <Icons.ExamIcon />;
+  } else if (type === "Workshop") {
+    icon = <Icons.WorkshopIcon />;
+  } 
 
   return (
     <div className={cx("container")}>

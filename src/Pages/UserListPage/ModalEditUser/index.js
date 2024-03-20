@@ -5,9 +5,8 @@ import { CancleIcon } from "../../../Components/Common/Icons/ActionIcons";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import axios from "axios";
 import { useSelector } from "react-redux";
-import { notification } from "antd";
+import { editUser } from "../../../Services/usersApi";
 
 const cx = classNames.bind(styles);
 
@@ -20,11 +19,8 @@ const schema = yup
     })
     .required()
 
-function ModalEditUser({ closeModal }) {
-    const token = sessionStorage.getItem("token");
-    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-
-    const updateUser = useSelector(state => state.user.updateUser);
+function ModalEditUser({ closeModal, loading, fetchUsers }) {
+    const updateUser = useSelector(state => state.users.updateUser);
     const [gender, setGender] = useState(updateUser.gender);
     const [status, setStatus] = useState(updateUser.status);
 
@@ -40,21 +36,15 @@ function ModalEditUser({ closeModal }) {
 
     const onSubmit = (data, event) => {
         event.preventDefault();
-        const finalData = { ...data, id: updateUser.id, gender: gender, status: status }
-        axios.put(`http://fams-group1-net03.ptbiology.com/api/user/update-user`, finalData)
-            .then(function () {
-                notification.success({
-                    message: "Update user successfully!"
-                });
-                closeModal();
+        loading(true);
+        closeModal();
+        editUser({ ...data, id: updateUser.id, gender: gender, status: status })
+            .then(() => {
+                fetchUsers();
             })
-            .catch(function (error) {
-                console.log(error);
-                notification.success({
-                    message: "Update user failed!",
-                    description: error.response.data.message || "Something wrong! Please try again later"
-                });
-            });
+            .finally(() => {
+                loading(false);
+            })
         reset();
     }
 

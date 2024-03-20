@@ -5,6 +5,11 @@
   width: 90%;
   min-height: 24px;
   gap: 8px;
+  cursor: pointer;
+
+  &:hover {
+    color: #69b1ff;
+  }
 
   .icon {
     margin-left: 50%;

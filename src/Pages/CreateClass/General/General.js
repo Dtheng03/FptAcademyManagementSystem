@@ -1,4 +1,4 @@
-import React, { useState } from "react"; // Import React
+import React, { useState, useEffect } from "react"; // Import React
 import styles from "./General.module.scss";
 import classNames from "classnames/bind";
 import { TimePicker } from "antd";
@@ -14,6 +14,7 @@ import {
   SupplierIcon,
 } from "../../../Components/Common/Icons/IndicatorIcons/index";
 import { notification } from 'antd';
+import axios from 'axios';
 
 const cx = classNames.bind(styles);
 
@@ -23,7 +24,11 @@ function General() {
   const [startTime, setStartTime] = useState(null);
   const [endTime, setEndTime] = useState(null);
   const [popupOpen, setPopupOpen] = useState(false);
+  const [adminValue, setAdminValue] = useState("default");
+  const [fsuValue, setFsuValue] = useState("default");
+  const [contactValue, setContactValue] = useState("default");
 
+  
   const handlePopupToggle = () => {
     setPopupOpen(prevPopupOpen => !prevPopupOpen); // Toggle popup open/close
   };
@@ -85,7 +90,7 @@ function General() {
             <TrainingCalendarIcon />
             <p>General</p>
           </div>
-          <div className={cx("conner-right")}>
+          <div className={cx("conner-right", { spin: !popupOpen })}>
             <DropDownCircleIcon />
           </div>
         </button>
@@ -128,7 +133,11 @@ function General() {
             <div className={cx("dropdown-option4")}>
               <GradeIcon />
               <p>Admin</p>
-              <select className={cx("select")} defaultValue="default">
+              <select
+                className={cx("select")}
+                value={adminValue}
+                onChange={(e) => setAdminValue(e.target.value)}
+              >
                 <option value="default" hidden>
                   Select
                 </option>
@@ -138,7 +147,11 @@ function General() {
             <div className={cx("dropdown-option5")}>
               <SupplierIcon />
               <p>FSU</p>
-              <select className={cx("select")} defaultValue="default">
+              <select
+                className={cx("select")}
+                value={fsuValue}
+                onChange={(e) => setFsuValue(e.target.value)}
+              >
                 <option value="default" hidden>
                   Select
                 </option>
@@ -146,7 +159,11 @@ function General() {
               </select>
             </div>
             <div className={cx("dropdown-option6")}>
-              <select className={cx("select")} defaultValue="default">
+              <select
+                className={cx("select")}
+                value={contactValue}
+                onChange={(e) => setContactValue(e.target.value)}
+              >
                 <option value="default" hidden>
                   Contacts
                 </option>

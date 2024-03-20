@@ -1,38 +1,19 @@
 import styles from "./TableRow.module.scss";
 import classNames from "classnames/bind";
 import { useState } from "react";
-import { MoreIcon } from "../../../Components/Common/Icons/ActionIcons";
+import { MoreIcon, VisibilityIcon, VisibilityOffIcon } from "../../../Components/Common/Icons/ActionIcons";
 import { DeleteForeverIcon, CreateIcon, CopyIcon } from "../../../Components/Common/Icons/DocManageIcons";
-import { Popover, notification, Popconfirm } from 'antd';
+import { Popover, notification, Modal, Button } from 'antd';
 import { useNavigate } from "react-router-dom";
+import { AttendeeStyle, StatusStyle } from "../Styles";
 import axios from "axios";
+import crypto from "crypto-js";
+import axiosClient from "../../../Services/axios/config";
+import { changeStatus } from "../../../Services/classApi";
 
 const cx = classNames.bind(styles);
 
-function AttendeeStyle({ attendee }) {
-    var className, title;
-    if (attendee === "Fresher") {
-        className = "fresher"
-        title = "Fresher"
-    } else if (attendee === "Intern") {
-        className = "intern"
-        title = "Intern"
-    } else if (attendee === "Online fee-fresher") {
-        className = "online-fee-fresher"
-        title = "Online fee-fresher"
-    } else if (attendee === "Offline fee-fresher") {
-        className = "offline-fee-fresher"
-        title = "Offline fee-fresher"
-    }
-
-    return (
-        <span className={cx("attendee-style", className)}>
-            {title}
-        </span>
-    );
-}
-
-function TableRow({ item, domChange, domChangeSuccess }) {
+function TableRow({ item, domChange, domChangeSuccess, reload }) {
     const style = {
         backgroundColor: "transparent",
         border: "none",
@@ -47,6 +28,18 @@ function TableRow({ item, domChange, domChangeSuccess }) {
     };
 
     const [open, setOpen] = useState(false);
+    const [isModalVisible, setModalVisible] = useState(false);
+    const [modalAction, setModalAction] = useState('');
+
+    var decryptedRoleName;
+    const encryptedRoleName = sessionStorage.getItem("roleName");
+    if (encryptedRoleName) {
+        decryptedRoleName = crypto.AES.decrypt(
+            encryptedRoleName,
+            "react02"
+        ).toString(crypto.enc.Utf8);
+    }
+    const roleName = decryptedRoleName;
 
     const navigate = useNavigate();
 
@@ -54,121 +47,182 @@ function TableRow({ item, domChange, domChangeSuccess }) {
         navigate(`/view-class-detail/${selectedItem.id}`);
     };
 
-    const handleDuplicateClass = () => {
-        const duplicatedClass = { ...item };
-        delete duplicatedClass.id;
-        axios
-            .post("https://653d1d13f52310ee6a99e3b7.mockapi.io/class", duplicatedClass)
-            .then(() => {
-                notification.success({
-                    message: "Duplicate class successfully",
-                });
-                domChangeSuccess();
-            })
-            .catch(function (error) {
-                console.log(error);
-                notification.error({
-                    message: "Duplicate class failed",
-                    description: "Please try again!",
-                });
-            });
+    const handleAction = (action) => {
+        setModalAction(action);
+        setModalVisible(true);
+        setOpen(false);
     };
 
-    const handleDeleteClass = () => {
+    const handleDelete = () => {
         axios
             .delete(`https://653d1d13f52310ee6a99e3b7.mockapi.io/class/${item.id}`)
             .then(() => {
                 notification.success({
-                    message: "Delete class successfully",
+                    message: 'Delete class successfully',
+                    duration: '1.5'
                 });
                 domChangeSuccess();
             })
             .catch(function (error) {
                 console.log(error);
                 notification.error({
-                    message: "Delete class failed",
-                    description: "Please try again!",
+                    message: 'Delete class failed',
+                    description: 'Please try again!',
+                    duration: '1.5'
                 });
             });
+        reload();
+    }
+
+    const handleDuplicate = () => {
+        const duplicatedClass = { ...item };
+        delete duplicatedClass.id;
+        axios
+            .post('https://653d1d13f52310ee6a99e3b7.mockapi.io/class', duplicatedClass)
+            .then(() => {
+                notification.success({
+                    message: 'Duplicate class successfully',
+                    duration: '1.5'
+                });
+                domChangeSuccess();
+            })
+            .catch(function (error) {
+                console.log(error);
+                notification.error({
+                    message: 'Duplicate class failed',
+                    description: 'Please try again!',
+                    duration: '1.5'
+                });
+            });
+        reload();
+    }
+
+    const handleChangeStatus = () => {
+        changeStatus(item.classId)
+            .then(() => {
+                domChangeSuccess();
+            })
+    }
+
+    const performAction = () => {
+        if (modalAction === 'duplicate') {
+            handleDuplicate();
+        } else if (modalAction === 'delete') {
+            handleDelete();
+        } else if (modalAction === 'change') {
+            handleChangeStatus();
+        }
+        setModalVisible(false);
     };
 
     return (
-        <tr className={cx("tr")} onDoubleClick={() => handleDoubleClick(item)}>
-            {/* <td className={cx("td", "id")}>{item.id}</td> */}
-            <td className={cx("td", "name")}>{item.classNames}</td>
-            <td className={cx("td")}>{item.classCode}</td>
-            <td className={cx("td")}>{item.createdOn}</td>
-            <td className={cx("td")}>{item.createdBy}</td>
-            <td className={cx("td")}>{item.duration} days</td>
-            <td className={cx("td")}><AttendeeStyle attendee={item.attendee} /></td>
-            <td className={cx("td")}>{item.location}</td>
-            <td className={cx("td")}>{item.fsu}</td>
-            <td className={cx("td")}>
-                <Popover
-                    trigger="click"
-                    placement="left"
-                    open={open}
-                    onOpenChange={() => {
-                        setOpen(!open);
-                    }}
-                    content={
-                        <>
-                            <button
-                                style={style}
-                                onClick={() => {
-                                    setOpen(false);
-                                }}
-                            >
-                                <CreateIcon />
-                                Edit class
-                            </button>
+        <>
+            <tr className={cx("tr")} onDoubleClick={() => handleDoubleClick(item)}>
+                {/* <td className={cx("td", "id")}>{item.id}</td> */}
+                <td className={cx("td", "name")}>{item.className}</td>
+                <td className={cx("td", "code")}>{item.classCode}</td>
+                <td className={cx("td", "createdon")}>{item.createdOn}</td>
+                <td className={cx("td", "createdby")}>{item.createdBy.fullName}</td>
+                <td className={cx("td", "duration")}>{item.duration} days</td>
+                <td className={cx("td", "attendee")}><AttendeeStyle attendee={item.attendee} /></td>
+                <td className={cx("td")}><StatusStyle status={item.status} /></td>
+                {/* <td className={cx("td", "location")}>{item.location}</td> */}
+                <td className={cx("td")}>{item.fsu}</td>
+                {(roleName === "Super Admin" || roleName === "Admin") &&
+                    <td className={cx("td")}>
+                        <Popover
+                            trigger="click"
+                            placement="bottomRight"
+                            open={open}
+                            onOpenChange={() => {
+                                setOpen(!open);
+                            }}
+                            content={
+                                <>
+                                    <button
+                                        style={style}
+                                        onClick={() => {
+                                            setOpen(false);
+                                        }}
+                                    >
+                                        <CreateIcon />
+                                        Edit class
+                                    </button>
 
-                            <button
-                                style={style}
-                                onClick={() => {
-                                    handleDuplicateClass();
-                                    setOpen(false);
-                                    domChange();
+                                    <button
+                                        style={style}
+                                        onClick={() => { handleAction('duplicate'); domChange() }}
+                                    >
+                                        <CopyIcon />
+                                        Duplicate class
+                                    </button>
 
-                                }}
-                            >
-                                <CopyIcon />
-                                Duplicate class
-                            </button>
+                                    <button
+                                        style={style}
+                                        onClick={() => { handleAction('change'); domChange(); }}
+                                    >
+                                        {item.classStatus === 'Inactive' ? (
+                                            <>
+                                                <VisibilityIcon />
+                                                Activate
+                                            </>
+                                        ) : (
+                                            <>
+                                                <VisibilityOffIcon />
+                                                De-activate
+                                            </>
+                                        )}
+                                    </button>
 
-                            <Popconfirm
-                                trigger={"click"}
-                                title="Delete class"
-                                description={
-                                    <div>
-                                        {`Do you want to delete the "${item.classNames}" class?`}
-                                        <br />
-                                        {"This class cannot be restored."}
-                                    </div>
-                                }
-                                placement="left"
-                                onConfirm={handleDeleteClass}
-                                okText="Delete"
-                                okButtonProps={{ style: { backgroundColor: '#2D3748', color: '#fff' } }}
-                                cancelButtonProps={{ style: { color: '#ff0000', border: 'none', textDecoration: 'underline' } }}
-                            >
-                                <button
-                                    style={{ ...style, color: "red" }}
-                                    onClick={() => domChange()}
-                                >
-                                    <DeleteForeverIcon />
-                                    Delete class
-                                </button>
-                            </Popconfirm>
-                        </>
-                    }
-                >
-                    <button className={cx("more-btn")} onClick={() => setOpen(!open)}>
-                        <MoreIcon />
-                    </button>
-                </Popover>
-            </td>
-        </tr >
+                                    <button
+                                        style={{ ...style, color: 'red' }}
+                                        onClick={() => { handleAction('delete'); domChange() }}
+                                    >
+                                        <DeleteForeverIcon />
+                                        Delete class
+                                    </button>
+                                </>
+                            }
+                        >
+                            <Button className={cx('more-btn')} onClick={() => setOpen(!open)}>
+                                <MoreIcon />
+                            </Button>
+                        </Popover>
+                    </td>}
+            </tr >
+
+            <Modal
+                title={
+                    modalAction === 'delete'
+                        ? 'Delete Class'
+                        : modalAction === 'duplicate'
+                            ? 'Duplicate Class'
+                            : 'Change Status Class'
+                }
+                open={isModalVisible}
+                onOk={performAction}
+                onCancel={() => setModalVisible(false)}
+                okText={
+                    modalAction === 'delete' ? 'Delete'
+                        : modalAction === 'duplicate'
+                            ? 'Duplicate'
+                            : 'Change'
+                }
+                okButtonProps={{
+                    style: { backgroundColor: '#2D3748', color: '#fff' },
+                }}
+                cancelButtonProps={{
+                    style: { color: '#ff0000', border: 'none' },
+                }}
+                centered={true}
+            >
+                {modalAction === 'delete'
+                    ? `Do you want to delete the "${item.className}" class? This action cannot be undone.`
+                    : modalAction === 'duplicate'
+                        ? `Do you want to duplicate the "${item.className}" class?`
+                        : `Do you want to change the status of the "${item.className}" class?`}
+            </Modal>
+        </>
     );
 }
 

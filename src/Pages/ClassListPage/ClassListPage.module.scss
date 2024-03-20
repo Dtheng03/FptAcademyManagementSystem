@@ -8,6 +8,7 @@
         background-color: #2D3748;
         color: #fff;
         padding-left: 2%;
+        letter-spacing: 5px;
     }
 
     .action {
@@ -58,34 +59,15 @@
                         color: black !important;
                     }
                 }
+
+                .clear-search-btn {
+                    display: flex;
+                    align-items: center;
+                    background-color: transparent;
+                    border: none;
+                    cursor: pointer;
+                }
             }
-        }
-    }
-
-    .suggestion {
-        position: absolute;
-        width: 300px;
-        max-height: 50vh;
-        z-index: 10;
-        margin-top: -1.5%;
-        margin-left: 2%;
-        overflow: auto;
-        border-radius: 8px;
-        border: 1px solid var(--secondary-color);
-        background-color: var(--white-color);
-
-        .item {
-            display: flex;
-            align-items: center;
-            padding: 2% 4%;
-            width: 100%;
-            height: 40px;
-            background-color: var(--white-color);
-            color: black;
-            font-weight: bold;
-            font-style: italic;
-            list-style-type: none;
-            cursor: pointer;
         }
     }
 
@@ -99,59 +81,5 @@
             font-style: italic;
             font-weight: 600;
         }
-    }
-
-    .table {
-        border-top-left-radius: 10px;
-        border-top-right-radius: 10px;
-        margin: 0 0.5%;
-        width: 99%;
-        box-shadow: 0 0 2px gray;
-        border-collapse: collapse;
-        font-weight: 500;
-
-        .thead {
-            border-top-left-radius: 10px;
-            border-top-right-radius: 10px;
-            background-color: var(--primary-color);
-
-            .tr {
-                border-top-left-radius: 10px;
-                border-top-right-radius: 10px;
-                text-align: left;
-
-                :first-child {
-                    border-top-left-radius: 10px;
-                }
-
-                :last-child {
-                    border-top-right-radius: 10px;
-                }
-
-                .th {
-                    height: 40px;
-
-                    .title {
-                        border: none;
-                        outline: none;
-                        gap: 4px;
-                        display: flex;
-                        align-items: center;
-                        background-color: transparent;
-                        color: var(--white-color);
-                        font-weight: bold;
-                    }
-                }
-
-                .name {
-                    padding-left: 2.5%;
-                }
-            }
-        }
-    }
-
-    .pagination {
-        margin: 2%;
-        text-align: center;
     }
 }

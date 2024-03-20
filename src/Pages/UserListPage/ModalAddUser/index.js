@@ -2,17 +2,16 @@ import styles from "./ModalAddUser.module.scss";
 import classNames from "classnames/bind";
 import { useState } from "react";
 import { CancleIcon } from "../../../Components/Common/Icons/ActionIcons";
-import axios from "axios";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { notification } from "antd";
+import { addUser } from "../../../Services/usersApi";
 
 const cx = classNames.bind(styles);
 
 const schema = yup
     .object({
-        userType: yup.string().required("This field is required"),
+        userType: yup.string().required("This field is required").trim(),
         fullName: yup.string().required("This field is required").trim(),
         email: yup.string().required("This field is required").email("This field must be a valid email").trim(),
         phone: yup.string().required("This field is required").length(10, "Phone number must have 10 digits").trim(),
@@ -20,10 +19,7 @@ const schema = yup
     })
     .required()
 
-function ModalAddUser({ closeModal }) {
-    const token = sessionStorage.getItem("token");
-    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-
+function ModalAddUser({ closeModal, loading, fetchUsers }) {
     const [gender, setGender] = useState("Male");
     const [status, setStatus] = useState("Active");
 
@@ -39,21 +35,15 @@ function ModalAddUser({ closeModal }) {
 
     const onSubmit = (data, event) => {
         event.preventDefault();
-        const finalData = { ...data, gender: gender, status: status }
-        axios.post('http://fams-group1-net03.ptbiology.com/api/user/create-user', finalData)
-            .then(function () {
-                notification.success({
-                    message: "Add new user successfully!"
-                })
-                closeModal();
+        loading(true);
+        closeModal();
+        addUser({ ...data, gender: gender, status: status })
+            .then(() => {
+                fetchUsers();
             })
-            .catch(function (error) {
-                console.log(error);
-                notification.error({
-                    message: "Add new user failed!",
-                    description: error.response.data.message || "Something wrong! Please try again later"
-                })
-            });
+            .finally(() => {
+                loading(false);
+            })
         reset();
     }
 
@@ -86,7 +76,7 @@ function ModalAddUser({ closeModal }) {
                             className={cx("input")}
                             {...register("userType")}
                         >
-                            <option value={0}>Select one</option>
+                            <option value={""}>Select one</option>
                             <option value={"Super Admin"}>Super Admin</option>
                             <option value={"Admin"}>Admin</option>
                             <option value={"Trainer"}>Trainer</option>

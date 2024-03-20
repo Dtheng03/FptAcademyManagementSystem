@@ -13,6 +13,7 @@
     .td {
         padding: 0.5%;
         height: 40px;
+        cursor: pointer;
     
 
         .more-btn {
@@ -23,26 +24,18 @@
 
     .name {
         font-weight: bold;
-        padding-left: 3%;
+        padding-left: 2.2%;
         width: 300px;
+        
     }
 
-    .duration{
-        
-        
-    }
+   
     .id{
-        padding-left: 3%;
-    }
-    .createOn{
-        padding-left: 3%;
-    }
-    .createBy{
-        padding-left: 0.4%;
-    }
-    .style{
         padding-left: 2.9%;
     }
+    
+    
+
 }
 
 .status-style {

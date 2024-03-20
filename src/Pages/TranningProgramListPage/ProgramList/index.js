@@ -56,10 +56,10 @@ function ProgramList({ domChange, domChangeSuccess, reload }) {
           <tr className={cx("tr")}>
             <th className={cx("th", "id")}>
               <button
-                className={cx("title")}
+                className={cx("title1")}
                 onClick={() => sortedColumn("id")}
               >
-                ID <SortIcon />
+                Program Name <SortIcon />
               </button>
             </th>
 
@@ -68,7 +68,7 @@ function ProgramList({ domChange, domChangeSuccess, reload }) {
                 className={cx("title")}
                 onClick={() => sortedColumn("tpName")}
               >
-                Program name <SortIcon />
+                Program Code <SortIcon />
               </button>
             </th>
             <th className={cx("th", "createOn")}>
@@ -95,7 +95,7 @@ function ProgramList({ domChange, domChangeSuccess, reload }) {
                 Duration <SortIcon />
               </button>
             </th>
-            <th className={cx("th", "id")}>
+            <th className={cx("th", "status")}>
               <button
                 className={cx("title")}
                 onClick={() => sortedColumn("status")}

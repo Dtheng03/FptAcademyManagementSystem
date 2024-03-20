@@ -11,10 +11,10 @@ import {
   Flex,
   Typography,
   notification,
+  Spin, // Import Spin component
 } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
 import axios from 'axios';
 
 const { Option } = Select;
@@ -23,12 +23,10 @@ const ImportSyllabusModal = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [form] = Form.useForm();
   const [selectedFile, setSelectedFile] = useState(null);
-  const fileInputRef = useRef(null); // Create a ref for the file input
+  const [loading, setLoading] = useState(false); // State to control loading overlay
   const fileInputRef = useRef(null); // Create a ref for the file input
 
   const handleFileChange = (event) => {
-    const file = event.target.files[0]; // Directly access the selected file
-    setSelectedFile(file);
     const file = event.target.files[0]; // Directly access the selected file
     setSelectedFile(file);
   };
@@ -105,18 +103,27 @@ const ImportSyllabusModal = () => {
 
     console.log('Request body:', requestBody);
 
-    // Call the handleImportAPI function to handle API import file
-    const res = await handleImportAPI(requestBody);
-    if (res.isSuccess) {
-      notification.success({
-        message: `Syllabus import successfully!`,
-      });
-    } else {
-      notification.error({
-        message: 'Syllabus duplication failed!',
-        description: `${res.message}. An unexpected error occurred. Please try again.`,
-      });
+    setLoading(true); // Set loading state to true when submitting the form
+
+    try {
+      // Call the handleImportAPI function to handle API import file
+      const res = await handleImportAPI(requestBody);
+      if (res.isSuccess) {
+        notification.success({
+          message: `Syllabus import successfully!`,
+        });
+      } else {
+        notification.error({
+          message: 'Syllabus duplication failed!',
+          description: `${res.message}. An unexpected error occurred. Please try again.`,
+        });
+      }
+    } catch (error) {
+      console.error('Error occurred during API call:', error);
+    } finally {
+      setLoading(false); // Set loading state to false after API call is complete
     }
+
     // Reset selectedFile after form submission
     setSelectedFile(null);
 
@@ -138,7 +145,6 @@ const ImportSyllabusModal = () => {
       <Button
         icon={<UploadOutlined />}
         onClick={() => setIsOpen(true)}
-        onClick={() => setIsOpen(true)}
         style={{
           borderRadius: '12px',
           color: 'white',
@@ -158,122 +164,121 @@ const ImportSyllabusModal = () => {
             Import Syllabus
           </Typography>
         }
-        visible={isOpen}
+        open={isOpen}
         onCancel={() => {
-          setIsOpen(false);
           setIsOpen(false);
         }}
         footer={null}
         destroyOnClose
       >
-        <Form onFinish={handleFormSubmit} layout='horizontal' form={form}>
-          {/* Import settings */}
-        <Form onFinish={handleFormSubmit} layout='horizontal' form={form}>
-          {/* Import settings */}
-          <Flex gap={18} justify='space-between' style={{ width: '100%' }}>
-            <Typography style={{ fontWeight: '700' }}>Import settings</Typography>
-            <Flex style={{ width: '20rem' }} justify='space-around'>
-              <Flex gap={20} vertical {...formItemLayout}>
-                <p>
-                  File (csv)<span style={{ color: 'red' }}>*</span>
-                </p>
-                <span>Encoding type</span>
-                <span>Column separator</span>
-                <span>Import template</span>
-              </Flex>
-              <Flex gap={18} vertical {...formItemLayout}>
-                <p
-                  onClick={handleSelectButtonClick}
-                  style={{
-                    width: '5rem',
-                    color: 'white',
-                    borderRadius: '6px',
-                    textAlign: 'center',
-                    backgroundColor: '#2D3748',
-                    cursor: 'pointer', // Add cursor pointer to indicate it's clickable
-                    cursor: 'pointer', // Add cursor pointer to indicate it's clickable
-                  }}
-                >
-                  {selectedFile ? truncateFileName(selectedFile.name, 10) : 'Select'}
-                  {selectedFile ? truncateFileName(selectedFile.name, 10) : 'Select'}
-                </p>
-                <input
-                  ref={fileInputRef} // Set the ref to the file input
-                  id='fileInput'
-                  type='file'
-                  accept='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' // Accept only xlsx files
-                  style={{ display: 'none' }}
-                  onChange={handleFileChange}
-                  multiple={false} // Only allow selecting one file at a time
-                  maxfilesize={25 * 1024 * 1024} // Maximum file size in bytes (25MB)
-                />
-                <Select placeholder='Auto detect' size='small' />
-                <Select placeholder='Comma' size='small' />
-                <Link
-                  to='https://docs.google.com/spreadsheets/d/17BLVaMDJjkCSlA5_0zcF87xgCN8ZAVEX/edit?usp=sharing&ouid=116512351481329534388&rtpof=true&sd=true'
-                  style={{ textDecoration: 'underline', color: '#285D9A' }}
-                  target='_blank'
-                  rel='noopener noreferrer'
-                >
-                  Download
-                </Link>
+        <Spin spinning={loading}>
+          {' '}
+          {/* Wrap the Modal content with Spin component */}
+          <Form onFinish={handleFormSubmit} layout='horizontal' form={form}>
+            {/* Import settings */}
+            <Flex gap={18} justify='space-between' style={{ width: '100%' }}>
+              <Typography style={{ fontWeight: '700' }}>Import settings</Typography>
+              <Flex style={{ width: '20rem' }} justify='space-around'>
+                <Flex gap={20} vertical {...formItemLayout}>
+                  <p>
+                    File (csv)<span style={{ color: 'red' }}>*</span>
+                  </p>
+                  <span>Encoding type</span>
+                  <span>Column separator</span>
+                  <span>Import template</span>
+                </Flex>
+                <Flex gap={18} vertical {...formItemLayout}>
+                  <p
+                    onClick={handleSelectButtonClick}
+                    style={{
+                      width: '5rem',
+                      color: 'white',
+                      borderRadius: '6px',
+                      textAlign: 'center',
+                      backgroundColor: '#2D3748',
+                      cursor: 'pointer', // Add cursor pointer to indicate it's clickable
+                    }}
+                  >
+                    {selectedFile ? truncateFileName(selectedFile.name, 10) : 'Select'}
+                  </p>
+                  <input
+                    ref={fileInputRef} // Set the ref to the file input
+                    id='fileInput'
+                    type='file'
+                    accept='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' // Accept only xlsx files
+                    style={{ display: 'none' }}
+                    onChange={handleFileChange}
+                    multiple={false} // Only allow selecting one file at a time
+                    maxfilesize={25 * 1024 * 1024} // Maximum file size in bytes (25MB)
+                  />
+                  <Select placeholder='Auto detect' size='small' />
+                  <Select placeholder='Comma' size='small' />
+                  <Link
+                    to='https://docs.google.com/spreadsheets/d/17BLVaMDJjkCSlA5_0zcF87xgCN8ZAVEX/edit?usp=sharing&ouid=116512351481329534388&rtpof=true&sd=true'
+                    style={{ textDecoration: 'underline', color: '#285D9A' }}
+                    target='_blank'
+                    rel='noopener noreferrer'
+                  >
+                    Download
+                  </Link>
+                </Flex>
               </Flex>
             </Flex>
-          </Flex>
-          <hr style={{ margin: '10px 0' }} />
+            <hr style={{ margin: '10px 0' }} />
 
-          {/* Duplicate control */}
-          <Flex gap={'5rem'} style={{ width: '100%' }}>
-            <Typography style={{ fontWeight: '700' }}>Duplicate control</Typography>
-            <Flex gap={8} vertical>
-              <Flex gap={6} vertical {...formItemLayout}>
-                <p>Scanning</p>
-                <Form.Item name='scanning' valuePropName='checked' noStyle>
-                  <Checkbox.Group options={['Syllabus code', 'Syllabus name']} />
-                </Form.Item>
-              </Flex>
+            {/* Duplicate control */}
+            <Flex gap={'5rem'} style={{ width: '100%' }}>
+              <Typography style={{ fontWeight: '700' }}>Duplicate control</Typography>
               <Flex gap={8} vertical>
-                <p>Duplicate handle</p>
-                <Form.Item name='duplicateHandle' initialValue={1} noStyle>
-                  <Radio.Group>
-                    <Radio value={1}>Allow</Radio>
-                    <Radio value={2}>Replace</Radio>
-                    <Radio value={3}>Skip</Radio>
-                  </Radio.Group>
-                </Form.Item>
+                <Flex gap={6} vertical {...formItemLayout}>
+                  <p>Scanning</p>
+                  <Form.Item name='scanning' valuePropName='checked' noStyle>
+                    <Checkbox.Group options={['Syllabus code', 'Syllabus name']} />
+                  </Form.Item>
+                </Flex>
+                <Flex gap={8} vertical>
+                  <p>Duplicate handle</p>
+                  <Form.Item name='duplicateHandle' initialValue={1} noStyle>
+                    <Radio.Group>
+                      <Radio value={1}>Allow</Radio>
+                      <Radio value={2}>Replace</Radio>
+                      <Radio value={3}>Skip</Radio>
+                    </Radio.Group>
+                  </Form.Item>
+                </Flex>
               </Flex>
             </Flex>
-          </Flex>
-          <hr style={{ margin: '10px 0' }} />
+            <hr style={{ margin: '10px 0' }} />
 
-          {/* Buttons */}
-          <Flex style={{ padding: '0.4rem 0' }} justify='flex-end' align='center'>
-            <span
-              onClick={() => setIsOpen(!isOpen)}
-              style={{
-                borderRadius: '10px',
-                fontWeight: '600',
-                padding: '0.5rem 1.5rem',
-                color: '#E74A3B',
-                textDecoration: 'underline',
-              }}
-            >
-              Cancel
-            </span>
-            <Button
-              type='primary'
-              htmlType='submit'
-              style={{
-                borderRadius: '10px',
-                color: 'white',
-                padding: '0 1.4rem',
-                backgroundColor: '#2D3748',
-              }}
-            >
-              Import
-            </Button>
-          </Flex>
-        </Form>
+            {/* Buttons */}
+            <Flex style={{ padding: '0.4rem 0' }} justify='flex-end' align='center'>
+              <span
+                onClick={() => setIsOpen(!isOpen)}
+                style={{
+                  borderRadius: '10px',
+                  fontWeight: '600',
+                  padding: '0.5rem 1.5rem',
+                  color: '#E74A3B',
+                  textDecoration: 'underline',
+                }}
+              >
+                Cancel
+              </span>
+              <Button
+                type='primary'
+                htmlType='submit'
+                style={{
+                  borderRadius: '10px',
+                  color: 'white',
+                  padding: '0 1.4rem',
+                  backgroundColor: '#2D3748',
+                }}
+              >
+                Import
+              </Button>
+            </Flex>
+          </Form>
+        </Spin>
       </Modal>
     </>
   );

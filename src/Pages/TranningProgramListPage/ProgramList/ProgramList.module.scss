@@ -1,77 +1,73 @@
 .table {
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  margin: 0 0.5%;
+  width: 99%;
+  box-shadow: 0 0 2px gray;
+  border-collapse: collapse;
+  font-weight: 500;
+
+  .thead {
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
-    margin: 0 0.5%;
-    width: 99%;
-    box-shadow: 0 0 2px gray;
-    border-collapse: collapse;
-    font-weight: 500;
+    background-color: var(--primary-color);
 
-    .thead {
+    .tr {
+      border-top-left-radius: 10px;
+      border-top-right-radius: 10px;
+      text-align: left;
+
+      :first-child {
         border-top-left-radius: 10px;
-        border-top-right-radius: 10px;
-        background-color: var(--primary-color);
-
-        .tr {
-            border-top-left-radius: 10px;
-            border-top-right-radius: 10px;
-              text-align: left;
-
-              :first-child {
-                  border-top-left-radius: 10px;
-              }
-
-              :last-child {
-                  border-top-right-radius: 10px;
-              }
-
-              .th {
-                  height: 40px;
-
-                  .title {
-                      border: none;
-                      outline: none;
-                      gap: 4px;
-                      display: flex;
-                      align-items: center;
-                      background-color: transparent;
-                      color: var(--white-color);
-                      font-weight: bold;
-                  }
-              }
-
-              .name {
-                  padding-left: 2.5%;
-                  width: 35%;
-              }
-              .id{
-                padding-left: 2.55%;
-              }
-              .createOn{
-                padding-left: 2.55%;
-              }
-              .createBy{
-                padding-left: 2.55%;
-              }
-              .duration{
-                padding-left: 2.55%;
-              }
-          }
       }
-  }
 
-  .pagination {
-      margin: 2%;
-      text-align: center;
-  }
+      :last-child {
+        border-top-right-radius: 10px;
+      }
 
-  .total {
-    position: absolute;
-    right: 5%;
-    font-size: medium;
-    font-weight: bolder;
-    color: #2d3748;
+      .th {
+        height: 40px;
 
-    
+        .title {
+          border: none;
+          outline: none;
+          gap: 4px;
+          display: flex;
+          align-items: center;
+          background-color: transparent;
+          color: var(--white-color);
+          font-weight: bold;
+        }
+      }
+
+      .name {
+        padding-left: 2.5%;
+        width: 25%;
+      }
+      .title1 {
+        margin-left: 30px;
+        border: none;
+        outline: none;
+          gap: 4px;
+        display: flex;
+        align-items: center;
+        background-color: transparent;
+        color: var(--white-color);
+        font-weight: bold;
+      }
+    }
   }
-  
+}
+
+.pagination {
+  margin: 2%;
+  text-align: center;
+}
+
+.total {
+  position: absolute;
+  right: 5%;
+  font-size: medium;
+  font-weight: bolder;
+  color: #2d3748;
+}

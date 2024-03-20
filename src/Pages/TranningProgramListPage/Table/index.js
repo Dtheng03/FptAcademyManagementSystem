@@ -68,7 +68,6 @@ export default function Table({ item, domChange, domChangeSuccess, reload }) {
     cursor: "pointer",
   };
   const [open, setOpen] = useState(false);
-
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [newStatus, setNewStatus] = useState(item.status);
   const [modalAction, setModalAction] = useState("");
@@ -85,7 +84,7 @@ export default function Table({ item, domChange, domChangeSuccess, reload }) {
       const duplicatedProgram = { ...item };
       delete duplicatedProgram.id;
       axios
-        .post(
+        .get(
           `http://fams-group1-net03.ptbiology.com/api/trainingprogram/dupplicate-training-program?id=${item.id}`,
           duplicatedProgram
         )
@@ -157,8 +156,8 @@ export default function Table({ item, domChange, domChangeSuccess, reload }) {
 
   return (
     <tr className={cx("tr")} onDoubleClick={() => handleViewDetail(item)}>
-      <td className={cx("td", "id")}>{item.tpCode}</td>
       <td className={cx("td", "name")}>{item.tpName}</td>
+      <td className={cx("td", "id")}>{item.tpCode}</td>
       <td className={cx("td", "createOn")}>{item.createdDate}</td>
       <td className={cx("td", "createBy")}>{item.createdBy.fullName}</td>
       <td className={cx("td", "duration")}>{item.duration.hour} hour</td>

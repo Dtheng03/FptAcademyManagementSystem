@@ -2,20 +2,12 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import styles from "./TranningProgram.module.scss";
 import classNames from "classnames/bind";
-import {
-  SearchIcon,
-  UploadIcon,
-} from "../../Components/Common/Icons/DocManageIcons";
+import { SearchIcon } from "../../Components/Common/Icons/DocManageIcons";
 import Button from "../../Components/Common/Button";
 import { Link } from "react-router-dom";
-import {
-  AddIcon,
-  CancleIcon,
-  FilterListIcon,
-  SortIcon,
-} from "../../Components/Common/Icons/ActionIcons";
-import { Pagination, Tag, Spin } from "antd";
-import Table from "./Table";
+import { AddIcon, CancleIcon } from "../../Components/Common/Icons/ActionIcons";
+import { Tag, Spin } from "antd";
+// import Table from "./Table";
 import { LoadingOutlined } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
 import { setProgramList } from "../../Redux/Reducer/ProgramTranningSlice";
@@ -23,15 +15,16 @@ import ProgramList from "./ProgramList";
 import Research from "./ProgramResearch";
 import ImportSyllabusModal from "./ImportButton/Import";
 import crypto from "crypto-js";
+import { getProgramList } from "../../Services/tranningProgramApi";
 
 const cx = classNames.bind(styles);
 
 export default function TranningProgramListPage() {
-  const [data, setData] = useState([]);
+  // const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
 
   const dispatch = useDispatch();
-  const programList = useSelector(state => state.program.programList)
+  const programList = useSelector((state) => state.program.programList);
 
   const token = sessionStorage.getItem("token");
   axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
@@ -55,38 +48,32 @@ export default function TranningProgramListPage() {
     const value = e.target.value;
     setSearchValue(value);
 
-      if (value.trim() === "") {
+    if (value.trim() === "") {
+      setSearch([]);
+    } else if (value !== "") {
+      const searchResults = programList.filter((result) =>
+        result.tpName.toLowerCase().includes(value.toLowerCase())
+      );
+      if (searchResults.length > 0) {
+        setSearch(searchResults);
+      } else {
         setSearch([]);
-      } else if (value !== "") {
-        const searchResults = programList.filter((result) =>
-          result.tpName.toLowerCase().includes(value.toLowerCase())
-        );
-        if (searchResults.length > 0) {
-          setSearch(searchResults);
-        } else {
-          setSearch([]);
-        }
-      }
-    };
-
-    useEffect(() => {
-      async function getProgram() {
-        try {
-          setLoading(true);
-          // const response = await axios.get(
-          //   "https://65411666f0b8287df1fdc4fa.mockapi.io/program"
-          // );
-          const response = await axios.post("http://fams-group1-net03.ptbiology.com/api/trainingprogram/view-training-program-list");
-          console.log(response.data.data);
-          
-          setData(response.data);
-        dispatch(setProgramList(response.data.data));
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setLoading(false);
       }
     }
+  };
+  //goi API
+  async function getProgram() {
+    setLoading(true);
+    getProgramList()
+      .then((res) => {
+        dispatch(setProgramList(res?.data?.data || []));
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }
+
+  useEffect(() => {
     getProgram();
   }, [isDomChange]);
 
